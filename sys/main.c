@@ -24,22 +24,13 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	printf("tarfs in [%p:%p]\n", &_binary_tarfs_start, &_binary_tarfs_end);
 	// kernel starts here
 	int i = 0;
-	register char *s, *v;
-	char c;
-	v = (char*)0xb8000; c=  'A';
-	for (i=0;i<500;i++){
-		*v=c;
-		v+=2;
-		c+=1;
-		if (c>'Z') c= 'A';
-	}
-	i=0;
+	register char *s;
 	while(1){
 		i++;
 		s = "we counted [  ] ";
 		s[12] = hexnum(i, 20);
 		s[13] = hexnum(i, 16);
-		for(v = (char*)0xb8000; *s; ++s, v += 2) *v = *s;
+		printf(s);
 	}
 }
 

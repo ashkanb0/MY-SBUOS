@@ -14,6 +14,7 @@ void write_k(char v){
 		col = 0;
 		row ++;
 		// TODO: rollup;
+		if (row>=80) row =0;
 	}
 }
 
