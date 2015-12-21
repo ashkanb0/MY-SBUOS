@@ -9,8 +9,17 @@ struct dirent
   long d_ino;
   off_t d_off;
   unsigned short d_reclen;
-	unsigned char d_type;
+	// unsigned char d_type;
   char d_name [NAME_MAX+1];
 };
+
+
+typedef struct DIR
+{
+	uint64_t fd;
+	struct dirent* dents;
+	uint64_t offset;
+}DIR;
+
 
 #endif

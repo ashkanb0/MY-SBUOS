@@ -3,6 +3,8 @@
 
 #include <sys/defs.h>
 
-void printf(const char *fmt, ...);
+void printf(const char *fmt, ...){
+	return ;
+}
 
 #endif

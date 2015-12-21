@@ -6,6 +6,9 @@
 
 extern __thread int errno;
 
+
+#define MAX_DIR_SIZE 2048
+
 void exit(int status);
 
 // memory
