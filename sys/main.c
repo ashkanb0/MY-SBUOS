@@ -3,6 +3,12 @@
 #include <sys/gdt.h>
 #include <sys/tarfs.h>
 
+char hexnum(int i, int sh){
+	i = (i>>sh)&0x000f;
+	return (i<10)? '0'+i: 'A'+(i-10);
+}
+
+
 void start(uint32_t* modulep, void* physbase, void* physfree)
 {
 	struct smap_t {
@@ -17,6 +23,24 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	}
 	printf("tarfs in [%p:%p]\n", &_binary_tarfs_start, &_binary_tarfs_end);
 	// kernel starts here
+	int i = 0;
+	register char *s, *v;
+	char c;
+	v = (char*)0xb8000; c=  'A';
+	for (i=0;i<500;i++){
+		*v=c;
+		v+=2;
+		c+=1;
+		if (c>'Z') c= 'A';
+	}
+	i=0;
+	while(1){
+		i++;
+		s = "we counted [  ] ";
+		s[12] = hexnum(i, 20);
+		s[13] = hexnum(i, 16);
+		for(v = (char*)0xb8000; *s; ++s, v += 2) *v = *s;
+	}
 }
 
 #define INITIAL_STACK_SIZE 4096
