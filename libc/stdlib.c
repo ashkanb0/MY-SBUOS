@@ -34,7 +34,8 @@ void *sbrk(int inc){
 }
 
 void *malloc(size_t size){
-	if ( sbrk (size) == (void *) -1)
+	void * p = sbrk (size);
+	if ( p == (void *) -1)
 		return NULL;
 	return p;
 }
