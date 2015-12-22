@@ -104,7 +104,7 @@ void printf(const char *fmt, ...){
 				printf(_buffer);
 
 			}
-			else if(*fmt == 'x') {
+			else if(*fmt == 'x' || *fmt == 'p') {//assuming p is the same as x for now!
 				int number = va_arg(val, int);
 				itoh_printf(_buffer, number); 
 				printf(_buffer);
