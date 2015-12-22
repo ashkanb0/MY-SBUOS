@@ -67,6 +67,7 @@ void do_newline(){
 void write_k(char v){
 	if (v=='\n'){
 		do_newline();
+		return;
 	}
 	char* position = (char*)(0xb8000 + 160*row+ 2*col);
 	*position = v;
