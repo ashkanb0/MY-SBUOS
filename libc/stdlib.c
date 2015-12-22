@@ -29,14 +29,11 @@ void *sbrk(int inc){
 	do_nothing((void *)end_point);
  	// if( (void *) syscall_1(SYS_brk, break_point + inc) == NULL)
  	if( (void *) end_point == NULL)
-      return  (void *) -1;
+		return  (void *) -1;
   	return (void *)break_point;
 }
 
 void *malloc(size_t size){
-	void *p;
-	p = sbrk (0);
-	// printf("malloc: p: %x\n", p);
 	if ( sbrk (size) == (void *) -1)
 		return NULL;
 	return p;

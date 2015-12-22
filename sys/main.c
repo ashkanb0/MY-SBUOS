@@ -3,11 +3,6 @@
 #include <sys/gdt.h>
 #include <sys/tarfs.h>
 
-char hexnum(int i, int sh){
-	i = (i>>sh)&0x000f;
-	return (i<10)? '0'+i: 'A'+(i-10);
-}
-
 
 void start(uint32_t* modulep, void* physbase, void* physfree)
 {
@@ -23,14 +18,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	}
 	printf("tarfs in [%p:%p]\n", &_binary_tarfs_start, &_binary_tarfs_end);
 	// kernel starts here
-	int i = 0;
-	register char *s;
 	while(1){
-		i++;
-		s = "we counted [  ] ";
-		s[12] = hexnum(i, 20);
-		s[13] = hexnum(i, 16);
-		printf(s);
 	}
 }
 
