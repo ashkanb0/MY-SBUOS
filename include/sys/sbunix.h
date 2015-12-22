@@ -57,6 +57,10 @@ char _buffer [30];
 long row = 0; long col = 0;
 
 void write_k(char v){
+	if (v=='\n'){
+		row++;
+		if (row>=80) row =0;
+	}
 	char* position = (char*)(0xb8000 + 160*row+ 2*col);
 	*position = v;
 	position++;
@@ -66,6 +70,8 @@ void write_k(char v){
 		col = 0;
 		row ++;
 		// TODO: rollup;
+		// TODO: do the same up there!!!;
+		
 		if (row>=80) row =0;
 	}
 }
