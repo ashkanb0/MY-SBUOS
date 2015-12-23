@@ -32,6 +32,10 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	printf("testing -after load [%p]\n", &IDTR);
 	printf("testing -after load [%x][%x]\n", IDTR.length, IDTR.base);
 
+	for(long l = IDTR.base; l<IDTR.base+IDTR.length;l++){
+		printf("%p -> [%x]\n", l, *((long*)(l)));
+		
+	}
 
 	while(1){
 	}
