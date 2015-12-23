@@ -27,7 +27,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
     IDTR.length = (uint16_t) 5;
     IDTR.base   = (uint32_t) 0;
 	printf("testing - before load [%p]\n", &IDTR);
-    __asm__ ( "lidt (%0)" : : "r"(&IDTR) );
+    __asm__ ( "sidt (%0)" : : "r"(&IDTR) );
 
 	printf("testing -after load [%p]\n", &IDTR);
 	printf("testing -after load [%x][%x]\n", IDTR.length, IDTR.base);
