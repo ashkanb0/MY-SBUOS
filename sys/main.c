@@ -18,6 +18,19 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	}
 	printf("tarfs in [%p:%p]\n", &_binary_tarfs_start, &_binary_tarfs_end);
 	// kernel starts here
+	struct
+    {
+        uint16_t length;
+        uint32_t base;
+    } __attribute__((packed)) IDTR;
+ 
+    IDTR.length = 0;
+    IDTR.base = (uint32_t) 0;
+    __asm__ ( "lidt (%0)" : : "p"(&IDTR) );
+
+	printf("testing [%p]\n", &IDTR);
+
+
 	while(1){
 	}
 }
