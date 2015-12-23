@@ -24,12 +24,13 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
         uint32_t base;
     } __attribute__((packed)) IDTR;
  
-    IDTR.length = 0;
-    IDTR.base = (uint32_t) 0;
+    IDTR.length = (uint16_t) 5;
+    IDTR.base   = (uint32_t) 0;
 	printf("testing - before load [%p]\n", &IDTR);
     __asm__ ( "lidt (%0)" : : "r"(&IDTR) );
 
 	printf("testing -after load [%p]\n", &IDTR);
+	printf("testing -after load [%x][%x]\n", IDTR.length, IDTR.base);
 
 
 	while(1){
