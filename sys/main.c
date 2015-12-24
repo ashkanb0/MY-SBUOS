@@ -3,6 +3,24 @@
 #include <sys/gdt.h>
 #include <sys/tarfs.h>
 
+/* BLACK MAGIC - Strongly Discouraged! */
+void interrupt_handler() {
+__asm__("pushad");
+    
+long i;
+
+__asm__(
+"in %%al,60h"
+"mov %0 %%al"
+: "=r"(i)
+);
+printf("[%x]\n", i);
+__asm__(
+"mov %%al,20h"
+"out 20h, %%al"
+);
+__asm__("popad; leave; iret"); /* BLACK MAGIC! */
+}
 
 void start(uint32_t* modulep, void* physbase, void* physfree)
 {
@@ -33,10 +51,20 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	printf("testing -after load [%x][%x]\n", IDTR.length, IDTR.base);
 
 	// for(long l = IDTR.base; l<IDTR.base+IDTR.length;l++){
-	for(long l = IDTR.base; l<IDTR.base+10;l++){
-		printf("%p -> [%x]\n", l, *((long*)(l)));
+	// for(long l = IDTR.base; l<IDTR.base+10;l++){
+	// 	printf("%p -> [%x]\n", l, *((long*)(l)));
 		
-	}
+	// }
+
+	void (*l) (void);
+	l = &interrupt_handler;
+
+	long* place = (long*)((long)IDTR.base+2);
+
+	*place = (long)(l);
+
+	// long l = IDTR.base+2;
+	// (void (void) *)(l) = &interrupt_handler;
 
 	while(1){
 	}
