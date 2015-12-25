@@ -41,7 +41,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	printf("testing -after load [%p]\n", &IDTR);
 	printf("testing -after load [%x][%x]\n", IDTR.length, IDTR.base);
 
-	IDTDescriptor* idt = (IDTDescriptor*)((uint64_t)base);
+	IDTDescriptor* idt = (IDTDescriptor*)((uint64_t)IDTR.base);
 
 	printf("test for idts : [%x]\n", idt[0].offset_low|(idt[0].offset_mid<<16)|(idt[0].offset_high<<32));
 
