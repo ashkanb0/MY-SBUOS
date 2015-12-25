@@ -3,6 +3,7 @@
 #include <sys/gdt.h>
 #include <sys/idt.h>
 #include <sys/tarfs.h>
+#include <sys/pic_helpers.h>
 
 
 void start(uint32_t* modulep, void* physbase, void* physfree)
@@ -19,9 +20,11 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	}
 	printf("tarfs in [%p:%p]\n", &_binary_tarfs_start, &_binary_tarfs_end);
 	// kernel starts here
+	
 	idts_setup();
-
+	PIC_setup();
 	// __asm__ volatile("int $0");
+
 	__asm__ volatile("sti");
 	while(1){
 	}
