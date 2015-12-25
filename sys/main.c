@@ -43,13 +43,14 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 
 	IDTDescriptor* idt = (IDTDescriptor*)((uint64_t)IDTR.base);
 
+	printf("address: [%x]\n", (uint64_t)(&interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_handler));
+	
 	printf("test for idts : [%x]\n", ((uint64_t)idt[0].offset_low)|
 										(((uint64_t)idt[0].offset_mid)<<16)|
 										(((uint64_t)idt[0].offset_high)<<32));
 
 
-	printf("address: [%x]\n", (uint64_t)(&interrupt_handler));
-	set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_handler));
 	
 	__asm__ volatile("int $0");
 	// __asm__ volatile("sti");
