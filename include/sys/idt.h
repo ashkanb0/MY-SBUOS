@@ -12,7 +12,7 @@ typedef struct IDTDescriptor{
 	uint16_t type_attr; 
 	uint16_t offset_mid;
 	uint32_t offset_high;
-	char zero2;
+	uint32_t zero2;
 }IDTDescriptor;
 
 

@@ -30,7 +30,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	struct
     {
         uint16_t length;
-        uint32_t base;
+        uint64_t base;
     } __attribute__((packed)) IDTR;
  
     IDTR.length = (uint16_t) 5;
@@ -45,7 +45,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 
 	printf("address: [%x]\n", (uint64_t)(&interrupt_handler));
 	set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_handler));
-	
+
 	printf("test for idts : [%x]\n", ((uint64_t)idt[0].offset_low)|
 										(((uint64_t)idt[0].offset_mid)<<16)|
 										(((uint64_t)idt[0].offset_high)<<32));
