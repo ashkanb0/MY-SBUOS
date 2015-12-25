@@ -4,7 +4,7 @@
 #include <sys/tarfs.h>
 
 void interrupt_handler(void){
-	
+
 }
 
 
@@ -52,6 +52,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	// long l = IDTR.base+2;
 	// (void (void) *)(l) = &interrupt_handler;
 
+	__asm__ volatile("sti");
 	while(1){
 	}
 }
