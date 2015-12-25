@@ -10,6 +10,7 @@ void interrupt_handler(void){
 	if(jafar<5){
 		jafar = 5;
 	}
+	printf("HEREEEEEEEEEEEEEE\n");
 }
 
 
