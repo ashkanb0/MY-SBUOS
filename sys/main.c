@@ -41,6 +41,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	printf("testing -after load [%p]\n", &IDTR);
 	printf("testing -after load [%x][%x]\n", IDTR.length, IDTR.base);
 
+	printf("address: [%x]\n", (uint64_t)(&interrupt_handler));
 	set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_handler));
 	
 	__asm__ volatile("int $0");
