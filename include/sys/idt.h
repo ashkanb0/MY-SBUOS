@@ -34,20 +34,25 @@ void interrupt_handler(void){
 
 
 void idts_setup(){
+	
+	
 	struct
-    {
-        uint16_t length;
-        uint64_t base;
-    } __attribute__((packed)) IDTR;
- 
- 	IDTR.base = 0; IDTR.length = 0;
-	__asm__ volatile ( "sidt (%0)" : : "r"(&IDTR) );
+	{
+		uint16_t length;
+		uint64_t base;
+	} __attribute__((packed)) IDTR;
 
+	IDTR.base = 0; IDTR.length = 0;
+	__asm__ ( "sidt (%0)" : : "r"(&IDTR) );
+
+	printf("IDTR.base [%x]\n", IDTR.base);
 
 	set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_handler));
 	// set_isr((uint64_t)IDTR.base, 1, (uint64_t)(&interrupt_handler));
 
+	IDTDescriptor* l = (IDTDescriptor*)(IDTR.base);
 
+	printf("entry[0].offset [%x|%x|%x]\n", l[0].offset_high, l[0].offset_mid, l[0].offset_low );
 
 	
 }
