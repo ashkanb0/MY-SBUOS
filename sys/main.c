@@ -52,7 +52,8 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	// long l = IDTR.base+2;
 	// (void (void) *)(l) = &interrupt_handler;
 
-	__asm__ volatile("sti");
+	__asm__ volatile("int $0");
+	// __asm__ volatile("sti");
 	while(1){
 	}
 }
