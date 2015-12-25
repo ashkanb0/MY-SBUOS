@@ -46,7 +46,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	printf("address: [%x]\n", (uint64_t)(&interrupt_handler));
 	set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_handler));
 
-	printf("test for idts : [%x%x%x]\n", idt[0].offset_high,idt[0].offset_mid,idt[0].offset_low)
+	printf("test for idts : [%x%x%x]\n", idt[0].offset_high,idt[0].offset_mid,idt[0].offset_low);
 
 
 	
