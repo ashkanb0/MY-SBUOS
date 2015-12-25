@@ -18,9 +18,9 @@ typedef struct IDTDescriptor{
 
 void set_isr(uint32_t base, int int_num, uint64_t handler){
 	IDTDescriptor* idt = (IDTDescriptor*)((uint64_t)base);
-	idt[int_num].offset_low = handler & 0x00ffff;
-	idt[int_num].offset_mid = (handler>>16) & 0x00ffff;
-	idt[int_num].offset_high = (handler>>32) & 0x00ffffffff;
+	idt[int_num].offset_low = (uint16_t)(handler & 0x00ffff);
+	idt[int_num].offset_mid = (uint16_t)((handler>>16) & 0x00ffff);
+	idt[int_num].offset_high= (uint64_t)((handler>>32) & 0x00ffffffff);
 }
 
 
