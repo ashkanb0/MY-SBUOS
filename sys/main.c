@@ -4,15 +4,6 @@
 #include <sys/idt.h>
 #include <sys/tarfs.h>
 
-void interrupt_handler(void){
-	int jafar = 0;
-	jafar = 50/10;
-	if(jafar<5){
-		jafar = 5;
-	}
-	printf("HEREEEEEEEEEEEEEE\n");
-}
-
 
 void start(uint32_t* modulep, void* physbase, void* physfree)
 {
@@ -28,29 +19,8 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	}
 	printf("tarfs in [%p:%p]\n", &_binary_tarfs_start, &_binary_tarfs_end);
 	// kernel starts here
-	struct
-    {
-        uint16_t length;
-        uint64_t base;
-    } __attribute__((packed)) IDTR;
- 
-    IDTR.length = (uint16_t) 5;
-    IDTR.base   = (uint32_t) 0;
-	printf("testing - before load [%p]\n", &IDTR);
-    __asm__ ( "sidt (%0)" : : "r"(&IDTR) );
+	idts_setup();
 
-	printf("testing -after load [%p]\n", &IDTR);
-	printf("testing -after load [%x][%x]\n", IDTR.length, IDTR.base);
-
-	IDTDescriptor* idt = (IDTDescriptor*)((uint64_t)IDTR.base);
-
-	printf("address: [%x]\n", (uint64_t)(&interrupt_handler));
-	set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_handler));
-
-	printf("test for idts : [%x|%x|%x]\n", idt[0].offset_high,idt[0].offset_mid,idt[0].offset_low);
-
-
-	
 	__asm__ volatile("int $0");
 	// __asm__ volatile("sti");
 	while(1){
