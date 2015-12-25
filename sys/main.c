@@ -21,8 +21,8 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	// kernel starts here
 	idts_setup();
 
-	__asm__ volatile("int $0");
-	// __asm__ volatile("sti");
+	// __asm__ volatile("int $0");
+	__asm__ volatile("sti");
 	while(1){
 	}
 }

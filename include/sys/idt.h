@@ -45,7 +45,6 @@ void idts_setup(){
 
 
 	set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_handler));
-	set_isr((uint64_t)IDTR.base, 1, (uint64_t)(&interrupt_handler));
 
 
 
