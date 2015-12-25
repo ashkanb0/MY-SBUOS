@@ -43,7 +43,7 @@ void idts_setup(){
 	} __attribute__((packed)) IDTR;
 
 	IDTR.base = 0; IDTR.length = 0;
-	__asm__ ( "lidt (%0)" : : "r"(&IDTR) );
+	__asm__ ( "sidt (%0)" : : "r"(&IDTR) );
 
 	printf("IDTR.base [%x]\n", IDTR.base);
 
