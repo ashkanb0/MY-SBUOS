@@ -42,12 +42,12 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 		
 	// }
 
-	void (*l) (void);
-	l = &interrupt_handler;
+	// void (*l) (void);
+	// l = &interrupt_handler;
 
-	long* place = (long*)((long)IDTR.base+2);
+	// long* place = (long*)((long)IDTR.base+2);
 
-	*place = (long)(l);
+	// *place = (long)(l);
 
 	// long l = IDTR.base+2;
 	// (void (void) *)(l) = &interrupt_handler;
