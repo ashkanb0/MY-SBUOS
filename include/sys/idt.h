@@ -41,7 +41,7 @@ void idts_setup(){
     } __attribute__((packed)) IDTR;
  
  	IDTR.base = 0; IDTR.length = 0;
-	__asm__ volatile( "sidt (%0)" : : "r"(&IDTR) );
+	__asm__ volatile ( "sidt (%0)" : : "r"(&IDTR) );
 
 
 	set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_handler));
