@@ -1,10 +1,15 @@
 #include <sys/sbunix.h>
 
 #include <sys/gdt.h>
+#include <sys/idt.h>
 #include <sys/tarfs.h>
 
 void interrupt_handler(void){
-
+	int jafar = 0;
+	jafar = 50/10;
+	if(jafar<5){
+		jafar = 5;
+	}
 }
 
 
@@ -36,22 +41,8 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	printf("testing -after load [%p]\n", &IDTR);
 	printf("testing -after load [%x][%x]\n", IDTR.length, IDTR.base);
 
-	// for(long l = IDTR.base; l<IDTR.base+IDTR.length;l++){
-	// for(long l = IDTR.base; l<IDTR.base+10;l++){
-	// 	printf("%p -> [%x]\n", l, *((long*)(l)));
-		
-	// }
-
-	// void (*l) (void);
-	// l = &interrupt_handler;
-
-	// long* place = (long*)((long)IDTR.base+2);
-
-	// *place = (long)(l);
-
-	// long l = IDTR.base+2;
-	// (void (void) *)(l) = &interrupt_handler;
-
+	set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_handler));
+	
 	__asm__ volatile("int $0");
 	// __asm__ volatile("sti");
 	while(1){
