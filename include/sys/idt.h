@@ -2,6 +2,9 @@
 #define _IDT_H
 
 #include <sys/defs.h>
+#include <sys/pic_helpers.h>
+#include <sys/sbunix.h>
+
 
 typedef struct IDTDescriptor{
 	uint16_t offset_low;
@@ -22,6 +25,19 @@ void set_isr(uint32_t base, int int_num, uint64_t handler){
 	idt[int_num].offset_high= (uint32_t)((handler>>32) & 0x00ffffffff);
 }
 
+
+// void keyboard_interrupt_handler(void);
+
+
+
+
+
+void keyboard_interrupt_handler(void){
+	char l = inb(0x60);
+	printf("hit: %x\n", l);
+	outb(0x20, 0x20);
+}
+
 void interrupt_handler(void){
 	int jafar = 0;
 	jafar = 50/10;
@@ -30,7 +46,6 @@ void interrupt_handler(void){
 	}
 	printf("HEREEEEEEEEEEEEEE\n");
 }
-
 
 
 void idts_setup(){
@@ -48,7 +63,7 @@ void idts_setup(){
 	printf("IDTR.base [%x]\n", IDTR.base);
 
 	set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_handler));
-	// set_isr((uint64_t)IDTR.base, 1, (uint64_t)(&interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 1, (uint64_t)(&keyboard_interrupt_handler));
 
 	IDTDescriptor* l = (IDTDescriptor*)(IDTR.base);
 
@@ -56,6 +71,9 @@ void idts_setup(){
 
 	
 }
+
+
+
 
 
 #endif

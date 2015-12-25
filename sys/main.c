@@ -1,9 +1,9 @@
-#include <sys/sbunix.h>
-
+// #include <sys/sbunix.h>
 #include <sys/gdt.h>
 #include <sys/idt.h>
 #include <sys/tarfs.h>
-#include <sys/pic_helpers.h>
+
+// #include <sys/pic_helpers.h>
 
 
 void start(uint32_t* modulep, void* physbase, void* physfree)
@@ -24,7 +24,6 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	idts_setup();
 	PIC_setup();
 
-	__asm__ volatile("int $0");
 	__asm__ volatile("sti");
 	while(1){
 	}
