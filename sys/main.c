@@ -3,24 +3,10 @@
 #include <sys/gdt.h>
 #include <sys/tarfs.h>
 
-/* BLACK MAGIC - Strongly Discouraged! */
-void interrupt_handler() {
-__asm__("pushad");
-    
-long i;
-
-__asm__(
-"in %%al,60h"
-"mov %0 %%al"
-: "=r"(i)
-);
-printf("[%x]\n", i);
-__asm__(
-"mov %%al,20h"
-"out 20h, %%al"
-);
-__asm__("popad; leave; iret"); /* BLACK MAGIC! */
+void interrupt_handler(void){
+	
 }
+
 
 void start(uint32_t* modulep, void* physbase, void* physfree)
 {
