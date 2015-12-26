@@ -57,9 +57,9 @@ void idts_setup(){
 
 	printf("IDTR.base [%x]\n", IDTR.base);
 
-	set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_handler));
+	// set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_handler));
 
-	for (int i = 0; i < IDTR.length; ++i)
+	for (int i = 2; i < IDTR.length; ++i)
 	{
 		set_isr((uint64_t)IDTR.base, i, (uint64_t)(&interrupt_handler));
 	}
