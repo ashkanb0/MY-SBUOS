@@ -26,6 +26,9 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 
 	// __asm__ volatile("sti");
 	__asm__ volatile("int $0");
+	__asm__ volatile("int $0");
+	__asm__ volatile("int $0");
+	__asm__ volatile("int $0");
 	while(1){
 	}
 }
