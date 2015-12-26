@@ -27,7 +27,14 @@ keyboard_interrupt_handler:
 	pushf
 	cld
 	push %ax
+	push %bx
+	push %cx
+	push %dx
 	call int_kbd_srv
+	# TODO : send EOI
+	pop %dx
+	pop %cx
+	pop %bx
 	pop %ax
 	popf
 	# popad
