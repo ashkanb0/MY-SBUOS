@@ -1,5 +1,7 @@
-.globl   interrupt_handler
-.align   4
+.text
+
+.globl interrupt_handler
+.align 4
  
 interrupt_handler:
 	# pushad
