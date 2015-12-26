@@ -15,6 +15,9 @@ interrupt_0_handler:
 keyboard_interrupt_handler:
 	# pushad
 	# cld
+	push %ax
 	call int_kbd_srv
+	pop %ax
 	# popad
+
 	iretq

@@ -29,15 +29,15 @@ void set_isr(uint32_t base, int int_num, uint64_t handler){
 
 
 void keyboard_interrupt_handler(void);
-void int_kbd_srv(void){
-	char l = inb(0x20);
+void int_kbd_srv(){
+	char l = inb(0x60);
 	printf("hit: %x\n", l);
-	outb(0x20, 0x20);
 }
 
 void interrupt_0_handler(void);
 void int_0_srv(){
 	printf("INT 0\n");
+
 }
 
 
