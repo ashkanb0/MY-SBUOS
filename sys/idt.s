@@ -5,20 +5,20 @@
  
 interrupt_0_handler:
 	# pushad
-	push %ax
-	push %bx
-	push %cx
-	push %dx
-	pushf
-	cld
+	# push %ax
+	# push %bx
+	# push %cx
+	# push %dx
+	# pushf
+	# cld
 	call int_0_srv
 	# popad
-	pop %dx
-	pop %cx
-	pop %bx
-	pop %ax
-	popf
-	iretq
+	# pop %dx
+	# pop %cx
+	# pop %bx
+	# pop %ax
+	# popf
+	iretd
 
 .globl keyboard_interrupt_handler
 .align 4
