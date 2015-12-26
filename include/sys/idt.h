@@ -26,22 +26,19 @@ void set_isr(uint32_t base, int int_num, uint64_t handler){
 }
 
 
-// void keyboard_interrupt_handler(void);
 
 
-
-
-
-void keyboard_interrupt_handler(void){
+void keyboard_interrupt_handler(void);
+void int_kbd_srv(void){
 	char l = inb(0x60);
 	printf("hit: %x\n", l);
 	outb(0x20, 0x20);
 }
 
-void do_something(){
-	printf("HEREEEEEEEE\n");
+void interrupt_0_handler(void);
+void int_0_srv(){
+	printf("INT 0\n");
 }
-void interrupt_handler(void);
 
 
 void idts_setup(){
@@ -58,7 +55,8 @@ void idts_setup(){
 
 	printf("IDTR.base [%x]\n", IDTR.base);
 
-	set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_0_handler));
+	set_isr((uint64_t)IDTR.base, 1, (uint64_t)(&keyboard_interrupt_handler));
 
 	// for (int i = 2; i < IDTR.length; ++i)
 	// {
