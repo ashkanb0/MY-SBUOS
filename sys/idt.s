@@ -5,10 +5,18 @@
  
 interrupt_0_handler:
 	# pushad
+	push %ax
+	push %bx
+	push %cx
+	push %dx
 	pushf
 	cld
 	call int_0_srv
 	# popad
+	pop %dx
+	pop %cx
+	pop %bx
+	pop %ax
 	popf
 	iretq
 
