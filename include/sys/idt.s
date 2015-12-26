@@ -1,9 +1,9 @@
-.globl   isr_wrapper
+.globl   interrupt_handler
 .align   4
  
-isr_wrapper:
+interrupt_handler:
 	# pushad
 	# cld
-	call interrupt_handler
+	call do_something
 	# popad
 	iretq
