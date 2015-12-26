@@ -39,11 +39,6 @@ void keyboard_interrupt_handler(void){
 }
 
 void interrupt_handler(void){
-	int jafar = 0;
-	jafar = 50/10;
-	if(jafar<5){
-		jafar = 5;
-	}
 	printf("HEREEEEEEEEEEEEEE\n");
 }
 
