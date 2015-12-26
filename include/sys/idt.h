@@ -30,13 +30,14 @@ void set_isr(uint32_t base, int int_num, uint64_t handler){
 
 void keyboard_interrupt_handler(void);
 void int_kbd_srv(){
-	char l = inb(0x60);
-	printf("hit: %x\n", l);
+	printf("INT ???\n");
+	// char l = inb(0x60);
+	// printf("hit: %x\n", l);
 }
 
 void interrupt_0_handler(void);
 void int_0_srv(){
-	printf("INT 0\n");
+	printf("INT ?\n");
 
 }
 
@@ -58,17 +59,22 @@ void idts_setup(){
 	set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_0_handler));
 	set_isr((uint64_t)IDTR.base, 8, (uint64_t)(&interrupt_0_handler));
 
-	// set_isr((uint64_t)IDTR.base, 8, (uint64_t)(&keyboard_interrupt_handler));
-	// set_isr((uint64_t)IDTR.base, 9, (uint64_t)(&keyboard_interrupt_handler));
-	// set_isr((uint64_t)IDTR.base, 10, (uint64_t)(&keyboard_interrupt_handler));
-	// set_isr((uint64_t)IDTR.base, 10+1, (uint64_t)(&keyboard_interrupt_handler));
-	// set_isr((uint64_t)IDTR.base, 10+2, (uint64_t)(&keyboard_interrupt_handler));
-	// set_isr((uint64_t)IDTR.base, 10+3, (uint64_t)(&keyboard_interrupt_handler));
-	// set_isr((uint64_t)IDTR.base, 10+4, (uint64_t)(&keyboard_interrupt_handler));
-	// set_isr((uint64_t)IDTR.base, 10+5, (uint64_t)(&keyboard_interrupt_handler));
-	// set_isr((uint64_t)IDTR.base, 10+6, (uint64_t)(&keyboard_interrupt_handler));
-	// set_isr((uint64_t)IDTR.base, 10+7, (uint64_t)(&keyboard_interrupt_handler));
-	// set_isr((uint64_t)IDTR.base, 10+8, (uint64_t)(&keyboard_interrupt_handler));
+	// set_isr((uint64_t)IDTR.base, 0x08+0, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0x08+1, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0x08+2, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0x08+3, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0x08+4, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0x08+5, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0x08+6, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0x08+7, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0x70+0, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0x70+1, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0x70+2, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0x70+3, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0x70+4, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0x70+5, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0x70+6, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr((uint64_t)IDTR.base, 0x70+7, (uint64_t)(&keyboard_interrupt_handler));
 
 	IDTDescriptor* l = (IDTDescriptor*)(IDTR.base);
 
