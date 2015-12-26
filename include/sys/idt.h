@@ -38,9 +38,10 @@ void keyboard_interrupt_handler(void){
 	outb(0x20, 0x20);
 }
 
-void interrupt_handler(void){
-	printf("HEREEEEEEEEEEEEEE\n");
+void do_something(){
+	printf("HEREEEEEEEE\n");
 }
+void interrupt_handler(void);
 
 
 void idts_setup(){
