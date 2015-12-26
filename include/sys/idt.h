@@ -30,7 +30,7 @@ void set_isr(uint32_t base, int int_num, uint64_t handler){
 
 void keyboard_interrupt_handler(void);
 void int_kbd_srv(void){
-	char l = inb(0x60);
+	char l = inb(0x20);
 	printf("hit: %x\n", l);
 	outb(0x20, 0x20);
 }
