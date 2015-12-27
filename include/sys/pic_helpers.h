@@ -2,7 +2,6 @@
 #define _PIC_H
 
 #include <sys/defs.h>
-#include <sys/sbunix.h>
 
 
 #define PIC1		0x20		/* IO base address for master PIC */
@@ -78,8 +77,6 @@ void PIC_remap(int offset1, int offset2)
  
 	a1 = inb(PIC1_DATA);// save masks
 	a2 = inb(PIC2_DATA);
- 	
-	printf("MASKS: %x, %x\n",a1, a2 );
 
 	outb(PIC1_COMMAND, ICW1_INIT+ICW1_ICW4);  // starts the initialization sequence (in cascade mode)
 	io_wait();
@@ -105,8 +102,15 @@ void PIC_remap(int offset1, int offset2)
 
 ///////// 
 
+void PIC_setmasks(char master_masks, char slave_masks){
+	outb(PIC1_DATA, master_masks);
+	outb(PIC2_DATA, slave_masks);
+}
+
+
 void PIC_setup(void){
 	PIC_remap(PIC_MASTER_OFFSET, PIC_SLAVE_OFFSET);
+	PIC_setmasks(0,0); // clear all masks
 }
 
 
