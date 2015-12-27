@@ -59,6 +59,7 @@ void idts_setup(){
 	IDTR.base = 0x0011000; IDTR.length = 128*256;
 	__asm__ ( "lidt (%0)" : : "r"(&IDTR) );
 
+	printf("idtent  SIZE [%d]\n", sizeof(IDTDescriptor));
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
 
 	IDTDescriptor* idt = (IDTDescriptor*)((uint64_t)IDTR.base);
