@@ -27,11 +27,11 @@
 // #define ICW4_BUF_MASTER	0x0C		/* Buffered mode/master */
 // #define ICW4_SFNM	0x10		/* Special fully nested (not) */
 
-// #define PIC_MASTER_OFFSET 0x08
-// #define PIC_SLAVE_OFFSET 0x70
+#define PIC_MASTER_OFFSET 0x08
+#define PIC_SLAVE_OFFSET 0x70
 
-#define PIC_MASTER_OFFSET 0x20
-#define PIC_SLAVE_OFFSET 0x28
+// #define PIC_MASTER_OFFSET 0x20
+// #define PIC_SLAVE_OFFSET 0x28
 
 
 
