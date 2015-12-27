@@ -58,6 +58,7 @@ void idts_setup(){
 
 	set_isr((uint64_t)IDTR.base, 0, (uint64_t)(&interrupt_0_handler));
 	set_isr((uint64_t)IDTR.base, 0x20, (uint64_t)(&interrupt_0_handler));
+	set_isr((uint64_t)IDTR.base, 0x21, (uint64_t)(&interrupt_0_handler));
 
 	// set_isr((uint64_t)IDTR.base, 0x08+0, (uint64_t)(&keyboard_interrupt_handler));
 	// set_isr((uint64_t)IDTR.base, 0x08+1, (uint64_t)(&keyboard_interrupt_handler));
