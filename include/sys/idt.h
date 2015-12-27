@@ -25,8 +25,7 @@ void set_isr(IDTDescriptor* idt, int int_num, uint64_t handler){
 	idt[int_num].zero1= 0;
 	idt[int_num].zero2= 0;
 	idt[int_num].selector= 0x0008;
-	printf("ATTR_VAL = 0x%x\n", idt[int_num].type_attr);
-	// idt[int_num].type_attr= 0x0E;
+	idt[int_num].type_attr= 0x8E;
 
 }
 
