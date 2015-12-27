@@ -18,8 +18,7 @@ typedef struct IDTDescriptor{
 }IDTDescriptor;
 
 
-void set_isr(uint32_t base, int int_num, uint64_t handler){
-	IDTDescriptor* idt = (IDTDescriptor*)((uint64_t)base);
+void set_isr(IDTDescriptor* idt, int int_num, uint64_t handler){
 	idt[int_num].offset_low = (uint16_t)(handler & 0x00ffff);
 	idt[int_num].offset_mid = (uint16_t)((handler>>16) & 0x00ffff);
 	idt[int_num].offset_high= (uint32_t)((handler>>32) & 0x00ffffffff);
@@ -51,12 +50,16 @@ void idts_setup(){
 		uint64_t base;
 	} __attribute__((packed)) IDTR;
 
-	IDTR.base = 0x0011000; IDTR.length = 250;
+	// TODO : CORRECT THESE!!!!!!
+	IDTR.base = 0x0011000; IDTR.length = 128*256;
 	__asm__ ( "sidt (%0)" : : "r"(&IDTR) );
 
 	printf("IDTR.base [%x]\n", IDTR.base);
 
-	set_isr((uint64_t)IDTR.base, 0x08+0, (uint64_t)(&interrupt_0_handler));
+	IDTDescriptor* idt = (IDTDescriptor*)((uint64_t)IDTR.base);
+
+
+	set_isr(idt, 0x08+0, (uint64_t)(&interrupt_0_handler));
 
 	// set_isr((uint64_t)IDTR.base, 0x08+0, (uint64_t)(&keyboard_interrupt_handler));
 	// set_isr((uint64_t)IDTR.base, 0x08+1, (uint64_t)(&keyboard_interrupt_handler));
