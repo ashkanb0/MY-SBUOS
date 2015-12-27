@@ -9,8 +9,10 @@
 typedef struct IDTDescriptor{
 	uint16_t offset_low;
 	uint16_t selector;
-	unsigned zero1:8;
-	unsigned type_attr:8; 
+	// unsigned zero1:8;
+	// unsigned type_attr:8; 
+	uint16_t type_attr;
+	
 	uint16_t offset_mid;
 	uint32_t offset_high;
 	uint32_t zero2;
@@ -25,7 +27,7 @@ void set_isr(IDTDescriptor* idt, int int_num, uint64_t handler){
 	idt[int_num].zero1= 0;
 	idt[int_num].zero2= 0;
 	idt[int_num].selector= 0;
-	idt[int_num].type_attr= 0x0E;
+	idt[int_num].type_attr= 0x000E;
 
 }
 
