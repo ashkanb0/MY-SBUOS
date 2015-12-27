@@ -24,7 +24,7 @@ void set_isr(IDTDescriptor* idt, int int_num, uint64_t handler){
 	idt[int_num].offset_mid = (uint16_t)((handler>>16) & 0x00ffff);
 	idt[int_num].offset_high= (uint32_t)((handler>>32) & 0x00ffffffff);
 
-	idt[int_num].zero1= 0;
+	// idt[int_num].zero1= 0;
 	idt[int_num].zero2= 0;
 	idt[int_num].selector= 0;
 	idt[int_num].type_attr= 0x000E;
