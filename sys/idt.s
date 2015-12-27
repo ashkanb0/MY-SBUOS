@@ -28,6 +28,7 @@ interrupt_0_handler:
 	pop %si
 	pop %di
 	pop %ax
+	# TODO : iretq ?
 	iretq
 
 .globl keyboard_interrupt_handler
