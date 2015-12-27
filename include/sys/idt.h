@@ -57,7 +57,7 @@ void idts_setup(){
 
 	// TODO : CORRECT THESE!!!!!!
 	IDTR.base = 0x0011000; IDTR.length = 128*256;
-	__asm__ ( "sidt (%0)" : : "r"(&IDTR) );
+	__asm__ ( "lidt (%0)" : : "r"(&IDTR) );
 
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
 
