@@ -59,9 +59,7 @@ void idts_setup(){
 		uint64_t base;
 	} __attribute__((packed)) IDTR;
 
-	// TODO : CORRECT THESE!!!!!!
 	IDTR.base = (uint64_t)(&idt); IDTR.length = sizeof(IDTDescriptor)*IDT_SIZE;
-	__asm__ ( "lidt (%0)" : : "r"(&IDTR) );
 
 	printf("idtent  SIZE [%d]\n", sizeof(IDTDescriptor));
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
@@ -77,6 +75,7 @@ void idts_setup(){
 
 	printf("entry[0].offset [%x|%x|%x]\n", l[0].offset_high, l[0].offset_mid, l[0].offset_low );
 
+	__asm__ ( "lidt (%0)" : : "r"(&IDTR) );
 	
 }
 
