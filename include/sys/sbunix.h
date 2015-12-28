@@ -5,6 +5,38 @@
 #include <stdarg.h>
 
 
+long row = 0; long col = 0;
+void do_newline(){
+	col = 0;
+	row ++;
+	// TODO: rollup;	
+	if (row>=80) row =0;
+}
+void write_k(char v){
+	if (v=='\n'){
+		do_newline();
+		return;
+	}
+	char* position = (char*)(0xb8000 + 160*row+ 2*col);
+	*position = v;
+	position++;
+	*position = 0;
+	col ++;
+	if (col>=80){
+		do_newline();
+	}
+}
+
+int left_or_right = 0;
+void put_pressed_key(unsigned char key){
+	char* position = (char*)(0xb8000 + 160*21+ 2*40)+left_or_right;
+	*position = keyboard_get_char_for(key);
+	position++;
+	*position = 0x45;
+	left_or_right = 2 - left_or_right;
+}
+
+
 int itoh_printf(char* buf, uint64_t n){
 	if (n==0){
 		buf[0]='0';
@@ -28,7 +60,6 @@ int itoh_printf(char* buf, uint64_t n){
 	}
 	return 0;
 }
-
 int itoa_printf(char* buf, uint64_t n){
 	if (n==0){
 		buf[0]='0';
@@ -50,34 +81,6 @@ int itoa_printf(char* buf, uint64_t n){
 }
 
 char _buffer [30];
-
-
-
-
-long row = 0; long col = 0;
-
-void do_newline(){
-	col = 0;
-	row ++;
-	// TODO: rollup;
-	
-	if (row>=80) row =0;
-}
-
-void write_k(char v){
-	if (v=='\n'){
-		do_newline();
-		return;
-	}
-	char* position = (char*)(0xb8000 + 160*row+ 2*col);
-	*position = v;
-	position++;
-	*position = 0;
-	col ++;
-	if (col>=80){
-		do_newline();
-	}
-}
 
 
 void printf(const char *fmt, ...){
