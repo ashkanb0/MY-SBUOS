@@ -36,25 +36,24 @@ void set_isr(IDTDescriptor* idt, int int_num, uint64_t handler){
 
 void keyboard_interrupt_handler(void);
 void int_kbd_srv(){
-	char l = inb(0x60);
+	unsigned char l = inb(0x60);
 	printf("hit: %x\n", l);
 	outb(0x20,0x20);
-	// outb(0x20,0x20); outb(0xa0,0x20);
 }
 
 
 // TODO : OFF WITH THESE!!!!
-void dummy_interrupt_handler_0(void);
-void dummy_interrupt_handler_1(void);
+// void dummy_interrupt_handler_0(void);
+// void dummy_interrupt_handler_1(void);
 
-void int_dmmy_srv_0(){
-	printf("Unimplemented Interrupt 0!\n");
-	outb(0x20,0x20);
-}
-void int_dmmy_srv_1(){
-	printf("Unimplemented Interrupt 1!\n");
-	outb(0x20,0x20); outb(0xa0,0x20);
-}
+// void int_dmmy_srv_0(){
+// 	printf("Unimplemented Interrupt 0!\n");
+// 	outb(0x20,0x20);
+// }
+// void int_dmmy_srv_1(){
+// 	printf("Unimplemented Interrupt 1!\n");
+// 	outb(0x20,0x20); outb(0xa0,0x20);
+// }
 
 IDTDescriptor idt [IDT_SIZE];
 
@@ -74,7 +73,6 @@ void idts_setup(){
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
 
 
-	// set_isr(idt, 32, (uint64_t)(&keyboard_interrupt_handler));
 	set_isr(idt, 33, (uint64_t)(&keyboard_interrupt_handler));
 
 
