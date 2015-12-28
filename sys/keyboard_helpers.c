@@ -11,9 +11,11 @@ void print_glyph(char* buff){
 	// TODO : special cases: ESC, tab, ....
 
 	if(shift||ctrl){
-		buff[2] = _capitals[pressed_key];
+		// buff[2] = _capitals[pressed_key];
+		buff[2] = 'A';
 	}else{
-		buff[2] = _smalls[pressed_key];
+		buff[2] = 'a';
+		// buff[2] = _smalls[pressed_key];
 	}
 	if(ctrl){
 		buff[1]= '^';
