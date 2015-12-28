@@ -31,13 +31,13 @@ void write_k(char v){
 int left_or_right = 0;
 
 void put_pressed_key(unsigned char key){
-	char [3] buffer;
-	keyboard_get_char_for(key, buffer);
+	char buff [3] ;
+	keyboard_get_char_for(key, buff);
 	char* position = (char*)(0xb8000 + 160*21+ 2*40)+left_or_right;
-	*position = buffer[0];
+	*position = buff[0];
 	position++;
 	*position = 0x45;
-	*position = buffer[1];
+	*position = buff[1];
 	position++;
 	*position = 0x45;
 	left_or_right = 2 - left_or_right;
