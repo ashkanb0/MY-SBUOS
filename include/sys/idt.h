@@ -44,6 +44,7 @@ void int_kbd_srv(){
 void interrupt_0_handler(void);
 void int_0_srv(){
 	printf("INT ?\n");
+	PIC_sendEOT(0x20);
 
 }
 
@@ -64,11 +65,12 @@ void idts_setup(){
 	printf("idtent  SIZE [%d]\n", sizeof(IDTDescriptor));
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
 
+	set_isr(idt, 0x20, (uint64_t)(&interrupt_0_handler));
 
-	for (int i = 0; i < IDT_SIZE; ++i)
-	{
-		set_isr(idt, i, (uint64_t)(&interrupt_0_handler));
-	}
+	// for (int i = 0; i < IDT_SIZE; ++i)
+	// {
+	// 	set_isr(idt, i, (uint64_t)(&interrupt_0_handler));
+	// }
 
 
 	IDTDescriptor* l = (IDTDescriptor*)(IDTR.base);
