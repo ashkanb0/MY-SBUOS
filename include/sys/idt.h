@@ -33,7 +33,7 @@ void set_isr(IDTDescriptor* idt, int int_num, uint64_t handler){
 void keyboard_interrupt_handler(void);
 void int_kbd_srv(){
 	unsigned char l = inb(0x60);
-	printf("hit: %x\n", l);
+	put_pressed_key(l);
 	outb(0x20,0x20);
 }
 
