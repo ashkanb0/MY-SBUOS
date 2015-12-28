@@ -1,15 +1,22 @@
 #ifndef __KBD_HLP_H
 #define __KBD_HLP_H
 
-int _4_bit_to_h(unsigned short n){
-	return (n<10)?'0'+n:'A'+n-10;	
-}
+enum{
+S_INPUT = 0,
+S_NEED_1 = 1,
+S_NEED_2 = 2,
+S_FINISHED = 3,
+};
 
-int keyboard_get_char_for(unsigned char key, char* buff){
-	buff[0] = _4_bit_to_h((key>>4)&0x0f);
-	buff[1] = _4_bit_to_h(key&0x0f);
-	buff[2] = 0;
-	return 0;
-}
+char  _smalls  [128] = {""};
+char _capitals [128] = {""};
+
+
+#define K_SHIFTDOWN 0x2a
+#define K_CTRLDOWN  0x1d
+
+
+int keyboard_feed(unsigned char key, char* buff);
+
 
 #endif

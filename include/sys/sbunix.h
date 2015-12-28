@@ -11,7 +11,7 @@ void do_newline(){
 	col = 0;
 	row ++;
 	// TODO: rollup;	
-	// if (row>=80) row =0;
+	if (row>=80) row =0;
 }
 void write_k(char v){
 	if (v=='\n'){
@@ -28,20 +28,28 @@ void write_k(char v){
 	}
 }
 
-int left_or_right = 0;
+char _glyph_buffer [4] = {' ', ' ', ' ', ' '};
 
 void put_pressed_key(unsigned char key){
-	char buff [3] ;
-	keyboard_get_char_for(key, buff);
-	char* position = (char*)(0xb8000 + 160*21+ 2*40)+left_or_right;
-	*position = buff[0];
-	position++;
-	*position = 0x3f;
-	position++;
-	*position = buff[1];
-	position++;
-	*position = 0x3f;
-	left_or_right = 4 - left_or_right;
+	if(keyboard_feed(key, _glyph_buffer)){
+		char* position = (char*)(0xb8000 + 160*21+ 2*40);
+		*position = _glyph_buffer[0];
+		position++;
+		*position = 0x0b;
+		position++;
+		*position = _glyph_buffer[1];
+		position++;
+		*position = 0x0b;
+		position++;
+		*position = _glyph_buffer[2];
+		position++;
+		*position = 0x0b;
+		position++;
+		*position = _glyph_buffer[3];
+		position++;
+		*position = 0x0b;
+		position++;
+	}
 }
 
 
