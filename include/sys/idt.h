@@ -70,7 +70,7 @@ void idts_setup(){
 	printf("idtent  SIZE [%d]\n", sizeof(IDTDescriptor));
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
 
-	for (int i = 0x20; i < 8; ++i)
+	for (int i = 0; i < IDT_SIZE; ++i)
 	{
 		set_isr(idt, i, (uint64_t)(&dummy_interrupt_handler_0));
 	}
