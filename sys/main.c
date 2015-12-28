@@ -26,6 +26,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 
 	__asm__ volatile("sti");
 	PIC_sendEOI(0x20);
+	__asm__ volatile("int $80");
 
 	while(1){
 	}
