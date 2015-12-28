@@ -35,19 +35,19 @@ void put_pressed_key(unsigned char key){
 		char* position = (char*)(0xb8000 + 160*21+ 2*40);
 		*position = _glyph_buffer[0];
 		position++;
-		*position = 0x0b;
+		*position = 0x00;
 		position++;
 		*position = _glyph_buffer[1];
 		position++;
-		*position = 0x0b;
+		*position = 0x00;
 		position++;
 		*position = _glyph_buffer[2];
 		position++;
-		*position = 0x0b;
+		*position = 0x00;
 		position++;
 		*position = _glyph_buffer[3];
 		position++;
-		*position = 0x0b;
+		*position = 0x00;
 		position++;
 	}
 }
