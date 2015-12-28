@@ -45,6 +45,8 @@ void int_0_srv(){
 
 }
 
+IDTDescriptor [IDT_SIZE] idt;
+
 
 void idts_setup(){
 	
@@ -56,16 +58,14 @@ void idts_setup(){
 	} __attribute__((packed)) IDTR;
 
 	// TODO : CORRECT THESE!!!!!!
-	IDTR.base = 0x0011000; IDTR.length = 128*256;
+	IDTR.base = (uint64_t)(&idt); IDTR.length = sizeof(IDTDescriptor)*IDT_SIZE;
 	__asm__ ( "lidt (%0)" : : "r"(&IDTR) );
 
 	printf("idtent  SIZE [%d]\n", sizeof(IDTDescriptor));
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
 
-	IDTDescriptor* idt = (IDTDescriptor*)((uint64_t)IDTR.base);
 
-
-	set_isr(idt, 0, (uint64_t)(&interrupt_0_handler));
+	// set_isr(idt, 0, (uint64_t)(&interrupt_0_handler));
 	set_isr(idt, 0x20, (uint64_t)(&interrupt_0_handler));
 
 	// set_isr((uint64_t)IDTR.base, 0x08+0, (uint64_t)(&keyboard_interrupt_handler));
