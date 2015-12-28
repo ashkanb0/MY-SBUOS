@@ -74,11 +74,13 @@ void idts_setup(){
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
 
 
-	for (int i = 25; i < 50; ++i)
-	{
-		set_isr(idt, i, (uint64_t)(&keyboard_interrupt_handler));
-	}
+	// for (int i = 25; i < 50; ++i)
+	// {
+	// 	set_isr(idt, i, (uint64_t)(&keyboard_interrupt_handler));
+	// }
 
+		set_isr(idt, 32, (uint64_t)(&keyboard_interrupt_handler));
+		set_isr(idt, 33, (uint64_t)(&keyboard_interrupt_handler));
 
 
 	IDTDescriptor* l = (IDTDescriptor*)(IDTR.base);
