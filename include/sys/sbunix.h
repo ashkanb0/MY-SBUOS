@@ -41,7 +41,7 @@ void put_pressed_key(unsigned char key){
 	*position = buff[1];
 	position++;
 	*position = 0x3f;
-	left_or_right = 2 - left_or_right;
+	left_or_right = 4 - left_or_right;
 }
 
 
