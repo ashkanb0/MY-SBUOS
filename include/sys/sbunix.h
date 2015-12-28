@@ -11,7 +11,7 @@ void do_newline(){
 	col = 0;
 	row ++;
 	// TODO: rollup;	
-	if (row>=80) row =0;
+	// if (row>=80) row =0;
 }
 void write_k(char v){
 	if (v=='\n'){
@@ -36,11 +36,11 @@ void put_pressed_key(unsigned char key){
 	char* position = (char*)(0xb8000 + 160*21+ 2*40)+left_or_right;
 	*position = buff[0];
 	position++;
-	*position = 0x45;
+	*position = 0x3f;
 	position++;
 	*position = buff[1];
 	position++;
-	*position = 0x45;
+	*position = 0x3f;
 	left_or_right = 2 - left_or_right;
 }
 
