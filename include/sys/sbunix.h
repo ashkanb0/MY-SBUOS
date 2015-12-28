@@ -37,6 +37,7 @@ void put_pressed_key(unsigned char key){
 	*position = buff[0];
 	position++;
 	*position = 0x45;
+	position++;
 	*position = buff[1];
 	position++;
 	*position = 0x45;
