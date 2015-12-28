@@ -59,7 +59,7 @@ static inline void io_wait(void)
  
 void PIC_sendEOI(unsigned char irq)
 {
-	if(irq >= 8)
+	if(irq >= 0x20)
 		outb(PIC2_COMMAND,PIC_EOI);
  
 	outb(PIC1_COMMAND,PIC_EOI);
@@ -110,7 +110,8 @@ void PIC_setmasks(char master_masks, char slave_masks){
 
 void PIC_setup(void){
 	PIC_remap(PIC_MASTER_OFFSET, PIC_SLAVE_OFFSET);
-	PIC_setmasks(0,0); // clear all masks
+	// PIC_setmasks(0,0); // clear all masks
+	PIC_setmasks(0xfd,0xff); // clear all masks
 }
 
 

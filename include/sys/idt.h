@@ -44,7 +44,7 @@ void int_kbd_srv(){
 void interrupt_0_handler(void);
 void int_0_srv(){
 	printf("INT ?\n");
-	
+	outb(0x20,0x20);	
 }
 
 IDTDescriptor idt [IDT_SIZE];
