@@ -2,6 +2,8 @@
 
 
 int state = S_INPUT, pressed_key = 0, shift = 0, ctrl = 0;
+char* _smalls = _key_map + 0;
+char* _capitals = _key_map + 128;
 /**
 * buff is an array of "4" characters
 **/
