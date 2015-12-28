@@ -41,10 +41,16 @@ void int_kbd_srv(){
 	// printf("hit: %x\n", l);
 }
 
-void interrupt_0_handler(void);
-void int_0_srv(){
-	printf("INT ?\n");
-	outb(0x20,0x20);	
+void dummy_interrupt_handler_0(void);
+void dummy_interrupt_handler_1(void);
+
+void int_dmmy_srv_0(){
+	printf("Unimplemented Interrupt 0!\n");
+	outb(0x20,0x20);
+}
+void int_dmmy_srv_1(){
+	printf("Unimplemented Interrupt 1!\n");
+	outb(0x20,0x20); outb(0xa0,0x20);
 }
 
 IDTDescriptor idt [IDT_SIZE];
@@ -64,13 +70,15 @@ void idts_setup(){
 	printf("idtent  SIZE [%d]\n", sizeof(IDTDescriptor));
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
 
-	set_isr(idt, 0x20, (uint64_t)(&interrupt_0_handler));
-	set_isr(idt, 80, (uint64_t)(&interrupt_0_handler));
+	for (int i = 0x20; i < 8; ++i)
+	{
+		set_isr(idt, i, (uint64_t)(&dummy_interrupt_handler_0));
+	}
 
-	// for (int i = 0; i < IDT_SIZE; ++i)
-	// {
-	// 	set_isr(idt, i, (uint64_t)(&interrupt_0_handler));
-	// }
+	for (int i = 0x28; i < 8; ++i)
+	{
+		set_isr(idt, i, (uint64_t)(&dummy_interrupt_handler_1));
+	}
 
 
 	IDTDescriptor* l = (IDTDescriptor*)(IDTR.base);
