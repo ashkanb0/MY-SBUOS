@@ -80,6 +80,8 @@ void idts_setup(){
 		set_isr(idt, i, (uint64_t)(&dummy_interrupt_handler_1));
 	}
 
+	set_isr(idt, 80, (uint64_t)(&interrupt_0_handler));
+
 
 	IDTDescriptor* l = (IDTDescriptor*)(IDTR.base);
 
