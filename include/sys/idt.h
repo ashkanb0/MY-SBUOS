@@ -41,6 +41,8 @@ void int_kbd_srv(){
 	// printf("hit: %x\n", l);
 }
 
+
+// TODO : OFF WITH THESE!!!!
 void dummy_interrupt_handler_0(void);
 void dummy_interrupt_handler_1(void);
 
@@ -70,15 +72,8 @@ void idts_setup(){
 	printf("idtent  SIZE [%d]\n", sizeof(IDTDescriptor));
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
 
-	for (int i = 0; i < IDT_SIZE; ++i)
-	{
-		set_isr(idt, i, (uint64_t)(&dummy_interrupt_handler_0));
-	}
 
-	for (int i = 0x28; i < 8; ++i)
-	{
-		set_isr(idt, i, (uint64_t)(&dummy_interrupt_handler_1));
-	}
+	set_isr(idt, 1, (uint64_t)(&dummy_interrupt_handler_2));
 
 
 
