@@ -47,7 +47,7 @@ void int_0_srv(){
 
 }
 
-IDTDescriptor [IDT_SIZE] idt;
+IDTDescriptor idt [IDT_SIZE];
 
 
 void idts_setup(){
