@@ -36,10 +36,10 @@ void set_isr(IDTDescriptor* idt, int int_num, uint64_t handler){
 
 void keyboard_interrupt_handler(void);
 void int_kbd_srv(){
-	printf("INT ???\n");
 	char l = inb(0x60);
 	printf("hit: %x\n", l);
-	outb(0x20,0x20); outb(0xa0,0x20);
+	outb(0x20,0x20);
+	// outb(0x20,0x20); outb(0xa0,0x20);
 }
 
 
@@ -74,13 +74,8 @@ void idts_setup(){
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
 
 
-	// for (int i = 25; i < 50; ++i)
-	// {
-	// 	set_isr(idt, i, (uint64_t)(&keyboard_interrupt_handler));
-	// }
-
-		set_isr(idt, 32, (uint64_t)(&keyboard_interrupt_handler));
-		set_isr(idt, 33, (uint64_t)(&keyboard_interrupt_handler));
+	// set_isr(idt, 32, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr(idt, 33, (uint64_t)(&keyboard_interrupt_handler));
 
 
 	IDTDescriptor* l = (IDTDescriptor*)(IDTR.base);
