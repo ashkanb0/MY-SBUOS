@@ -3,6 +3,7 @@
 
 #include <sys/defs.h>
 #include <sys/keyboard_helpers.h>
+#include <sys/timer_helpers.h>
 #include <stdarg.h>
 
 
@@ -50,6 +51,21 @@ void put_pressed_key(unsigned char key){
 		*position = 0x00;
 		position++;
 	}
+}
+
+char _time_buffer [] = "0:00:00";
+
+void put_time_since_boot(void){
+	if (tick_count(_time_buffer)){
+		char* position = (char*)(0xb8000 + 160*21+ 2*56);
+		for(int i=0; _time_buffer[i]; ++i){
+			*position = _glyph_buffer[i];
+			position++;
+			*position = 0x00;
+			position++;		
+		}
+	} 
+
 }
 
 

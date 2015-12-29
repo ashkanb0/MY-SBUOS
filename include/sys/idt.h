@@ -40,8 +40,8 @@ void int_kbd_srv(){
 void timer_interrupt_handler(void);
 void int_tmr_srv(){
 	// unsigned char l = inb(0x60);
-	// put_pressed_key(l);
-	printf("INR\n");
+	put_time_since_boot();
+	// printf("INR\n");
 	outb(0x20,0x20);
 }
 
