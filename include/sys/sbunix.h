@@ -59,7 +59,7 @@ void put_time_since_boot(void){
 	if (tick_count(_time_buffer)){
 		char* position = (char*)(0xb8000 + 160*21+ 2*56);
 		for(int i=0; _time_buffer[i]; ++i){
-			*position = _glyph_buffer[i];
+			*position = _timer_buffer[i];
 			position++;
 			*position = 0x00;
 			position++;		
