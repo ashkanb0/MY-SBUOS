@@ -42,7 +42,7 @@ void int_tmr_srv(){
 	// unsigned char l = inb(0x60);
 	// put_pressed_key(l);
 	printf("INR\n");
-	// outb(0x20,0x20);
+	outb(0x20,0x20);
 }
 
 
