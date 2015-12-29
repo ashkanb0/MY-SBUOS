@@ -38,7 +38,7 @@ void int_kbd_srv(){
 }
 
 void timer_interrupt_handler(void);
-void int_kbd_srv(){
+void int_tmr_srv(){
 	// unsigned char l = inb(0x60);
 	// put_pressed_key(l);
 	printf("INR\n");
