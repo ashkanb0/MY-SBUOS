@@ -63,7 +63,7 @@ void PIC_setmasks(char master_masks, char slave_masks){
 void PIC_setup(void){
 	PIC_remap(PIC_MASTER_OFFSET, PIC_SLAVE_OFFSET);
 	// PIC_setmasks(0,0); // clear all masks
-	PIC_setmasks(0xfd,0xff); // KEYBOARD ONLY
+	PIC_setmasks(0xf9,0xff); // KEYBOARD ONLY
 }
 
 
