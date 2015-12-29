@@ -2,8 +2,9 @@
 
 
 int state = S_INPUT, pressed_key = 0, shift = 0, ctrl = 0;
-char* _smalls = _key_map + 0;
-char* _capitals = _key_map + 128;
+char* _smalls = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./";
+;
+char* _capitals = "~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?";
 /**
 * buff is an array of "4" characters
 **/
@@ -11,11 +12,9 @@ void print_glyph(char* buff){
 	// TODO : special cases: ESC, tab, ....
 	buff[0] = buff[1] = buff[2] = buff[3] = ' ';
 	if(shift||ctrl){
-		// buff[2] = _capitals[pressed_key];
-		buff[2] = 'A';
+		buff[2] = _capitals[pressed_key];
 	}else{
-		buff[2] = 'a';
-		// buff[2] = _smalls[pressed_key];
+		buff[2] = _smalls[pressed_key];
 	}
 	if(ctrl){
 		buff[1]= '^';

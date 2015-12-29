@@ -1,4 +1,4 @@
-// #include <sys/sbunix.h>
+#include <sys/sbunix.h>
 #include <sys/gdt.h>
 #include <sys/idt.h>
 #include <sys/tarfs.h>

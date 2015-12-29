@@ -8,7 +8,6 @@ S_NEED_2 = 2,
 S_FINISHED = 3,
 };
 
-char _key_map [256];
 
 
 #define K_SHIFTDOWN 0x2a
@@ -19,3 +18,4 @@ int keyboard_feed(unsigned char key, char* buff);
 
 
 #endif
+
