@@ -7,7 +7,6 @@
 
 #define IDT_SIZE 256
 
-
 typedef struct IDTDescriptor{
 	uint16_t offset_low;
 	uint16_t selector;

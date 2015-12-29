@@ -17,6 +17,13 @@
 #define PIC_MASTER_OFFSET 0x20
 #define PIC_SLAVE_OFFSET 0x28
 
+#define TMR_CMD			0x43
+#define TMR_INIT		0x43
+#define TMR_DATA		0x43
+// 1193180/32 = 37286
+#define TMR_FRQ_H		0x91
+#define TMR_FRQ_L		0xa6
+
 static inline void outb(uint16_t port, uint8_t val)
 {
 	__asm__ volatile ( "outb %0, %1" : : "a"(val), "Nd"(port) );
@@ -55,6 +62,16 @@ void PIC_remap(int offset1, int offset2)
 	outb(PIC1_DATA, a1);   // restore saved masks.
 	outb(PIC2_DATA, a2);
 }
+
+void timer_setup(void){
+	outb(TMR_CMD, TMR_INIT);
+	io_wait();
+	outb(TMR_DATA, TMR_FRQ_L);
+	io_wait();
+	outb(TMR_DATA, TMR_FRQ_H);
+	io_wait();
+}
+
 ///////// 
 void PIC_setmasks(char master_masks, char slave_masks){
 	outb(PIC1_DATA, master_masks);
