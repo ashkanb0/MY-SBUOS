@@ -11,19 +11,19 @@ char* _capitals = " ~!@#$%^&*()_+  QWERTYUIOP{}| ASDFGHJKL:\"   ZXCVBNM<>?     "
 void print_glyph(char* buff){
 	buff[0] = buff[1] = buff[2] = buff[3] = ' ';
 	// special cases: ESC, tab, ....
-	if(pressed_key = 0x01){//ESC
+	if(pressed_key == 0x01){//ESC
 		buff[0] = 'E';buff[1] = 'S'; buff[2]='C';
 		return;
 	}
-	if(pressed_key = 0x0e){//backspace
+	if(pressed_key == 0x0e){//backspace
 		buff[1] = '\\'; buff[2]='B';
 		return;
 	}
-	if(pressed_key = 0x0f){//tab
+	if(pressed_key == 0x0f){//tab
 		buff[1] = '\\'; buff[2]='T';
 		return;
 	}
-	if(pressed_key = 0x1c){//return
+	if(pressed_key == 0x1c){//return
 		buff[1] = '\\'; buff[2]='N';
 		return;
 	}
