@@ -11,7 +11,7 @@ void do_newline(){
 	col = 0;
 	row ++;
 	// TODO: rollup;	
-	if (row>=80) row =0;
+	if (row>=22) row =0;
 }
 void write_k(char v){
 	if (v=='\n'){
