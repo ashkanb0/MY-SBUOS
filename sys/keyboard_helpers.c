@@ -12,7 +12,7 @@ void print_glyph(char* buff){
 	buff[0] = buff[1] = buff[2] = buff[3] = ' ';
 	// special cases: ESC, tab, ....
 	if(pressed_key == 0x01){//ESC
-		buff[0] = 'E';buff[1] = 'S'; buff[2]='C';
+		buff[0] = 'E'; buff[1] = 'S'; buff[2]='C';
 		return;
 	}
 	if(pressed_key == 0x0e){//backspace

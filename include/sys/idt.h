@@ -34,7 +34,7 @@ void keyboard_interrupt_handler(void);
 void int_kbd_srv(){
 	unsigned char l = inb(0x60);
 	put_pressed_key(l);
-	printf("%x\n", l);
+	// printf("%x\n", l);
 	outb(0x20,0x20);
 }
 
