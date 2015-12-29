@@ -48,6 +48,9 @@ int keyboard_feed(unsigned char key, char* buff){
 	if (state == S_FINISHED){
 		print_glyph(buff);
 		state = S_INPUT;
+		shift = 0;
+		ctrl = 0;
+		pressed_key = 0;
 		return 1;
 	}
 	return 0;
