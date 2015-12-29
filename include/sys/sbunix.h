@@ -33,7 +33,7 @@ char _glyph_buffer [4] = {' ', ' ', ' ', ' '};
 
 void put_pressed_key(unsigned char key){
 	if(keyboard_feed(key, _glyph_buffer)){
-		char* position = (char*)(0xb8000 + 160*21+ 2*40);
+		char* position = (char*)(0xb8000 + 160*21+ 2*48);
 		*position = _glyph_buffer[0];
 		position++;
 		*position = 0x00;
