@@ -2,9 +2,9 @@
 
 
 int state = S_INPUT, pressed_key = 0, shift = 0, ctrl = 0;
-char* _smalls = " `1234567890-=  qwertyuiop[]\\ asdfghjkl;'zxcvbnm,./";
+char* _smalls = " `1234567890-=  qwertyuiop[]\\ asdfghjkl;'   zxcvbnm,./";
 ;
-char* _capitals = " ~!@#$%^&*()_+  QWERTYUIOP{}| ASDFGHJKL:\"ZXCVBNM<>?";
+char* _capitals = " ~!@#$%^&*()_+  QWERTYUIOP{}| ASDFGHJKL:\"   ZXCVBNM<>?";
 /**
 * buff is an array of "4" characters
 **/
