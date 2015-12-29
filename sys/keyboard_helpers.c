@@ -9,7 +9,7 @@ char* _capitals = _key_map + 128;
 **/
 void print_glyph(char* buff){
 	// TODO : special cases: ESC, tab, ....
-
+	buff[0] = buff[1] = buff[2] = buff[3] = ' ';
 	if(shift||ctrl){
 		// buff[2] = _capitals[pressed_key];
 		buff[2] = 'A';
