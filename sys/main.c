@@ -17,7 +17,8 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	printf("physfree = [%x]\n", physfree);
 	for(smap = (struct smap_t*)(modulep+2); smap < (struct smap_t*)((char*)modulep+modulep[1]+2*4); ++smap) {
 		if (smap->type == 1 /* memory */ && smap->length != 0) {
-			printf("Available Physical Memory [%x-%x]\n", smap->base, smap->base + smap->length);
+			// make_pages(smap->base, smap->length, );
+			printf("Available Physical Memory [%x-%x], %d\n", smap->base, smap->base + smap->length, smap->type);
 		}
 	}
 	printf("tarfs in [%p:%p]\n", &_binary_tarfs_start, &_binary_tarfs_end);
