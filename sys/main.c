@@ -2,6 +2,7 @@
 #include <sys/gdt.h>
 #include <sys/idt.h>
 #include <sys/tarfs.h>
+#include <sys/memory_helpers.h>
 
 // #include <sys/pic_helpers.h>
 
@@ -15,12 +16,15 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	while(modulep[0] != 0x9001) modulep += modulep[1]+2;
 	printf("physbase = [%x]\n", physbase);
 	printf("physfree = [%x]\n", physfree);
+	// uint64_t* track_physfree = (uint64_t*) physfree;
+	physfree = init_pages(physfree);
 	for(smap = (struct smap_t*)(modulep+2); smap < (struct smap_t*)((char*)modulep+modulep[1]+2*4); ++smap) {
 		if (smap->type == 1 /* memory */ && smap->length != 0) {
-			// make_pages(smap->base, smap->length, );
-			printf("Available Physical Memory [%x-%x], %d\n", smap->base, smap->base + smap->length, smap->type);
+			physfree = make_pages(smap->base, smap->length, physfree);
+			printf("Available Physical Memory [%x-%x]\n", smap->base, smap->base + smap->length);
 		}
 	}
+	printf("number of pages: %d\n", page_count);
 	printf("tarfs in [%p:%p]\n", &_binary_tarfs_start, &_binary_tarfs_end);
 	// kernel starts here
 	
