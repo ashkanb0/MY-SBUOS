@@ -30,12 +30,8 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 
 	printf("tarfs in [%p:%p]\n", &_binary_tarfs_start, &_binary_tarfs_end);
 
-	struct posix_header_ustar* p = (struct posix_header_ustar*)(&_binary_tarfs_start);
-
-	printf("name:size:type [%s:%s:%c]\n", p-> name, p->size, p->typeflag[0]);
-	printf("name:size:type [%s:%s:%c]\n", p[1].name, p[1].size, p[1].typeflag[0]);
-	printf("name:size:type [%s:%s:%c]\n", p[2].name, p[2].size, p[2].typeflag[0]);
-
+	init_tarfs(&_binary_tarfs_start, &_binary_tarfs_end);
+	
 
 	// kernel starts here
 	idts_setup();

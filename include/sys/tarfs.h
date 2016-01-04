@@ -24,4 +24,7 @@ struct posix_header_ustar {
 	char pad[12];
 };
 
+
+void init_tarfs(void* tar_start, void* tar_end);
+
 #endif
