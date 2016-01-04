@@ -38,7 +38,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 
 	for (int i = 0; i < 10; ++i)
 	{
-		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
+		tarfs_header* p = (tarfs_header *) (_tar_start+sizeof(tarfs_header)+offset);
 		printf("name: %s, size: %s \n", p->name, p->size);
 		offset += atoi(p->size);
 	}
