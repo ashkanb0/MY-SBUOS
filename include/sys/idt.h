@@ -73,7 +73,7 @@ void idts_setup(){
 
 	IDTR.base = (uint64_t)(&idt); IDTR.length = sizeof(IDTDescriptor)*IDT_SIZE;
 
-	printf("idtent  SIZE [%d]\n", sizeof(IDTDescriptor));
+	// printf("idtent  SIZE [%d]\n", sizeof(IDTDescriptor));
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
 
 
