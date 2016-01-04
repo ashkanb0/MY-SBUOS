@@ -29,10 +29,19 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	filter_out_pages(0xb8000 - PAGESIZE, 0xbb200); // mem-mapped display // TODO: is this correct?
 
 	printf("tarfs in [%p:%p]\n", &_binary_tarfs_start, &_binary_tarfs_end);
-
 	init_tarfs(&_binary_tarfs_start, &_binary_tarfs_end);
-	
 
+	// logging
+	uint64_t _tar_start = (uint64_t) &_binary_tarfs_start;
+	// uint64_t _tar_end = (uint64_t) &_binary_tarfs_end;
+	uint64_t offset = 0;
+
+	for (int i = 0; i < 10; ++i)
+	{
+		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
+		printf("name: %s, size: %s \n", p->name, p->size);
+		offset += atoi(p->size);
+	}
 	// kernel starts here
 	idts_setup();
 	PIC_setup();
