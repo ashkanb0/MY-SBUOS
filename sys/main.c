@@ -32,8 +32,9 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 
 	struct posix_header_ustar* p = (struct posix_header_ustar*)(&_binary_tarfs_start);
 
-	printf("name:size [%s:%s]\n", p-> name, p->size);
-	printf("name:size [%s:%s]\n", p[1].name, p[1].size);
+	printf("name:size:type [%s:%s:%c]\n", p-> name, p->size, p->typeflag[0]);
+	printf("name:size:type [%s:%s:%c]\n", p[1].name, p[1].size, p[1].typeflag[0]);
+	printf("name:size:type [%s:%s:%c]\n", p[2].name, p[2].size, p[2].typeflag[0]);
 
 
 	// kernel starts here
