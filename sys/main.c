@@ -28,8 +28,8 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	
 	// physfree should point to last used address in kernel by now,
 	// update accordingly up until here
-	filter_out_pages((uint64_t)physbase, (uint64_t)physfree); // kernel
-	filter_out_pages(0xb8000, 0xbb200); // mem-mapped display // TODO: is this correct?
+	filter_out_pages((uint64_t)physbase - PAGESIZE, (uint64_t)physfree); // kernel
+	filter_out_pages(0xb8000 - PAGESIZE, 0xbb200); // mem-mapped display // TODO: is this correct?
 
 
 	printf("number of free pages: %d\n", page_count);
