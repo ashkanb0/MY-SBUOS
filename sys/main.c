@@ -14,9 +14,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 		uint32_t type;
 	}__attribute__((packed)) *smap;
 	while(modulep[0] != 0x9001) modulep += modulep[1]+2;
-	// printf("physbase = [%x]\n", physbase);
-	// printf("physfree = [%x]\n", physfree);
-	// uint64_t* track_physfree = (uint64_t*) physfree;
+	
 	physfree = init_pages(physfree);
 	for(smap = (struct smap_t*)(modulep+2); smap < (struct smap_t*)((char*)modulep+modulep[1]+2*4); ++smap) {
 		if (smap->type == 1 /* memory */ && smap->length != 0) {
@@ -24,24 +22,27 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 			printf("Available Physical Memory [%x-%x]\n", smap->base, smap->base + smap->length);
 		}
 	}
-	printf("number of pages: %d\n", page_count);
-	
+
 	// physfree should point to last used address in kernel by now,
 	// update accordingly up until here
 	filter_out_pages((uint64_t)physbase - PAGESIZE, (uint64_t)physfree); // kernel
 	filter_out_pages(0xb8000 - PAGESIZE, 0xbb200); // mem-mapped display // TODO: is this correct?
 
-
-	printf("number of free pages: %d\n", page_count);
 	printf("tarfs in [%p:%p]\n", &_binary_tarfs_start, &_binary_tarfs_end);
+
+	struct posix_header_ustar* p = (struct posix_header_ustar*)(&_binary_tarfs_start);
+
+	printf("name:size [%s:%d]\n", p-> name, p->size);
+
+
 	// kernel starts here
-	
 	idts_setup();
 	PIC_setup();
 
 	__asm__ volatile("sti");
 
 	while(1){
+
 	}
 }
 
