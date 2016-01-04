@@ -40,6 +40,20 @@ void add_page(uint64_t base, mem_page* page){
 	page_count ++;
 }
 
+void filter_out_pages(uint64_t base, uint64_t top){
+	mem_page * p;
+
+	for(mem_page* curr = head -> next; curr; curr= curr->next){
+		p = curr->next;
+		while( p-> base > base && p-> base < top){
+			curr -> next = p-> next;
+			p = curr->next;
+
+			page_count --;
+		}
+	}
+}
+
 void * make_pages(uint64_t base, uint64_t length, void * physfree){
 	mem_page* page = (mem_page*) physfree;
 	for(uint64_t offset = 0; offset<length; offset+= PAGESIZE){
