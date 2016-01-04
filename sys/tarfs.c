@@ -7,7 +7,7 @@ uint64_t atoi(int l, char* s){
 	for(int i=0; i<l; i++, s++){
 		res = (res* 10) + ((uint64_t)*s - 0x30);
 	}
-	return 0;
+	return res;
 }
 
 void init_tarfs(void* tar_start, void* tar_end){
