@@ -40,7 +40,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	{
 		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
 		uint64_t size = tar_size(p->size);
-		printf("name: %s, size: %s = %x\n", p->name, p->size, size);
+		printf("name: %s, size: %s = %d\n", p->name, p->size, size);
 		offset += size + sizeof(tarfs_header) + tar_size_roundup(size);
 	}
 	// kernel starts here
