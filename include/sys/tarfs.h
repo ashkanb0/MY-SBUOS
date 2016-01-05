@@ -32,7 +32,7 @@ typedef struct posix_header_ustar {
 void init_tarfs(void* tar_start, void* tar_end);
 
 
-uint64_t atoi(int l, char* s);
+uint64_t tar_size( char* s);
 
 
 #endif

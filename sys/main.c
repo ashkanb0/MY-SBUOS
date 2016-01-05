@@ -39,8 +39,8 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	for (int i = 0; i < 10; ++i)
 	{
 		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
-		printf("name: %s, size: %s = %x, type %d\n", p->name, p->size, atoi(12, p->size), p->typeflag[0]);
-		offset += (p->typeflag[0]!=53?atoi(12, p->size):sizeof(tarfs_header));
+		printf("name: %s, size: %s = %x\n", p->name, p->size, tar_zise(p->size));
+		offset += tar_zise(p->size)+sizeof(tarfs_header);
 	}
 	// kernel starts here
 	idts_setup();
