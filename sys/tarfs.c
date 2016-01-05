@@ -2,9 +2,9 @@
 
 uint64_t _tar_start, _tar_end;
 
-uint64_t atoi(int l, char* s){
+uint64_t tar_size(char* s){
 	uint64_t res = 0;
-	for(int i=0; i<l-1; i++, s++){
+	for(int i=0; i<11; i++, s++){
 		res = (res* 8) + ((uint64_t)*s - 0x30);
 	}
 	return res;
