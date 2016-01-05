@@ -26,7 +26,7 @@ struct pt_regs {
 
 static __inline int64_t syscall_0(uint64_t n) {
 	int64_t res;
-	__asm volatile ("syscall"
+	__asm volatile ("int $0x80"
 		 : "=a" (res)
 		 : "a" (n)
 		 );
@@ -35,7 +35,7 @@ static __inline int64_t syscall_0(uint64_t n) {
 
 static __inline int64_t syscall_1(uint64_t n, uint64_t a1) {
 	int64_t res;
-	__asm volatile ("syscall"
+	__asm volatile ("int $0x80"
 		 : "=a" (res)
 		 : "a" (n), "D" (a1)
 		 );
@@ -44,7 +44,7 @@ static __inline int64_t syscall_1(uint64_t n, uint64_t a1) {
 
 static __inline int64_t syscall_2(uint64_t n, uint64_t a1, uint64_t a2) {
 	int64_t res;
-	__asm volatile ("syscall"
+	__asm volatile ("int $0x80"
 		 : "=a" (res)
 		 : "a" (n), "D" (a1), "S" (a2)
 		 );
@@ -54,7 +54,7 @@ static __inline int64_t syscall_2(uint64_t n, uint64_t a1, uint64_t a2) {
 static __inline int64_t syscall_3(uint64_t n, uint64_t a1, uint64_t a2, uint64_t a3) {
 	// return 0;
 	int64_t res;
-	__asm volatile ("syscall"
+	__asm volatile ("int $0x80"
 		 : "=a" (res)
 		 : "a" (n), "D" (a1), "S" (a2), "d" (a3)
 		 );
