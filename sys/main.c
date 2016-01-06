@@ -25,27 +25,16 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 
 	// physfree should point to last used address in kernel by now,
 	// update accordingly up until here
+	printf("KERNEL IN [%p:%p]\n", physbase, physfree);
 	filter_out_pages((uint64_t)physbase - PAGESIZE, (uint64_t)physfree); // kernel
 	filter_out_pages(0xb8000 - PAGESIZE, 0xbb200); // mem-mapped display // TODO: is this correct?
 
 	printf("tarfs in [%p:%p]\n", &_binary_tarfs_start, &_binary_tarfs_end);
 	init_tarfs(&_binary_tarfs_start, &_binary_tarfs_end);
 
-	// logging
-	uint64_t _tar_start = (uint64_t) &_binary_tarfs_start;
-	// uint64_t _tar_end = (uint64_t) &_binary_tarfs_end;
-	uint64_t offset = 0;
-
-	for (int i = 0; i < 10; ++i)
-	{
-		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
-		uint64_t size = tar_size(p->size);
-		printf("name: %s, size: %s = %d\n", p->name, p->size, size);
-		offset += size + sizeof(tarfs_header) + tar_size_roundup(size);
-	}
-	// kernel starts here
 	idts_setup();
 	PIC_setup();
+
 
 	__asm__ volatile("sti");
 
