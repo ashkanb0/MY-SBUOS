@@ -103,7 +103,7 @@ void filter_out_pages(uint64_t base, uint64_t top){
 
 	for(mem_page* curr = _free_page_list_head -> next; curr; curr= curr->next){
 		p = curr->next;
-		while( p-> base => base && p-> base < top){
+		while( p-> base >= base && p-> base < top){
 			curr -> next = p-> next;
 			p-> next = NULL;
 			add_page(p, &_filtered_page_list_tail);
