@@ -64,7 +64,8 @@ mem_page* get_free_page(){
 
 void self_map(uint64_t page_add, mem_page* table, int lvl){
 	// point to the lowest word-address of a 9-bit index
-	uint64_t index = (0x01ff & (page_add>> (12 + (lvl-1)*9)))|0x07; 
+	uint64_t index = (0x01ff & (page_add>> (12 + (lvl-1)*9))); 
+	// uint64_t index = (0x01ff & (page_add>> (12 + (lvl-1)*9)))|0x07; 
 	uint64_t* page = (uint64_t *)table;
 	
 	if (lvl == 1){
