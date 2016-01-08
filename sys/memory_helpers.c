@@ -68,7 +68,7 @@ void self_map(uint64_t page_add, uint64_t* table, int lvl){
 	uint64_t index = (0x01ff & (page_add>> (12 + (lvl-1)*9))); 
 	// uint64_t index = (0x01ff & (page_add>> (12 + (lvl-1)*9)))|0x07; 
 	
-	printf("self mapping address %x with index %x on level %d\n",page_add, index, lvl);
+	printf("self mapping address %x with index %x on level %d      \n",page_add, index, lvl);
 
 	if (lvl == 1){
 		table[index] = page_add;
@@ -120,6 +120,10 @@ void * make_pages(uint64_t base, uint64_t length, void * physfree){
 void self_map_filtered_out_pages(void){
 	kernel_pml4 = get_free_page();
 	zero_out(kernel_pml4);
+
+	// self referencing entry
+	uint64_t* table = (uint64_t*) kernel_pml4-> base;
+	table[510] = kernel_pml4-> base;
 
 	mem_page* curr = dequeue_page(&_filtered_page_list_head, &_filtered_page_list_tail);
 	while(curr){

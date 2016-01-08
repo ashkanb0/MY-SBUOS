@@ -2,6 +2,7 @@
 
 long row = 0; long col = 0;
 void do_newline(){
+	// TODO : clear rest of the line :))
 	col = 0;
 	row ++;
 	// TODO: rollup;	
