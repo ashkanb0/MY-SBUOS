@@ -65,14 +65,12 @@ mem_page* get_free_page(){
 }
 
 void self_map(uint64_t page_add, uint64_t* table, int lvl){
-	// point to the lowest word-address of a 9-bit index
-	uint64_t index = (0x01ff & (page_add>> (12 + (lvl-1)*9))); 
-	// uint64_t index = (0x01ff & (page_add>> (12 + (lvl-1)*9)))|0x07; 
 	
+	uint64_t index = (0x01ff & (page_add>> (12 + (lvl-1)*9))); 
 	// printf("self mapping address %x with index %x on level %d      \n",page_add, index, lvl);
 
 	if (lvl == 1){
-		table[index] = page_add;
+		table[index] = page_add | 3;
 		return;
 	}
 
@@ -80,7 +78,7 @@ void self_map(uint64_t page_add, uint64_t* table, int lvl){
 		// create it!
 		mem_page* next_lvl_page = get_free_page();
 		zero_out(next_lvl_page);
-		table[index] = ((uint64_t)next_lvl_page); 
+		table[index] = ((uint64_t)next_lvl_page)|3; 
 		// table[index] = ((uint64_t)next_lvl_page)| 0x07; //lowest byte
 	}
 	self_map(page_add, (uint64_t*)table[index], lvl - 1);
@@ -135,19 +133,30 @@ void self_map_filtered_out_pages(void){
 	}
 }
 
-void _set_cr3(uint64_t table){
-	__asm__ volatile("movq %0, %%cr3"::"g"(table):);
+
+static inline uint64_t _read_cr0(void)
+{
+    uint64_t val;
+    __asm__ volatile ( "mov %%cr0, %0" : "=r"(val) );
+    return val;
+}
+
+static inline void _set_cr3(uint64_t table){
+	__asm__ volatile("movq %0, %%cr3"::"r"(table):);
+}
+static inline void _set_cr0(uint64_t table){
+	__asm__ volatile("movq %0, %%cr0"::"g"(table):);
 }
 
 void setup_paging(){
 	self_map_filtered_out_pages();
 
-	uint64_t cr0_log;
+	uint64_t cr0= _read_cr0();
+	printf("CR0 : %x\n", cr0);
+	cr0 &= 0x07fffffff;
+	printf("CR0 : %x\n", cr0);
+	_set_cr0(cr0);
 
-	__asm__ volatile("movq %%cr0, %0":"=r"(cr0_log)::);
-
-	printf("CR0 : %x\n", cr0_log);
-
-	// _set_cr3((uint64_t)kernel_pml4->base);
+	_set_cr3((uint64_t)kernel_pml4->base);
 }
 

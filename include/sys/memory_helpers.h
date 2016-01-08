@@ -16,7 +16,6 @@ typedef struct memory_page_linked_list
 void * init_pages(void* physfree);
 void self_map_filtered_out_pages(void);
 void setup_paging();
-void _set_cr3(uint64_t table);
 void filter_out_pages(uint64_t base, uint64_t top);
 
 
