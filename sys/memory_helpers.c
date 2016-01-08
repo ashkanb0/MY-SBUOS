@@ -35,6 +35,8 @@ void * init_pages(void* physfree){
 
 
 uint64_t pt_sext(uint64_t n){
+	// DEBUGGING
+	return n;
 	// extending bit:16 to area 0:15
 	n &= 0x0000ffffffffffff;
 	if (n & SEXT_MASK){
