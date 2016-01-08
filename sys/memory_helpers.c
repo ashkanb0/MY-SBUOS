@@ -1,6 +1,10 @@
 #include <sys/sbunix.h>
 #include <sys/memory_helpers.h>
 
+// DEBUGGING
+#pragma OPTIMIZE OFF
+
+
 // LINKED LIST OF FREE PAGES
 mem_page* _free_page_list_head = NULL;
 mem_page* _free_page_list_tail = NULL;
