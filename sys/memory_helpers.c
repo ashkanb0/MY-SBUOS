@@ -61,6 +61,7 @@ mem_page* get_free_page(){
 	if (res != NULL){
 		add_page(res, &_used_page_list_tail);
 	}
+	printf("page being taken: %x\n", res->base);
 	return res;
 }
 
@@ -79,7 +80,6 @@ void self_map(uint64_t page_add, uint64_t* table, int lvl){
 		mem_page* next_lvl_page = get_free_page();
 		zero_out(next_lvl_page);
 		table[index] = ((uint64_t)next_lvl_page)|3; 
-		// table[index] = ((uint64_t)next_lvl_page)| 0x07; //lowest byte
 	}
 	self_map(page_add, (uint64_t*)table[index], lvl - 1);
 }
