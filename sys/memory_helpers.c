@@ -121,9 +121,11 @@ void * make_pages(uint64_t base, uint64_t length, void * physfree){
 void self_map_filtered_out_pages(void){
 	kernel_pml4 = get_free_page();
 	zero_out(kernel_pml4);
-	for(mem_page* curr = _free_page_list_head -> next; curr; curr= curr->next){
+	mem_page* curr = dequeue_page(&_filtered_page_list_head, &_filtered_page_list_tail);
+	while(curr){
 		self_map(curr->base, kernel_pml4, 4);
-	}	
+		curr = dequeue_page(&_filtered_page_list_head, &_filtered_page_list_tail);
+	}
 }
 
 void _set_cr3(uint64_t table){
