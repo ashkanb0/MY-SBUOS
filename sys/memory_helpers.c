@@ -1,9 +1,10 @@
 #include <sys/sbunix.h>
 #include <sys/memory_helpers.h>
 
-// DEBUGGING
-#pragma OPTIMIZE OFF
 
+uint64_t do_nothing(uint64_t arg){
+	return (arg+217)|arg;
+}
 
 // LINKED LIST OF FREE PAGES
 mem_page* _free_page_list_head = NULL;
@@ -118,6 +119,7 @@ void * make_pages(uint64_t base, uint64_t length, void * physfree){
 		page -> next = NULL;
 		add_page(page, &_free_page_list_tail);
 		page ++;
+		do_nothing(length);
 	}
 	return page;
 }
