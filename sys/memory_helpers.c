@@ -68,7 +68,7 @@ void self_map(uint64_t page_add, uint64_t* table, int lvl){
 	uint64_t index = (0x01ff & (page_add>> (12 + (lvl-1)*9))); 
 	// uint64_t index = (0x01ff & (page_add>> (12 + (lvl-1)*9)))|0x07; 
 	
-	printf("self mapping address %x with index %x on level %d      \n",page_add, index, lvl);
+	// printf("self mapping address %x with index %x on level %d      \n",page_add, index, lvl);
 
 	if (lvl == 1){
 		table[index] = page_add;
@@ -79,7 +79,8 @@ void self_map(uint64_t page_add, uint64_t* table, int lvl){
 		// create it!
 		mem_page* next_lvl_page = get_free_page();
 		zero_out(next_lvl_page);
-		table[index] = ((uint64_t)next_lvl_page)| 0x07; //lowest byte
+		table[index] = ((uint64_t)next_lvl_page); 
+		// table[index] = ((uint64_t)next_lvl_page)| 0x07; //lowest byte
 	}
 	self_map(page_add, (uint64_t*)table[index], lvl - 1);
 }
@@ -139,6 +140,6 @@ void _set_cr3(uint64_t table){
 void setup_paging(){
 	self_map_filtered_out_pages();
 
-	// _set_cr3((uint64_t)kernel_pml4->base);
+	_set_cr3((uint64_t)kernel_pml4->base);
 }
 
