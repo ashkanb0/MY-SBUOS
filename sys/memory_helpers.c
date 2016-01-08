@@ -139,6 +139,6 @@ void _set_cr3(uint64_t table){
 void setup_paging(){
 	self_map_filtered_out_pages();
 
-	_set_cr3((uint64_t)kernel_pml4->base);
+	// _set_cr3((uint64_t)kernel_pml4->base);
 }
 
