@@ -1,9 +1,6 @@
 #include <sys/sbunix.h>
 #include <sys/memory_helpers.h>
 
-
-#define SEXT_MASK 0x0000800000000000
-
 // LINKED LIST OF FREE PAGES
 mem_page* _free_page_list_head = NULL;
 mem_page* _free_page_list_tail = NULL;
@@ -33,17 +30,6 @@ void * init_pages(void* physfree){
 
 }
 
-
-uint64_t pt_sext(uint64_t n){
-	// DEBUGGING
-	return n;
-	// extending bit:16 to area 0:15
-	n &= 0x0000ffffffffffff;
-	if (n & SEXT_MASK){
-		n |= 0xffff000000000000;
-	}
-	return n;
-}
 
 void zero_out(mem_page* page){
 	char* bt = (char*) page-> base;
@@ -82,10 +68,10 @@ void self_map(uint64_t page_add, uint64_t* table, int lvl){
 	uint64_t index = (0x01ff & (page_add>> (12 + (lvl-1)*9))); 
 	// uint64_t index = (0x01ff & (page_add>> (12 + (lvl-1)*9)))|0x07; 
 	
-	// printf("self mapping address %x with index %x on level %d      \n",page_add, index, lvl);
+	printf("self mapping address %x with index %x on level %d      \n",page_add, index, lvl);
 
 	if (lvl == 1){
-		table[index] = pt_sext(page_add);
+		table[index] = page_add;
 		return;
 	}
 
@@ -93,8 +79,7 @@ void self_map(uint64_t page_add, uint64_t* table, int lvl){
 		// create it!
 		mem_page* next_lvl_page = get_free_page();
 		zero_out(next_lvl_page);
-		// table[index] = pt_sext((uint64_t)next_lvl_page->base)| 0x07; //lowest byte
-		table[index] = pt_sext((uint64_t)next_lvl_page->base); //lowest byte
+		table[index] = ((uint64_t)next_lvl_page)| 0x07; //lowest byte
 	}
 	self_map(page_add, (uint64_t*)table[index], lvl - 1);
 }
@@ -105,7 +90,7 @@ void filter_out_pages(uint64_t base, uint64_t top){
 
 	for(mem_page* curr = _free_page_list_head -> next; curr; curr= curr->next){
 		p = curr->next;
-		while( p-> base >= base && p-> base < top){
+		while( p-> base > base && p-> base < top){
 			curr -> next = p-> next;
 			p-> next = NULL;
 			add_page(p, &_filtered_page_list_tail);
