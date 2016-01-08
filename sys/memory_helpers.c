@@ -2,10 +2,6 @@
 #include <sys/memory_helpers.h>
 
 
-uint64_t do_nothing(uint64_t arg){
-	return (arg+217)|arg;
-}
-
 // LINKED LIST OF FREE PAGES
 mem_page* _free_page_list_head = NULL;
 mem_page* _free_page_list_tail = NULL;
@@ -108,18 +104,17 @@ void filter_out_pages(uint64_t base, uint64_t top){
 
 void * make_pages(uint64_t base, uint64_t length, void * physfree){
 	// JK :))))
-	if(base==0)return physfree;
+	// if(base==0)return physfree;
 	uint64_t free_int = (uint64_t) physfree;
 	free_int = free_int%PAGESIZE == 0? free_int : free_int + PAGESIZE - (free_int% PAGESIZE);
 	// I'll throw this out! 
 
 	mem_page* page = (mem_page*) free_int;
-	for(uint64_t offset = 0; offset<length; offset+= PAGESIZE){
-		page -> base = base+ offset;
+	for(uint64_t index = base; index<base+length; index+= PAGESIZE){
+		page -> base = index;
 		page -> next = NULL;
 		add_page(page, &_free_page_list_tail);
 		page ++;
-		do_nothing(length);
 	}
 	return page;
 }
