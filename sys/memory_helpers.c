@@ -136,12 +136,18 @@ void self_map_filtered_out_pages(void){
 }
 
 void _set_cr3(uint64_t table){
-	__asm__ volatile("movq %0, %%cr3"::"b"(table):);
+	__asm__ volatile("movq %0, %%cr3"::"g"(table):);
 }
 
 void setup_paging(){
 	self_map_filtered_out_pages();
 
-	_set_cr3((uint64_t)kernel_pml4->base);
+	uint64_t cr0_log;
+
+	__asm__ volatile("movq %%cr0, %0":"=r"(cr0_log)::);
+
+	printf("CR0 : %x\n", cr0_log);
+
+	// _set_cr3((uint64_t)kernel_pml4->base);
 }
 
