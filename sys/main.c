@@ -18,8 +18,8 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	physfree = init_pages(physfree);
 	for(smap = (struct smap_t*)(modulep+2); smap < (struct smap_t*)((char*)modulep+modulep[1]+2*4); ++smap) {
 		if (smap->type == 1 /* memory */ && smap->length != 0) {
-			physfree = make_pages(smap->base, smap->length, physfree);
 			printf("Available Physical Memory [%x-%x]\n", smap->base, smap->base + smap->length);
+			physfree = make_pages(smap->base, smap->length, physfree);
 		}
 	}
 
