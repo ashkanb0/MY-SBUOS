@@ -103,7 +103,7 @@ void filter_out_pages(uint64_t base, uint64_t top){
 
 void * make_pages(uint64_t base, uint64_t length, void * physfree){
 	// JK :))))
-	if (base==0) return;
+	if (base==0) return NULL;
 	uint64_t free_int = (uint64_t) physfree;
 	free_int = free_int%PAGESIZE == 0? free_int : free_int + PAGESIZE - (free_int% PAGESIZE);
 	// I'll throw this out! 
