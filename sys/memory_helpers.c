@@ -151,12 +151,12 @@ static inline void _set_cr0(uint64_t table){
 void setup_paging(){
 	self_map_filtered_out_pages();
 
+	_set_cr3((uint64_t)kernel_pml4->base);
+
+	// enabling paging
 	uint64_t cr0= _read_cr0();
-	printf("CR0 : %x\n", cr0);
-	cr0 &= 0x07fffffff;
-	printf("CR0 : %x\n", cr0);
+	cr0 |= 0x080000000;
 	_set_cr0(cr0);
 
-	_set_cr3((uint64_t)kernel_pml4->base);
 }
 
