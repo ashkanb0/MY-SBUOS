@@ -28,6 +28,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	printf("KERNEL IN [%p:%p]\n", physbase, physfree);
 	filter_out_pages((uint64_t)physbase - PAGESIZE, (uint64_t)physfree); // kernel
 	filter_out_pages(0xb8000 - PAGESIZE, 0xbb200); // mem-mapped display // TODO: is this correct?
+	setup_paging();
 
 	printf("tarfs in [%p:%p]\n", &_binary_tarfs_start, &_binary_tarfs_end);
 	init_tarfs(&_binary_tarfs_start, &_binary_tarfs_end);
