@@ -1,3 +1,4 @@
+#include <sys/sbunix.h>
 #include <sys/memory_helpers.h>
 
 // LINKED LIST OF FREE PAGES
@@ -68,6 +69,8 @@ void self_map(uint64_t page_add, mem_page* table, int lvl){
 	// uint64_t index = (0x01ff & (page_add>> (12 + (lvl-1)*9)))|0x07; 
 	uint64_t* page = (uint64_t *)table;
 	
+	printf("self mapping address %x with index %x on level %d\n",page_add, index, lvl);
+
 	if (lvl == 1){
 		page[index] = page_add;
 		return;
