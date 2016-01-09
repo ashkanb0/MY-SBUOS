@@ -93,7 +93,7 @@ void filter_out_pages(uint64_t base, uint64_t top){
 		while( p-> base > base && p-> base < top){
 			curr -> next = p-> next;
 			p-> next = NULL;
-			add_page(p, &_filtered_page_list_tail);
+			// add_page(p, &_filtered_page_list_tail);
 			p = curr->next;
 
 		}
@@ -134,6 +134,12 @@ void self_map_filtered_out_pages(void){
 }
 
 
+void map_kernel(void * physbase, void * physfree){
+	// MAPPING KERNEL TO 0xC0000000
+	
+}
+
+
 static inline uint64_t _read_cr0(void)
 {
     uint64_t val;
@@ -149,14 +155,15 @@ static inline void _set_cr0(uint64_t table){
 }
 
 void setup_paging(){
-	self_map_filtered_out_pages();
+	// self_map_filtered_out_pages();
 
-	_set_cr3((uint64_t)kernel_pml4->base);
+
+	// _set_cr3((uint64_t)kernel_pml4->base);
 
 	// enabling paging
-	uint64_t cr0= _read_cr0();
-	cr0 |= 0x080000000;
-	_set_cr0(cr0);
+	// uint64_t cr0= _read_cr0();
+	// cr0 |= 0x080000000;
+	// _set_cr0(cr0);
 
 }
 
