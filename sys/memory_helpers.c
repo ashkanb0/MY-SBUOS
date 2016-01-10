@@ -131,7 +131,7 @@ void * make_pages(uint64_t base, uint64_t length, void * physfree){
 static inline uint64_t _read_cr0(void)
 {
     uint64_t val;
-    __asm__ volatile ( "mov %%cr0, %0" : "=r"(val) );
+    __asm__ volatile ( "movq %%cr0, %0" : "=r"(val) );
     return val;
 }
 
