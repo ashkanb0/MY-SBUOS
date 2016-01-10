@@ -191,7 +191,13 @@ void setup_paging(
 	kernel_vrt =  mem_map_v((uint64_t)physbase, (uint64_t)physfree, kernel_vrt, kernel_pml4->base);
 	kernel_vrt = mem_map_v((uint64_t)displaybase, (uint64_t)displayfree, kernel_vrt, kernel_pml4->base);
 
-	set_display_address(kernel_vrt);
+	set_display_address(kernel_vrt| 0xffffffff80000000);
+
+
+	_free_page_list_head |= 0xffffffff80000000;
+	_free_page_list_tail |= 0xffffffff80000000;
+	_used_page_list_head |= 0xffffffff80000000;
+	_used_page_list_tail |= 0xffffffff80000000;
 
 	_set_cr3((uint64_t)kernel_pml4->base);
 
