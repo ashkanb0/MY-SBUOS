@@ -194,10 +194,10 @@ void setup_paging(
 	set_display_address(kernel_vrt| 0xffffffff80000000);
 
 
-	_free_page_list_head |= 0xffffffff80000000;
-	_free_page_list_tail |= 0xffffffff80000000;
-	_used_page_list_head |= 0xffffffff80000000;
-	_used_page_list_tail |= 0xffffffff80000000;
+	_free_page_list_head = (mem_page*)((uint64_t)_free_page_list_head|0xffffffff80000000);
+	_free_page_list_tail = (mem_page*)((uint64_t)_free_page_list_tail|0xffffffff80000000);
+	_used_page_list_head = (mem_page*)((uint64_t)_used_page_list_head|0xffffffff80000000);
+	_used_page_list_tail = (mem_page*)((uint64_t)_used_page_list_tail|0xffffffff80000000);
 
 	_set_cr3((uint64_t)kernel_pml4->base);
 
