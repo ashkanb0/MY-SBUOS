@@ -6,8 +6,8 @@
 mem_page* _free_page_list_head = NULL;
 mem_page* _free_page_list_tail = NULL;
 
-mem_page* _filtered_page_list_head = NULL;
-mem_page* _filtered_page_list_tail = NULL;
+// mem_page* _filtered_page_list_head = NULL;
+// mem_page* _filtered_page_list_tail = NULL;
 
 mem_page* _used_page_list_head = NULL;
 mem_page* _used_page_list_tail = NULL;
@@ -22,12 +22,13 @@ void * init_pages(void* physfree){
 
 	_free_page_list_head = _free_page_list_tail = dummy_hdr;
 
-	dummy_hdr[1].base = 0;
-	dummy_hdr[1].next = NULL;
+	// dummy_hdr[1].base = 0;
+	// dummy_hdr[1].next = NULL;
 
-	_filtered_page_list_head = _filtered_page_list_tail = dummy_hdr + 1;
+	// _filtered_page_list_head = _filtered_page_list_tail = dummy_hdr + 1;
 	
-	return dummy_hdr + 2;// number of allocated
+	return dummy_hdr + 1;// number of allocated
+	// return dummy_hdr + 2;// number of allocated
 
 }
 
@@ -65,13 +66,11 @@ mem_page* get_free_page(){
 	return res;
 }
 
-void self_map(uint64_t page_add, uint64_t* table, int lvl){
+void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
+	uint64_t index = (0x01ff & (virt>> (12 + (lvl-1)*9))); 
 	
-	uint64_t index = (0x01ff & (page_add>> (12 + (lvl-1)*9))); 
-	// printf("self mapping address %x with index %x on level %d      \n",page_add, index, lvl);
-
 	if (lvl == 1){
-		table[index] = page_add | 3;
+		table[index] = phys;
 		return;
 	}
 
@@ -79,10 +78,38 @@ void self_map(uint64_t page_add, uint64_t* table, int lvl){
 		// create it!
 		mem_page* next_lvl_page = get_free_page();
 		zero_out(next_lvl_page);
-		table[index] = ((uint64_t)next_lvl_page)|3; 
+		table[index] = ((uint64_t)next_lvl_page->base); 
 	}
-	self_map(page_add, (uint64_t*)table[index], lvl - 1);
+	map_v(phys, virt, (uint64_t*)table[index], lvl - 1);
+	
 }
+
+uint64_t mem_map_v(uint64_t base, uint64_t end, uint64_t vrtlmm, uint64_t table){
+	for(; base<end; base+=PAGESIZE, vrtlmm+=PAGESIZE){
+		map_v(base, vrtlmm, (uint64_t*)table, 4);
+	}
+	return vrtlmm;
+}
+
+
+// void self_map(uint64_t page_add, uint64_t* table, int lvl){
+	
+// 	uint64_t index = (0x01ff & (page_add>> (12 + (lvl-1)*9))); 
+// 	// printf("self mapping address %x with index %x on level %d      \n",page_add, index, lvl);
+
+// 	if (lvl == 1){
+// 		table[index] = page_add | 3;
+// 		return;
+// 	}
+
+// 	if(table[index] == 0){
+// 		// create it!
+// 		mem_page* next_lvl_page = get_free_page();
+// 		zero_out(next_lvl_page);
+// 		table[index] = ((uint64_t)next_lvl_page)|3; 
+// 	}
+// 	self_map(page_add, (uint64_t*)table[index], lvl - 1);
+// }
 
 
 void filter_out_pages(uint64_t base, uint64_t top){
@@ -90,7 +117,7 @@ void filter_out_pages(uint64_t base, uint64_t top){
 
 	for(mem_page* curr = _free_page_list_head -> next; curr; curr= curr->next){
 		p = curr->next;
-		while( p-> base > base && p-> base < top){
+		while( p-> base >= base && p-> base < top){
 			curr -> next = p-> next;
 			p-> next = NULL;
 			// add_page(p, &_filtered_page_list_tail);
@@ -118,26 +145,18 @@ void * make_pages(uint64_t base, uint64_t length, void * physfree){
 }
 
 
-void self_map_filtered_out_pages(void){
-	kernel_pml4 = get_free_page();
-	zero_out(kernel_pml4);
-
-	// self referencing entry
-	uint64_t* table = (uint64_t*) kernel_pml4-> base;
-	table[511] = kernel_pml4-> base;
-
-	mem_page* curr = dequeue_page(&_filtered_page_list_head, &_filtered_page_list_tail);
-	while(curr){
-		self_map(curr->base, (uint64_t *)kernel_pml4->base, 4);
-		curr = dequeue_page(&_filtered_page_list_head, &_filtered_page_list_tail);
-	}
-}
-
-
-void map_kernel(void * physbase, void * physfree){
-	// MAPPING KERNEL TO 0xC0000000
+// void self_map_filtered_out_pages(void){
 	
-}
+// 	// self referencing entry
+// 	uint64_t* table = (uint64_t*) kernel_pml4-> base;
+// 	table[511] = kernel_pml4-> base;
+
+// 	mem_page* curr = dequeue_page(&_filtered_page_list_head, &_filtered_page_list_tail);
+// 	while(curr){
+// 		self_map(curr->base, (uint64_t *)kernel_pml4->base, 4);
+// 		curr = dequeue_page(&_filtered_page_list_head, &_filtered_page_list_tail);
+// 	}
+// }
 
 
 static inline uint64_t _read_cr0(void)
@@ -154,11 +173,25 @@ static inline void _set_cr0(uint64_t table){
 	__asm__ volatile("movq %0, %%cr0"::"g"(table):);
 }
 
-void setup_paging(){
-	// self_map_filtered_out_pages();
+void setup_paging(
+	void* physbase, void* physfree, 
+	uint64_t displaybase, uint64_t displayfree, 
+	void* kernel_virtual){
+	
+	uint64_t kernel_vrt = (uint64_t)kernel_virtual;
+
+	kernel_pml4 = get_free_page();
+	zero_out(kernel_pml4);
+
+	// self referencing entry
+	uint64_t* table = (uint64_t*) kernel_pml4-> base;
+	table[511] = kernel_pml4-> base;
 
 
-	// _set_cr3((uint64_t)kernel_pml4->base);
+	kernel_vrt =  mem_map_v((uint64_t)physbase, (uint64_t)physfree, kernel_vrt, kernel_pml4->base);
+	kernel_vrt = mem_map_v((uint64_t)displaybase, (uint64_t)displayfree, kernel_vrt, kernel_pml4->base);
+
+	_set_cr3((uint64_t)kernel_pml4->base);
 
 	// enabling paging
 	// uint64_t cr0= _read_cr0();
