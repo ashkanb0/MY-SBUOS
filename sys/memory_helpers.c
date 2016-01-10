@@ -93,25 +93,6 @@ uint64_t mem_map_v(uint64_t base, uint64_t end, uint64_t vrtlmm, uint64_t table)
 }
 
 
-// void self_map(uint64_t page_add, uint64_t* table, int lvl){
-	
-// 	uint64_t index = (0x01ff & (page_add>> (12 + (lvl-1)*9))); 
-// 	// printf("self mapping address %x with index %x on level %d      \n",page_add, index, lvl);
-
-// 	if (lvl == 1){
-// 		table[index] = page_add | 3;
-// 		return;
-// 	}
-
-// 	if(table[index] == 0){
-// 		// create it!
-// 		mem_page* next_lvl_page = get_free_page();
-// 		zero_out(next_lvl_page);
-// 		table[index] = ((uint64_t)next_lvl_page)|3; 
-// 	}
-// 	self_map(page_add, (uint64_t*)table[index], lvl - 1);
-// }
-
 
 void filter_out_pages(uint64_t base, uint64_t top){
 	mem_page * p;
@@ -146,19 +127,6 @@ void * make_pages(uint64_t base, uint64_t length, void * physfree){
 }
 
 
-// void self_map_filtered_out_pages(void){
-	
-// 	// self referencing entry
-// 	uint64_t* table = (uint64_t*) kernel_pml4-> base;
-// 	table[511] = kernel_pml4-> base;
-
-// 	mem_page* curr = dequeue_page(&_filtered_page_list_head, &_filtered_page_list_tail);
-// 	while(curr){
-// 		self_map(curr->base, (uint64_t *)kernel_pml4->base, 4);
-// 		curr = dequeue_page(&_filtered_page_list_head, &_filtered_page_list_tail);
-// 	}
-// }
-
 
 static inline uint64_t _read_cr0(void)
 {
@@ -192,20 +160,20 @@ void setup_paging(
 	kernel_vrt =  mem_map_v((uint64_t)physbase, (uint64_t)physfree, kernel_vrt, kernel_pml4->base);
 	mem_map_v((uint64_t)displaybase, (uint64_t)displayfree, kernel_vrt, kernel_pml4->base);
 
-	set_display_address(kernel_vrt| 0xffffffff80000000);
+	set_display_address(kernel_vrt| KERNEL_MAPPING);
 
 
-	_free_page_list_head = (mem_page*)((uint64_t)_free_page_list_head|0xffffffff80000000);
-	_free_page_list_tail = (mem_page*)((uint64_t)_free_page_list_tail|0xffffffff80000000);
-	_used_page_list_head = (mem_page*)((uint64_t)_used_page_list_head|0xffffffff80000000);
-	_used_page_list_tail = (mem_page*)((uint64_t)_used_page_list_tail|0xffffffff80000000);
+	_free_page_list_head = (mem_page*)((uint64_t)_free_page_list_head|KERNEL_MAPPING);
+	_free_page_list_tail = (mem_page*)((uint64_t)_free_page_list_tail|KERNEL_MAPPING);
+	_used_page_list_head = (mem_page*)((uint64_t)_used_page_list_head|KERNEL_MAPPING);
+	_used_page_list_tail = (mem_page*)((uint64_t)_used_page_list_tail|KERNEL_MAPPING);
 
 	_set_cr3((uint64_t)kernel_pml4->base);
 
 	// enabling paging
-	// uint64_t cr0= _read_cr0();
-	// cr0 |= 0x080000000;
-	// _set_cr0(cr0);
+	uint64_t cr0= _read_cr0();
+	cr0 |= 0x080000000;
+	_set_cr0(cr0);
 
 }
 

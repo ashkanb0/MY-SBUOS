@@ -5,6 +5,7 @@
 
 // 4 K
 #define PAGESIZE 4096
+#define KERNEL_MAPPING 0xffffffff80000000
 
 typedef struct memory_page_linked_list
 {
