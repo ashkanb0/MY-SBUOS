@@ -98,16 +98,15 @@ uint64_t mem_map_v(uint64_t base, uint64_t end, uint64_t vrtlmm, uint64_t table)
 
 
 void filter_out_pages(uint64_t base, uint64_t top){
-	mem_page * p;
+	mem_page * curr;
 
-	for(mem_page* curr = _free_page_list_head -> next; curr; curr= curr->next){
-		p = curr->next;
-		while( p-> base >= base && p-> base < top){
-			curr -> next = p-> next;
-			p-> next = NULL;
+	for(mem_page* prev = _free_page_list_head ; ; prev= prev->next){
+		curr = prev->next;
+		while( curr-> base >= base && curr-> base < top){
+			prev -> next = curr -> next;
+			curr -> next = NULL;
 			// add_page(p, &_filtered_page_list_tail);
-			p = curr->next;
-
+			curr = prev -> next;
 		}
 	}
 }
@@ -151,6 +150,10 @@ void setup_paging(
 	uint64_t displaybase, uint64_t displayfree, 
 	void* kernel_virtual){
 	
+	filter_out_pages((uint64_t)physbase - PAGESIZE, (uint64_t)physfree); // kernel
+	filter_out_pages(0xb8000 - PAGESIZE, 0xbb200); // mem-mapped display // TODO: is this correct?
+	
+
 	uint64_t kernel_vrt = (uint64_t)kernel_virtual;
 
 	kernel_pml4 = get_free_page();

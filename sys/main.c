@@ -28,8 +28,6 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	// update accordingly up until here
 	printf("KERNEL IN [%p:%p:%x]\n", physbase, physfree, &kernmem);
 	// filter_out_pages(0, (uint64_t)physfree); // kernel
-	filter_out_pages((uint64_t)physbase - PAGESIZE, (uint64_t)physfree); // kernel
-	filter_out_pages(0xb8000 - PAGESIZE, 0xbb200); // mem-mapped display // TODO: is this correct?
 	// filter_out_pages(0xb8000 - PAGESIZE, 0xb9000); // mem-mapped display (4k)
 	setup_paging(physbase, physfree, 0xb8000, 0xbb200, &kernmem);
 
