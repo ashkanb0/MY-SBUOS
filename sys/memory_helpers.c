@@ -70,8 +70,8 @@ void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 	uint64_t index = (0x01ff & (virt>> (12 + (lvl-1)*9))); 
 	
 	if (lvl == 1){
-		// table[index] = (phys & 0xffffffffff000)|3;
-		table[index] = (phys & 0xffffffffff000);
+		table[index] = (phys & 0xffffffffff000)|3;
+		// table[index] = (phys & 0xffffffffff000);
 		// printf("putting physical %x->%x in index %d for virtual %x\n", phys, (phys & 0xffffffffff000)|3,index, virt );
 		return;
 	}
@@ -81,8 +81,8 @@ void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 		printf("creating page for index %x out of virtual %x in level %d\n",index, virt, lvl );
 		mem_page* next_lvl_page = get_free_page();
 		zero_out(next_lvl_page);
-		// table[index] = ((uint64_t)next_lvl_page->base|7); 
-		table[index] = ((uint64_t)next_lvl_page->base); 
+		table[index] = ((uint64_t)next_lvl_page->base|3); 
+		// table[index] = ((uint64_t)next_lvl_page->base); 
 	}
 	map_v(phys, virt, (uint64_t*)table[index], lvl - 1);
 	
@@ -133,14 +133,16 @@ void * make_pages(uint64_t base, uint64_t length, void * physfree){
 
 
 void _set_cr3(uint64_t table){
+		// "movq %%cr0, %%rax\n\t"
+		// "or $0x80000000, %%eax\n\t"
+		// "movq %%rax, %%cr0\n\t"
 	__asm__ volatile(
-		"movq %%cr0, %%rax\n\t"
-		"or $0x80000000, %%eax\n\t"
-		"movq %%rax, %%cr0\n\t"
 		"movq %0, %%cr3\n\r"
-		"and $0x7fffffff, %%eax\n\t"
-		"movq %%rax, %%cr0\n\t"
-		::"r"(table):);
+		::"r"(table):
+		);
+		// "and $0x7fffffff, %%eax\n\t"
+		// "movq %%rax, %%cr0\n\t"
+		// "%eax"
 }
 
 uint64_t _read_cr0(){
