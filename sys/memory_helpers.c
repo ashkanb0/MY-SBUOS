@@ -70,7 +70,8 @@ void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 	uint64_t index = (0x01ff & (virt>> (12 + (lvl-1)*9))); 
 	
 	if (lvl == 1){
-		table[index] = (phys & 0xffffffffff000)|3;
+		// table[index] = (phys & 0xffffffffff000)|3;
+		table[index] = (phys & 0xffffffffff000);
 		// printf("putting physical %x->%x in index %d for virtual %x\n", phys, (phys & 0xffffffffff000)|3,index, virt );
 		return;
 	}
@@ -80,7 +81,8 @@ void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 		printf("creating page for index %x out of virtual %x in level %d\n",index, virt, lvl );
 		mem_page* next_lvl_page = get_free_page();
 		zero_out(next_lvl_page);
-		table[index] = ((uint64_t)next_lvl_page->base|7); 
+		// table[index] = ((uint64_t)next_lvl_page->base|7); 
+		table[index] = ((uint64_t)next_lvl_page->base); 
 	}
 	map_v(phys, virt, (uint64_t*)table[index], lvl - 1);
 	
