@@ -85,11 +85,12 @@ void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 }
 
 uint64_t mem_map_v(uint64_t base, uint64_t end, uint64_t vrtlmm, uint64_t table){
+	uint64_t res = vrtlmm;
 	for(; base<end; base+=PAGESIZE){
-		map_v(base, vrtlmm, (uint64_t*)table, 4);
-		vrtlmm+=PAGESIZE;
+		map_v(base, res, (uint64_t*)table, 4);
+		res+=PAGESIZE;
 	}
-	return vrtlmm;
+	return res;
 }
 
 
