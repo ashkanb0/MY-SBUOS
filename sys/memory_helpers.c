@@ -100,7 +100,7 @@ uint64_t mem_map_v(uint64_t base, uint64_t end, uint64_t vrtlmm, uint64_t table)
 void filter_out_pages(uint64_t base, uint64_t top){
 	mem_page * curr;
 
-	for(mem_page* prev = _free_page_list_head ; ; prev= prev->next){
+	for(mem_page* prev = _free_page_list_head ; prev -> next ; prev= prev->next){
 		curr = prev->next;
 		while( curr-> base >= base && curr-> base < top){
 			prev -> next = curr -> next;
@@ -168,7 +168,6 @@ void setup_paging(
 	mem_map_v((uint64_t)displaybase, (uint64_t)displayfree, kernel_vrt, kernel_pml4->base);
 
 	set_display_address(kernel_vrt| KERNEL_MAPPING);
-
 
 	_free_page_list_head = (mem_page*)((uint64_t)_free_page_list_head|KERNEL_MAPPING);
 	_free_page_list_tail = (mem_page*)((uint64_t)_free_page_list_tail|KERNEL_MAPPING);
