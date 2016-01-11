@@ -116,10 +116,10 @@ void filter_out_pages(uint64_t base, uint64_t top){
 void * make_pages(uint64_t base, uint64_t length, void * physfree){
 	// JK :))))
 	if(base==0)return physfree;
-	uint64_t free_int = (uint64_t) physfree;
-	free_int = free_int%PAGESIZE == 0? free_int : free_int + PAGESIZE - (free_int% PAGESIZE);
 	// I'll throw this out! 
 
+	uint64_t free_int = (uint64_t) physfree;
+	free_int = free_int%PAGESIZE == 0? free_int : free_int + PAGESIZE - (free_int% PAGESIZE);
 	mem_page* page = (mem_page*) free_int;
 	for(uint64_t index = base; index<base+length; index+= PAGESIZE){
 		page -> base = index;
@@ -147,16 +147,8 @@ uint64_t _read_cr3(){
 	return res;
 }
 
-// void _enable_paging(){
-// 	__asm__ volatile(
-// 	"mov %%cr0, %%rax\n\t"
-// 	"or $1 << 31, %%eax\n\t"
-// 	"mov %%rax, %%cr0\n\t"
-// 	:
-// 	:
-// 	: "%rax");
-	
-// }
+
+
 
 void setup_paging(
 	void* physbase, void* physfree, 
@@ -196,7 +188,9 @@ void setup_paging(
 	set_display_address(kernel_vrt| KERNEL_MAPPING);
 
 	// CHANEG PAGING
+	_disable_paging();
 	_set_cr3((uint64_t)kernel_pml4->base);
+	_enable_paging();
 
 	printf("HELLO PAGED WORLD!\n");
 
