@@ -71,7 +71,7 @@ void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 	
 	if (lvl == 1){
 		table[index] = (phys & 0xffffffffff000)|3;
-		printf("putting physical %x->%x in index %d for virtual %x\n" phys, (phys & 0xffffffffff000)|3,index, virt );
+		printf("putting physical %x->%x in index %d for virtual %x\n", phys, (phys & 0xffffffffff000)|3,index, virt );
 		return;
 	}
 
