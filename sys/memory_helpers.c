@@ -70,7 +70,7 @@ void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 	uint64_t index = (0x01ff & (virt>> (12 + (lvl-1)*9))); 
 	
 	if (lvl == 1){
-		table[index] = (phys & 0xffffffffff000);
+		table[index] = (phys & 0xffffffffff000)|3;
 		return;
 	}
 
@@ -78,7 +78,7 @@ void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 		// create it!
 		mem_page* next_lvl_page = get_free_page();
 		zero_out(next_lvl_page);
-		table[index] = ((uint64_t)next_lvl_page->base); 
+		table[index] = ((uint64_t)next_lvl_page->base|7); 
 	}
 	map_v(phys, virt, (uint64_t*)table[index], lvl - 1);
 	
