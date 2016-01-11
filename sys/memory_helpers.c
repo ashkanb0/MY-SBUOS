@@ -136,9 +136,13 @@ void _set_cr3(uint64_t table){
 	__asm__ volatile("movq %0, %%cr3"::"r"(table):);
 }
 
-uint64_t _read_cr3(){
+uint64_t _read_cr0(){
 	uint64_t res;
 	__asm__ volatile("movq %%cr0, %0":"=r"(res):);
+	return res;
+}
+uint64_t _read_cr3(){
+	uint64_t res;
 	__asm__ volatile("movq %%cr3, %0":"=r"(res):);
 	return res;
 }
@@ -185,7 +189,10 @@ void setup_paging(
 
 
 	// DEBUGGING, MAKE SURE TO REMOVE IT!!
+	kernel_vrt = _read_cr0();
+	printf("CR0 %x\n", kernel_vrt);
 	kernel_vrt = _read_cr3();
+	printf("CR3 %x\n", kernel_vrt);
 
 	// CHANEG PAGING
 	_set_cr3((uint64_t)kernel_pml4->base);
