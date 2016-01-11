@@ -129,18 +129,19 @@ void * make_pages(uint64_t base, uint64_t length, void * physfree){
 
 
 
-static inline uint64_t _read_cr0(void)
-{
-    uint64_t val;
-    __asm__ volatile ( "movq %%cr0, %0" : "=r"(val) );
-    return val;
-}
-
 static inline void _set_cr3(uint64_t table){
 	__asm__ volatile("movq %0, %%cr3"::"r"(table):);
 }
-static inline void _set_cr0(uint64_t table){
-	__asm__ volatile("movq %0, %%cr0"::"g"(table):);
+
+void _enable_paging(){
+	__asm__ volatile(
+	"mov %%cr0, %%rax\n\t"
+	"or $1 << 31, %%eax\n\t"
+	"mov %%rax, %%cr0\n\t"
+	:
+	:
+	: "%rax");
+	
 }
 
 void setup_paging(
@@ -172,9 +173,7 @@ void setup_paging(
 	_set_cr3((uint64_t)kernel_pml4->base);
 
 	// enabling paging
-	uint64_t cr0= _read_cr0();
-	cr0 |= 0x080000000;
-	_set_cr0(cr0);
 
+	_enable_paging();
 }
 

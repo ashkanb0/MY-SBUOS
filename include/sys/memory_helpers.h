@@ -22,4 +22,6 @@ void filter_out_pages(uint64_t base, uint64_t top);
 
 void * make_pages(uint64_t base, uint64_t length, void * physfree);
 
+void _enable_paging();
+
 #endif
