@@ -171,9 +171,9 @@ void setup_paging(
 	_set_cr3((uint64_t)kernel_pml4->base);
 
 	// enabling paging
-	uint64_t cr0= _read_cr0();
-	cr0 |= 0x080000000;
-	_set_cr0(cr0);
+	// uint64_t cr0= _read_cr0();
+	// cr0 |= 0x080000000;
+	// _set_cr0(cr0);
 
 }
 
