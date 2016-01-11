@@ -189,10 +189,8 @@ void setup_paging(
 
 
 	// DEBUGGING, MAKE SURE TO REMOVE IT!!
-	kernel_vrt = _read_cr0();
-	printf("CR0 %x\n", kernel_vrt);
-	kernel_vrt = _read_cr3();
-	printf("CR3 %x\n", kernel_vrt);
+	printf("CR0 %x\n", _read_cr0());
+	printf("CR3 %x\n", _read_cr3());
 
 	// CHANEG PAGING
 	_set_cr3((uint64_t)kernel_pml4->base);
