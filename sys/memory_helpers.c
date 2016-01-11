@@ -77,7 +77,7 @@ void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 
 	if(table[index] == 0){
 		// create it!
-		printf("creating page for index %x in level %d\n",index, lvl );
+		printf("creating page for index %x out of virtual %x in level %d\n",index, virt, lvl );
 		mem_page* next_lvl_page = get_free_page();
 		zero_out(next_lvl_page);
 		table[index] = ((uint64_t)next_lvl_page->base|7); 
@@ -157,8 +157,8 @@ void setup_paging(
 	zero_out(kernel_pml4);
 
 	// self referencing entry
-	uint64_t* table = (uint64_t*) kernel_pml4-> base;
-	table[511] = kernel_pml4-> base;
+	// uint64_t* table = (uint64_t*) kernel_pml4-> base;
+	// table[510] = kernel_pml4-> base;
 
 
 	kernel_vrt =  mem_map_v((uint64_t)physbase, (uint64_t)physfree, kernel_vrt, kernel_pml4->base);
