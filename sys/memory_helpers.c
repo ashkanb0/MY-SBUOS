@@ -132,7 +132,7 @@ void * make_pages(uint64_t base, uint64_t length, void * physfree){
 
 
 
-static inline void _set_cr3(uint64_t table){
+void _set_cr3(uint64_t table){
 	__asm__ volatile("movq %0, %%cr3"::"r"(table):);
 }
 
