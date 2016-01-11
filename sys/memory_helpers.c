@@ -133,7 +133,14 @@ void * make_pages(uint64_t base, uint64_t length, void * physfree){
 
 
 void _set_cr3(uint64_t table){
-	__asm__ volatile("movq %0, %%cr3"::"r"(table):);
+	__asm__ volatile(
+		"movq %cr0, %rax\n\t"
+		"or $0x80000000, %eax\n\t"
+		"movq %rax, %cr0\n\t"
+		"movq %0, %%cr3\n\r"
+		"and $0x7fffffff, %eax\n\t"
+		"movq %rax, %cr0\n\t"
+		::"r"(table):);
 }
 
 uint64_t _read_cr0(){
@@ -188,9 +195,9 @@ void setup_paging(
 	set_display_address(kernel_vrt| KERNEL_MAPPING);
 
 	// CHANEG PAGING
-	_disable_paging();
+	// _disable_paging();
 	_set_cr3((uint64_t)kernel_pml4->base);
-	_enable_paging();
+	// _enable_paging();
 
 	printf("HELLO PAGED WORLD!\n");
 
