@@ -133,16 +133,7 @@ void * make_pages(uint64_t base, uint64_t length, void * physfree){
 
 
 void _set_cr3(uint64_t table){
-		// "movq %%cr0, %%rax\n\t"
-		// "or $0x80000000, %%eax\n\t"
-		// "movq %%rax, %%cr0\n\t"
-	__asm__ volatile(
-		"movq %0, %%cr3\n\r"
-		::"r"(table):
-		);
-		// "and $0x7fffffff, %%eax\n\t"
-		// "movq %%rax, %%cr0\n\t"
-		// "%eax"
+	__asm__ volatile("movq %0, %%cr3\n\r"::"r"(table): );
 }
 
 uint64_t _read_cr0(){
@@ -153,6 +144,11 @@ uint64_t _read_cr0(){
 uint64_t _read_cr3(){
 	uint64_t res;
 	__asm__ volatile("movq %%cr3, %0":"=r"(res):);
+	return res;
+}
+uint64_t _read_cr3(){
+	uint64_t res;
+	__asm__ volatile("movq %%cr4, %0":"=r"(res):);
 	return res;
 }
 
@@ -185,6 +181,7 @@ void setup_paging(
 	// DEBUGGING, MAKE SURE TO REMOVE IT!!
 	printf("CR0 %x\n", _read_cr0());
 	printf("CR3 %x\n", _read_cr3());
+	printf("CR3 %x\n", _read_cr4());
 
 
 
