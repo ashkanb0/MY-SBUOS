@@ -146,7 +146,7 @@ uint64_t _read_cr3(){
 	__asm__ volatile("movq %%cr3, %0":"=r"(res):);
 	return res;
 }
-uint64_t _read_cr3(){
+uint64_t _read_cr4(){
 	uint64_t res;
 	__asm__ volatile("movq %%cr4, %0":"=r"(res):);
 	return res;
