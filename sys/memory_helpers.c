@@ -132,20 +132,20 @@ void * make_pages(uint64_t base, uint64_t length, void * physfree){
 
 
 
-// static inline void _set_cr3(uint64_t table){
-// 	__asm__ volatile("movq %0, %%cr3"::"r"(table):);
-// }
-
-void _enable_paging(){
-	__asm__ volatile(
-	"mov %%cr0, %%rax\n\t"
-	"or $1 << 31, %%eax\n\t"
-	"mov %%rax, %%cr0\n\t"
-	:
-	:
-	: "%rax");
-	
+static inline void _set_cr3(uint64_t table){
+	__asm__ volatile("movq %0, %%cr3"::"r"(table):);
 }
+
+// void _enable_paging(){
+// 	__asm__ volatile(
+// 	"mov %%cr0, %%rax\n\t"
+// 	"or $1 << 31, %%eax\n\t"
+// 	"mov %%rax, %%cr0\n\t"
+// 	:
+// 	:
+// 	: "%rax");
+	
+// }
 
 void setup_paging(
 	void* physbase, void* physfree, 
@@ -176,6 +176,11 @@ void setup_paging(
 	_used_page_list_head = (mem_page*)((uint64_t)_used_page_list_head|KERNEL_MAPPING);
 	_used_page_list_tail = (mem_page*)((uint64_t)_used_page_list_tail|KERNEL_MAPPING);
 
+
+	// DEBUGGING, MAKE SURE TO REMOVE IT!!
+	// kernel_vrt = _read_cr3();
+
+	// CHANEG PAGING
 	_set_cr3((uint64_t)kernel_pml4->base);
 
 	printf("HELLO PAGED WORLD!\n");
