@@ -157,8 +157,8 @@ void setup_paging(
 	zero_out(kernel_pml4);
 
 	// self referencing entry
-	// uint64_t* table = (uint64_t*) kernel_pml4-> base;
-	// table[510] = kernel_pml4-> base;
+	uint64_t* table = (uint64_t*) kernel_pml4-> base;
+	table[510] = kernel_pml4-> base; // 511 is being used by kernel memory
 
 
 	kernel_vrt =  mem_map_v((uint64_t)physbase, (uint64_t)physfree, kernel_vrt, kernel_pml4->base);
