@@ -84,6 +84,7 @@ void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 		table[index] = ((uint64_t)next_lvl_page->base|3); 
 		// table[index] = ((uint64_t)next_lvl_page->base); 
 	}
+	// TODO : use virtual memory of (table[index])
 	map_v(phys, virt, (uint64_t*)table[index], lvl - 1);
 	
 }
@@ -181,7 +182,7 @@ void setup_paging(
 	// DEBUGGING, MAKE SURE TO REMOVE IT!!
 	printf("CR0 %x\n", _read_cr0());
 	printf("CR3 %x\n", _read_cr3());
-	printf("CR3 %x\n", _read_cr4());
+	printf("CR4 %x\n", _read_cr4());
 
 
 
