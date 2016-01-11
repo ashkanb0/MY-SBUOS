@@ -134,12 +134,12 @@ void * make_pages(uint64_t base, uint64_t length, void * physfree){
 
 void _set_cr3(uint64_t table){
 	__asm__ volatile(
-		"movq %cr0, %rax\n\t"
-		"or $0x80000000, %eax\n\t"
-		"movq %rax, %cr0\n\t"
+		"movq %%cr0, %%rax\n\t"
+		"or $0x80000000, %%eax\n\t"
+		"movq %%rax, %%cr0\n\t"
 		"movq %0, %%cr3\n\r"
-		"and $0x7fffffff, %eax\n\t"
-		"movq %rax, %cr0\n\t"
+		"and $0x7fffffff, %%eax\n\t"
+		"movq %%rax, %%cr0\n\t"
 		::"r"(table):);
 }
 
