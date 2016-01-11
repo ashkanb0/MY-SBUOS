@@ -172,8 +172,10 @@ void setup_paging(
 
 	_set_cr3((uint64_t)kernel_pml4->base);
 
-	// enabling paging
+	printf("HELLO PAGED WORLD!\n");
 
-	_enable_paging();
+	// enabling paging
+	// _enable_paging();
+
 }
 
