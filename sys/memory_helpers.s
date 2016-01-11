@@ -1,5 +1,10 @@
 .text
+.global _set_cr3
 
+_set_cr3:
+	movq %rdi, %rax
+	movq %rax, %cr3
+	retq
 
 # .global _enable_paging
 # _enable_paging:
