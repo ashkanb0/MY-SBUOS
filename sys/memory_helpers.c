@@ -138,6 +138,7 @@ void _set_cr3(uint64_t table){
 
 uint64_t _read_cr3(){
 	uint64_t res;
+	__asm__ volatile("movq %%cr0, %0":"=r"(res):);
 	__asm__ volatile("movq %%cr3, %0":"=r"(res):);
 	return res;
 }
