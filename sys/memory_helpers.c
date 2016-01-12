@@ -85,7 +85,7 @@ void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 		// table[index] = ((uint64_t)next_lvl_page->base); 
 	}
 	// TODO : use virtual memory of (table[index])
-	map_v(phys, virt, (uint64_t*)table[index], lvl - 1);
+	map_v(phys, virt, (uint64_t*)(table[index] & ~3), lvl - 1);
 	
 }
 
