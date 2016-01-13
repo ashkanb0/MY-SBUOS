@@ -4,8 +4,6 @@
 
 // LINKED LIST OF FREE PAGES
 mem_page* _page_list = NULL;
-mem_page* _free_page_list = NULL;
-mem_page* _used_page_list = NULL;
 
 
 uint64_t _free_page_list_head = 0;
@@ -147,11 +145,8 @@ void filter_out_pages(uint64_t base, uint64_t top){
 void * make_pages(uint64_t base, uint64_t length, void * physfree){
 	// JK :))))
 	if(base==0)return physfree;
-	// I'll throw this out! 
-
-	uint64_t free_int = (uint64_t) physfree;
-	free_int = free_int%PAGESIZE == 0? free_int : free_int + PAGESIZE - (free_int% PAGESIZE);
-	mem_page* page = (mem_page*) free_int;
+	
+	mem_page* page = (mem_page*) physfree;
 
 	uint64_t list_index = 1;
 	for(uint64_t index = base; index<base+length; index+= PAGESIZE, list_index++){
@@ -192,12 +187,10 @@ void setup_paging(
 	uint64_t displaybase, uint64_t displayfree, 
 	void* kernel_virtual){
 	
-	printf("HERE 1\n");
 
 	filter_out_pages((uint64_t)physbase, (uint64_t)physfree); // kernel
 	filter_out_pages(0xb8000 - PAGESIZE, 0xbb200); // mem-mapped display // TODO: is this correct?
 	
-	printf("HERE 2\n");
 
 	uint64_t kernel_vrt = (uint64_t)kernel_virtual;
 
@@ -219,10 +212,10 @@ void setup_paging(
 
 
 
-	_free_page_list_head = _free_page_list_head|KERNEL_MAPPING;
-	_free_page_list_tail = _free_page_list_tail|KERNEL_MAPPING;
-	_used_page_list_head = _used_page_list_head|KERNEL_MAPPING;
-	_used_page_list_tail = _used_page_list_tail|KERNEL_MAPPING;
+	// _free_page_list_head = _free_page_list_head|KERNEL_MAPPING;
+	// _free_page_list_tail = _free_page_list_tail|KERNEL_MAPPING;
+	// _used_page_list_head = _used_page_list_head|KERNEL_MAPPING;
+	// _used_page_list_tail = _used_page_list_tail|KERNEL_MAPPING;
 
 
 	set_display_address(kernel_vrt| KERNEL_MAPPING);
