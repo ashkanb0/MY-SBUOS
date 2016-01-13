@@ -190,9 +190,12 @@ void setup_paging(
 	uint64_t displaybase, uint64_t displayfree, 
 	void* kernel_virtual){
 	
+	printf("HERE 1\n");
+
 	filter_out_pages((uint64_t)physbase, (uint64_t)physfree); // kernel
 	filter_out_pages(0xb8000 - PAGESIZE, 0xbb200); // mem-mapped display // TODO: is this correct?
 	
+	printf("HERE 2\n");
 
 	uint64_t kernel_vrt = (uint64_t)kernel_virtual;
 
@@ -206,7 +209,6 @@ void setup_paging(
 
 	kernel_vrt =  mem_map_v((uint64_t)physbase, (uint64_t)physfree, kernel_vrt, kernel_pml4->base);
 	mem_map_v((uint64_t)displaybase, (uint64_t)displayfree, kernel_vrt, kernel_pml4->base);
-
 
 	// DEBUGGING, MAKE SURE TO REMOVE IT!!
 	printf("CR0 %x\n", _read_cr0());
