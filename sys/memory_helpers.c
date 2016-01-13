@@ -137,9 +137,9 @@ void filter_out_pages(uint64_t base, uint64_t top){
 		uint64_t next_index = curr -> next;
 		mem_page * next = (_page_list+ next_index);
 		while( next-> base >= base && next-> base < top){
-			mem_page * next = (_page_list+ next_index);
 			next_index =  curr -> next = next -> next;
 			next -> next = 0;
+			next = (_page_list+ next_index);
 		}
 	}
 }
