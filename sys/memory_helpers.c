@@ -19,7 +19,7 @@ uint64_t get_page_table(uint64_t virt, uint64_t lvl){
 	printf("TURNING VIRTUAL   >%x<  on level %d\n",virt , lvl);
 	uint64_t mask = 0x0000ffffffffffff >> ((lvl) * 9);
 	virt =  ((virt & 0x0000fffffffff000) >> (lvl * 9)) & 0xfffffffffffff000 ;
-	printf("virt >%x<        mask >%x<                   \n",virt , mask);
+	printf("virt >%x<        mask >%x<         lvl %d          \n",virt , mask, lvl);
 	printf("DONE WITH VIRTUAL >%x<                   \n",(0xffffff7fbfdfe000 & (~mask))| (virt & mask));
 	return (0xffffff7fbfdfe000 & (~mask))| (virt & mask);
 }
