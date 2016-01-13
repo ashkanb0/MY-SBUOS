@@ -16,10 +16,10 @@ mem_page* kernel_pml4 = NULL;
 
 
 uint64_t get_page_table(uint64_t virt, uint64_t lvl){
-	printf("TURNING VIRTUAL  %x  on level %d\n",virt , lvl);
+	printf("TURNING VIRTUAL   >%x<  on level %d\n",virt , lvl);
 	uint64_t mask = 0x0000ffffffffffff >> ((lvl) * 9);
 	virt = virt >> (lvl * 9) & 0x0000fffffffff000 ;
-	printf("DONE WITH VIRTUAL %x                    \n",(0xffffff7fbfdfe000 & (~mask))| (virt & mask));
+	printf("DONE WITH VIRTUAL >%x<                   \n",(0xffffff7fbfdfe000 & (~mask))| (virt & mask));
 	return (0xffffff7fbfdfe000 & (~mask))| (virt & mask);
 }
 
@@ -231,10 +231,6 @@ void setup_paging(
 
 	printf("HELLO PAGED WORLD!\n");
 	// DEBUGGING, MAKE SURE TO REMOVE IT!!
-	printf("CR0 %x\n", _read_cr0());
-	printf("CR3 %x\n", _read_cr3());
-	printf("CR4 %x\n", _read_cr4());
-
 	// enabling paging
 	// _enable_paging();
 
