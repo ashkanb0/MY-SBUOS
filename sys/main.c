@@ -3,6 +3,7 @@
 #include <sys/idt.h>
 #include <sys/tarfs.h>
 #include <sys/memory_helpers.h>
+#include <sys/process_helpers.h>
 
 // #include <sys/pic_helpers.h>
 
@@ -15,7 +16,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 		uint32_t type;
 	}__attribute__((packed)) *smap;
 	while(modulep[0] != 0x9001) modulep += modulep[1]+2;
-	
+
 	physfree = init_pages(physfree);
 	for(smap = (struct smap_t*)(modulep+2); smap < (struct smap_t*)((char*)modulep+modulep[1]+2*4); ++smap) {
 		if (smap->type == 1 /* memory */ && smap->length != 0) {
@@ -24,11 +25,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 		}
 	}
 
-	// physfree should point to last used address in kernel by now,
-	// update accordingly up until here
 	printf("KERNEL IN [%p:%p:%x]\n", physbase, physfree, &kernmem);
-	// filter_out_pages(0, (uint64_t)physfree); // kernel
-	// filter_out_pages(0xb8000 - PAGESIZE, 0xb9000); // mem-mapped display (4k)
 	setup_paging(physbase, physfree, 0xb8000, 0xbb200, &kernmem);
 
 	printf("tarfs in [%p:%p]\n", &_binary_tarfs_start, &_binary_tarfs_end);
@@ -36,13 +33,13 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 
 	idts_setup();
 	PIC_setup();
-
+	process_init();
 
 	__asm__ volatile("sti");
 
-	while(1){
+	exec_empty("/bin/sbush");
 
-	}
+	while(1);
 }
 
 #define INITIAL_STACK_SIZE 4096

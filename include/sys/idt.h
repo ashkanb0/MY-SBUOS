@@ -39,10 +39,27 @@ void int_kbd_srv(){
 
 void timer_interrupt_handler(void);
 void int_tmr_srv(){
-	// unsigned char l = inb(0x60);
-	put_time_since_boot();
-	// printf("INR\n");
+	unsigned char l = inb(0x60);
+	put_pressed_key(l);
+	// printf("%x\n", l);
 	outb(0x20,0x20);
+}
+
+void syscall_interrupt_handler(void);
+void int_syscall_srv(){
+	printf("SYSCALL INTERRUPT NOT IMPLEMENTED\n");
+	
+}
+
+void d_interrupt_handler(void);
+void int_d_srv(){
+	printf("D INTERRUPT NOT IMPLEMENTED\n");
+	
+}
+
+void e_interrupt_handler(void);
+void int_e_srv(){
+	printf("E INTERRUPT NOT IMPLEMENTED\n");
 }
 
 
@@ -77,8 +94,11 @@ void idts_setup(){
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
 
 
+	set_isr(idt, 0x0d, (uint64_t)(&d_interrupt_handler));
+	set_isr(idt, 0x0e, (uint64_t)(&e_interrupt_handler));
 	set_isr(idt, 0x20, (uint64_t)(&timer_interrupt_handler));
 	set_isr(idt, 0x21, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr(idt, 0x80, (uint64_t)(&syscall_interrupt_handler));
 
 
 	IDTDescriptor* l = (IDTDescriptor*)(IDTR.base);
