@@ -120,6 +120,7 @@ uint64_t mem_map_v(uint64_t base, uint64_t end, uint64_t vrtlmm, uint64_t table)
 
 void filter_out_pages(uint64_t base, uint64_t top){
 	mem_page * curr = (_page_list+ _free_page_list_head);
+	printf("HERE > %x\n", _free_page_list_head);
 	while(curr->base >= base && curr->base < top ){
 		_free_page_list_head = curr -> next;
 		curr = (_page_list+ _free_page_list_head);
@@ -130,6 +131,7 @@ void filter_out_pages(uint64_t base, uint64_t top){
 		}
 	}
 
+	printf("HERE >> %x\n", _free_page_list_head);
 	for(uint64_t index = _free_page_list_head ;index!=0 ; index = curr->next){
 		curr = (_page_list+ index);
 		uint64_t next_index = curr -> next;
