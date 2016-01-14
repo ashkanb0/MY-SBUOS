@@ -18,7 +18,7 @@ int self_referencing_enabled = 0;
 
 uint64_t* get_page_table(uint64_t virt, uint64_t lvl){
 	uint64_t mask = 0x0000ffffffffffff >> ((lvl) * 9);
-	virt =  ((virt & 0x0000fffffffff000) >> (lvl * 9)) & 0xfffffffffffff000 ;
+	virt =  (virt  >> (lvl * 9)) & 0xfffffffffffff000 ;
 	uint64_t res = (0xffffff7fbfdfe000 & (~mask))| (virt & mask);
 	// printf("DONE WITH VIRTUAL >%x<                        \n",res);
 	return (uint64_t*)res;
@@ -108,7 +108,7 @@ void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 	// if (self_referencing_enabled==0)
 	// 	map_v(phys, virt, (uint64_t*)(table[index] & ~3), lvl - 1);
 	// else
-		map_v(phys, virt, get_page_table(virt, lvl - 1), lvl - 1);
+		map_v(phys, virt, get_page_table((uint64_t)(table[index] & ~3), lvl - 1), lvl - 1);
 }
 
 uint64_t mem_map_v(uint64_t base, uint64_t end, uint64_t vrtlmm, uint64_t table){
