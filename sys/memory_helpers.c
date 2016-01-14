@@ -23,7 +23,7 @@ uint64_t* get_page_table(uint64_t virt, uint64_t lvl){
 		int table_lvl = 4;
 		while(table_lvl > lvl){
 			uint64_t index = (0x01ff & (virt>> (12 + (table_lvl-1) * 9)));
-			if(table_lvl==1)printf("on virt = %x, table_lvl = %d, index = %d\n",virt , table_lvl, index);
+			if(table_lvl==2)printf("on virt = %x, table_lvl = %d, index = %d\n",virt , table_lvl, index);
 			table = (uint64_t *)(table[index]);
 			table_lvl --;
 		}
