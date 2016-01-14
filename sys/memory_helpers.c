@@ -14,9 +14,20 @@ uint64_t _used_page_list_tail = 0;
 
 mem_page* kernel_pml4 = NULL;
 
+int self_referencing_enabled = 0;
 
 uint64_t get_page_table(uint64_t virt, uint64_t lvl){
 	// printf("TURNING VIRTUAL   >%x<  on level %d           \n", virt, lvl);
+	if (self_referencing_enabled == 0){
+		uint64_t* table = (uint64_t*) (kernel_pml4->base);
+		int table_lvl = 4;
+		while(table_lvl > lvl){
+			uint64_t index = (0x01ff & (virt>> (12 + (table_lvl-1)*9)));
+			table = (uint64_t *)(table[index]);
+			table_lvl --;
+		}
+		return (uint64_t)table;
+	}
 	uint64_t mask = 0x0000ffffffffffff >> ((lvl) * 9);
 	virt =  ((virt & 0x0000fffffffff000) >> (lvl * 9)) & 0xfffffffffffff000 ;
 	uint64_t res = (0xffffff7fbfdfe000 & (~mask))| (virt & mask);
@@ -190,10 +201,6 @@ void setup_paging(
 	uint64_t displaybase, uint64_t displayfree, 
 	void* kernel_virtual){
 	
-	// SET SELF REFERENCING FOR BOOT PAGE TABLE!!!!!!
-	uint64_t pre_cr3 =  _read_cr3();
-	((uint64_t*)pre_cr3)[511] = pre_cr3;
-
 
 	filter_out_pages((uint64_t)physbase, (uint64_t)physfree); // kernel
 	filter_out_pages(0xb8000 - PAGESIZE, 0xbb200); // mem-mapped display // TODO: is this correct?
