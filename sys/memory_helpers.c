@@ -16,11 +16,11 @@ mem_page* kernel_pml4 = NULL;
 
 
 uint64_t get_page_table(uint64_t virt, uint64_t lvl){
-	printf("TURNING VIRTUAL   >%x<  on level %d           \n", virt, lvl);
+	// printf("TURNING VIRTUAL   >%x<  on level %d           \n", virt, lvl);
 	uint64_t mask = 0x0000ffffffffffff >> ((lvl) * 9);
 	virt =  ((virt & 0x0000fffffffff000) >> (lvl * 9)) & 0xfffffffffffff000 ;
 	uint64_t res = (0xffffff7fbfdfe000 & (~mask))| (virt & mask);
-	printf("DONE WITH VIRTUAL >%x<                        \n",res);
+	// printf("DONE WITH VIRTUAL >%x<                        \n",res);
 	return res;
 }
 
