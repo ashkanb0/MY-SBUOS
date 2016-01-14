@@ -147,7 +147,7 @@ void printf(const char *fmt, ...){
 
 			}
 			else if(*fmt == 'x' || *fmt == 'p') {//assuming p is the same as x for now!
-				int number = va_arg(val, int64_t);
+				uint64_t number = va_arg(val, int64_t);
 				itoh_printf(_buffer, number); 
 				printf(_buffer);
 			}
