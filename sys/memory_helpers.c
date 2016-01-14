@@ -16,23 +16,24 @@ mem_page* kernel_pml4 = NULL;
 
 int self_referencing_enabled = 0;
 
-uint64_t get_page_table(uint64_t virt, uint64_t lvl){
+uint64_t* get_page_table(uint64_t virt, uint64_t lvl){
 	// printf("TURNING VIRTUAL   >%x<  on level %d           \n", virt, lvl);
 	if (self_referencing_enabled == 0){
 		uint64_t* table = (uint64_t*) (kernel_pml4->base);
 		int table_lvl = 4;
 		while(table_lvl > lvl){
-			uint64_t index = (0x01ff & (virt>> (12 + (table_lvl-1)*9)));
+			uint64_t index = (0x01ff & (virt>> (12 + (table_lvl-1) * 9)));
+			printf("on virt = %x, table_lvl = %d, index = %d\n",virt , table_lvl, index);
 			table = (uint64_t *)(table[index]);
 			table_lvl --;
 		}
-		return (uint64_t)table;
+		return table;
 	}
 	uint64_t mask = 0x0000ffffffffffff >> ((lvl) * 9);
 	virt =  ((virt & 0x0000fffffffff000) >> (lvl * 9)) & 0xfffffffffffff000 ;
 	uint64_t res = (0xffffff7fbfdfe000 & (~mask))| (virt & mask);
 	// printf("DONE WITH VIRTUAL >%x<                        \n",res);
-	return res;
+	return (uint64_t*)res;
 }
 
 void * init_pages(void* physfree){
@@ -116,8 +117,7 @@ void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 	}
 	// TODO : use virtual memory of (table[index])
 	// map_v(phys, virt, (uint64_t*)(virt_mem(table[index] & ~3, lvl)), lvl - 1);
-	map_v(phys, virt, (uint64_t*)(get_page_table(virt, lvl - 1)), lvl - 1);
-	
+	map_v(phys, virt, get_page_table(virt, lvl - 1), lvl - 1);
 }
 
 uint64_t mem_map_v(uint64_t base, uint64_t end, uint64_t vrtlmm, uint64_t table){
