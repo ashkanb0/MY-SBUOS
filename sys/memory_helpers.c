@@ -17,18 +17,6 @@ mem_page* kernel_pml4 = NULL;
 int self_referencing_enabled = 0;
 
 uint64_t* get_page_table(uint64_t virt, uint64_t lvl){
-	// printf("TURNING VIRTUAL   >%x<  on level %d           \n", virt, lvl);
-	if (self_referencing_enabled == 0){
-		uint64_t* table = (uint64_t*) (kernel_pml4->base);
-		int table_lvl = 4;
-		while(table_lvl > lvl){
-			uint64_t index = (0x01ff & (virt>> (12 + (table_lvl-1) * 9)));
-			table = (uint64_t *)(table[index]);
-			table_lvl --;
-			if(table_lvl<=2)printf("on virt = %x, table_lvl = %d, index = %d\n", virt, table_lvl ,index);
-		}
-		return table;
-	}
 	uint64_t mask = 0x0000ffffffffffff >> ((lvl) * 9);
 	virt =  ((virt & 0x0000fffffffff000) >> (lvl * 9)) & 0xfffffffffffff000 ;
 	uint64_t res = (0xffffff7fbfdfe000 & (~mask))| (virt & mask);
@@ -117,7 +105,10 @@ void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 	}
 	// TODO : use virtual memory of (table[index])
 	// map_v(phys, virt, (uint64_t*)(virt_mem(table[index] & ~3, lvl)), lvl - 1);
-	map_v(phys, virt, get_page_table(virt, lvl - 1), lvl - 1);
+	if (self_referencing_enabled==0)
+		map_v(phys, virt, (uint64_t*)(table[index] & ~3), lvl - 1);
+	else
+		map_v(phys, virt, get_page_table(virt, lvl - 1), lvl - 1);
 }
 
 uint64_t mem_map_v(uint64_t base, uint64_t end, uint64_t vrtlmm, uint64_t table){
@@ -201,6 +192,7 @@ void setup_paging(
 	uint64_t displaybase, uint64_t displayfree, 
 	void* kernel_virtual){
 	
+	self_referencing_enabled = 0;
 
 	filter_out_pages((uint64_t)physbase, (uint64_t)physfree); // kernel
 	filter_out_pages(0xb8000 - PAGESIZE, 0xbb200); // mem-mapped display // TODO: is this correct?
@@ -234,6 +226,8 @@ void setup_paging(
 	_page_list = (mem_page *)(((uint64_t)_page_list)|KERNEL_MAPPING);
 
 	set_display_address(kernel_vrt| KERNEL_MAPPING);
+
+	self_referencing_enabled = 1;
 
 	// CHANEG PAGING
 	// _disable_paging();
