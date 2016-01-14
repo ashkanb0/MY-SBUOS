@@ -190,8 +190,10 @@ void setup_paging(
 	uint64_t displaybase, uint64_t displayfree, 
 	void* kernel_virtual){
 	
+	// SET SELF REFERENCING FOR BOOT PAGE TABLE!!!!!!
+	uint64_t pre_cr3 =  _read_cr3();
+	((uint64_t*)pre_cr3)[511] = pre_cr3;
 
-	printf("%x, %x, %x\n", 0xffffffffff000, 0x0000007fffffffff, 0x7357abcd98767357);
 
 	filter_out_pages((uint64_t)physbase, (uint64_t)physfree); // kernel
 	filter_out_pages(0xb8000 - PAGESIZE, 0xbb200); // mem-mapped display // TODO: is this correct?
