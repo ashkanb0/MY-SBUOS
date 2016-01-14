@@ -105,10 +105,10 @@ void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 	}
 	// TODO : use virtual memory of (table[index])
 	// map_v(phys, virt, (uint64_t*)(virt_mem(table[index] & ~3, lvl)), lvl - 1);
-	// if (self_referencing_enabled==0)
-	// 	map_v(phys, virt, (uint64_t*)(table[index] & ~3), lvl - 1);
-	// else
-	map_v(phys, virt, get_page_table(virt, lvl - 1), lvl - 1);
+	if (self_referencing_enabled==0)
+		map_v(phys, virt, (uint64_t*)(table[index] & ~3), lvl - 1);
+	else
+		map_v(phys, virt, get_page_table(virt, lvl - 1), lvl - 1);
 }
 
 uint64_t mem_map_v(uint64_t base, uint64_t end, uint64_t vrtlmm, uint64_t table){
