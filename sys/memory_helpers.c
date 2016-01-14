@@ -196,6 +196,8 @@ void setup_paging(
 	void* kernel_virtual){
 	
 
+	printf("%x, %x, %x\n", 0xffffffffff000, 0x0000007fffffffff, 0x7357abcd98767357);
+
 	filter_out_pages((uint64_t)physbase, (uint64_t)physfree); // kernel
 	filter_out_pages(0xb8000 - PAGESIZE, 0xbb200); // mem-mapped display // TODO: is this correct?
 	
