@@ -14,15 +14,15 @@ uint64_t _used_page_list_tail = 0;
 
 mem_page* kernel_pml4 = NULL;
 
-int self_referencing_enabled = 0;
 
-uint64_t* get_page_table(uint64_t virt, uint64_t lvl){
-	uint64_t mask = 0x0000ffffffffffff >> ((lvl) * 9);
-	virt =  (virt  >> (lvl * 9)) & 0xfffffffffffff000 ;
-	uint64_t res = (0xffffff7fbfdfe000 & (~mask))| (virt & mask);
-	// printf("DONE WITH VIRTUAL >%x<                        \n",res);
-	return (uint64_t*)res;
-}
+// uint64_t* get_vitrual_address(uint64_t virt){
+// 	uint64_t mask = 0xffffff0000000000;
+// 	virt =  (virt  >>  9) & 0x0000007ffffff000 ;
+// 	uint64_t* page_table = (uint64_t) virt | mask;
+// 	uint64_t index = (0x01ff & (virt>> 12 )); 
+	
+// 	return (uint64_t*)(page_table[index]);
+// }
 
 void * init_pages(void* physfree){
 	_page_list = (mem_page*) physfree;
@@ -86,7 +86,7 @@ mem_page* get_free_page(){
 	return res;
 }
 
-void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
+void k_map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 	uint64_t index = (0x01ff & (virt>> (12 + (lvl-1)*9))); 
 	
 	if (lvl == 1){
@@ -106,15 +106,15 @@ void map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 	// TODO : use virtual memory of (table[index])
 	// map_v(phys, virt, (uint64_t*)(virt_mem(table[index] & ~3, lvl)), lvl - 1);
 	// if (self_referencing_enabled==0)
-		map_v(phys, virt, (uint64_t*)(table[index] & ~3), lvl - 1);
+		k_map_v(phys, virt, (uint64_t*)(table[index] & ~3), lvl - 1);
 	// else
-		// map_v(phys, virt, get_page_table((uint64_t)(table[index] & ~3), lvl - 1), lvl - 1);
+		// map_v(phys, virt, get_vitrual_address(table[index] & ~3), lvl - 1);
 }
 
-uint64_t mem_map_v(uint64_t base, uint64_t end, uint64_t vrtlmm, uint64_t table){
+uint64_t k_mem_map_v(uint64_t base, uint64_t end, uint64_t vrtlmm, uint64_t table){
 	uint64_t res = vrtlmm;
 	for(; base<end; base+=PAGESIZE){
-		map_v(base, res, (uint64_t*)table, 4);
+		k_map_v(base, res, (uint64_t*)table, 4);
 		res+=PAGESIZE;
 	}
 	return res;
@@ -192,10 +192,6 @@ void setup_paging(
 	uint64_t displaybase, uint64_t displayfree, 
 	void* kernel_virtual){
 	
-	self_referencing_enabled = 0;
-
-	uint64_t boot_cr3 = _read_cr3();
-	((uint64_t*)boot_cr3)[510] = boot_cr3|3;
 
 	filter_out_pages((uint64_t)physbase, (uint64_t)physfree); // kernel
 	filter_out_pages(0xb8000 - PAGESIZE, 0xbb200); // mem-mapped display // TODO: is this correct?
@@ -208,17 +204,16 @@ void setup_paging(
 
 	// self referencing entry
 	uint64_t* table = (uint64_t*) kernel_pml4-> base;
-	table[510] = kernel_pml4-> base; // 511 is being used by kernel memory
+	table[510] = (kernel_pml4-> base) | 3; // 511 is being used by kernel memory
 
 
-	kernel_vrt =  mem_map_v((uint64_t)physbase, (uint64_t)physfree, kernel_vrt, kernel_pml4->base);
-	mem_map_v((uint64_t)displaybase, (uint64_t)displayfree, kernel_vrt, kernel_pml4->base);
+	kernel_vrt =  k_mem_map_v((uint64_t)physbase, (uint64_t)physfree, kernel_vrt, kernel_pml4->base);
+	k_mem_map_v((uint64_t)displaybase, (uint64_t)displayfree, kernel_vrt, kernel_pml4->base);
 
 	_page_list = (mem_page *)(((uint64_t)_page_list)|KERNEL_MAPPING);
 
 	set_display_address(kernel_vrt| KERNEL_MAPPING);
 
-	self_referencing_enabled = 1;
 
 	// CHANEG PAGING
 	_set_cr3((uint64_t)kernel_pml4->base);
