@@ -15,6 +15,50 @@ uint64_t _used_page_list_tail = 0;
 mem_page* kernel_pml4 = NULL;
 
 
+uint64_t _available_virt_mem;
+
+char* _kmalloc_page = NULL;
+uint64_t _kmalloc_index = 0;
+
+mem_page* dequeue_page(uint64_t* list_head, uint64_t* list_tail){
+	if(*list_head == 0 && list_tail==0)
+		return NULL;
+
+	mem_page* page = (_page_list+*list_head);
+
+	(*list_head) = page -> next;
+	if (page -> next == 0)
+		*list_tail = 0 ;
+	return page;
+	
+}
+
+
+void zero_out(mem_page* page){
+	char* bt = (char*) page-> base;
+	for (int i = 0; i < PAGESIZE; ++i)
+		bt[i] = 0;
+}
+
+void queue_page(mem_page* page, uint64_t* list_head, uint64_t* list_tail, uint64_t index){
+	if (*list_head == 0 && *list_tail == 0){
+		*list_head = index;
+	}else{
+		(_page_list + (*list_tail))->next = index;
+	}
+	(_page_list + index)->next = 0;
+	*list_tail = index;
+}
+
+mem_page* get_free_page(){
+	uint64_t list_index = _free_page_list_head;
+	mem_page* res = dequeue_page(&_free_page_list_head, &_free_page_list_tail);
+	if (res != NULL){
+		queue_page(res, &_used_page_list_head, &_used_page_list_tail, list_index);
+	}
+	// printf("page being taken: %x\n", res->base);
+	return res;
+}
 // uint64_t* get_vitrual_address(uint64_t virt){
 // 	uint64_t mask = 0xffffff0000000000;
 // 	virt =  (virt  >>  9) & 0x0000007ffffff000 ;
@@ -23,6 +67,40 @@ mem_page* kernel_pml4 = NULL;
 	
 // 	return (uint64_t*)(page_table[index]);
 // }
+uint64_t map_page (uint64_t phys, uint64_t virt){
+	uint64_t* table = (uint64_t*) (0xffffff7fbfdfe000);
+	uint64_t index;
+	for (int lvl = 4; lvl>1; lvl--){
+		index = (0x01ff & (virt>> (12 + (lvl-1)*9)));
+	 	if(table[index] == 0){
+		// create it!
+			mem_page* next_lvl_page = get_free_page();
+			zero_out(next_lvl_page);
+			table[index] = ((uint64_t)next_lvl_page->base|3); 
+		}
+		table = (uint64_t*)((((uint64_t)(table))|0xffffff8000000000| (index>>3))>>9);
+	}
+	index = (0x01ff & (virt >> 12 ));
+	table [index] = phys;
+
+	return virt+ PAGESIZE;
+}
+
+
+void * kmalloc(uint64_t no_bytes){
+	if (no_bytes > PAGESIZE) return NULL;
+	if (_kmalloc_page == NULL || _kmalloc_index + no_bytes >= PAGESIZE){
+		mem_page* mal = get_free_page();
+		_kmalloc_page = (char*)_available_virt_mem;
+		_available_virt_mem = map_page(mal->base, _available_virt_mem);
+		_kmalloc_index = 0;
+	}
+
+	char* res = _kmalloc_page + _kmalloc_index;
+	_kmalloc_index += no_bytes; 
+	return (void* ) res;
+}
+
 
 void * init_pages(void* physfree){
 	_page_list = (mem_page*) physfree;
@@ -46,45 +124,6 @@ void * init_pages(void* physfree){
 }
 
 
-void zero_out(mem_page* page){
-	char* bt = (char*) page-> base;
-	for (int i = 0; i < PAGESIZE; ++i)
-		bt[i] = 0;
-}
-
-
-mem_page* dequeue_page(uint64_t* list_head, uint64_t* list_tail){
-	if(*list_head == 0 && list_tail==0)
-		return NULL;
-
-	mem_page* page = (_page_list+*list_head);
-
-	(*list_head) = page -> next;
-	if (page -> next == 0)
-		*list_tail = 0 ;
-	return page;
-	
-}
-
-void queue_page(mem_page* page, uint64_t* list_head, uint64_t* list_tail, uint64_t index){
-	if (*list_head == 0 && *list_tail == 0){
-		*list_head = index;
-	}else{
-		(_page_list + (*list_tail))->next = index;
-	}
-	(_page_list + index)->next = 0;
-	*list_tail = index;
-}
-
-mem_page* get_free_page(){
-	uint64_t list_index = _free_page_list_head;
-	mem_page* res = dequeue_page(&_free_page_list_head, &_free_page_list_tail);
-	if (res != NULL){
-		queue_page(res, &_used_page_list_head, &_used_page_list_tail, list_index);
-	}
-	// printf("page being taken: %x\n", res->base);
-	return res;
-}
 
 void k_map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 	uint64_t index = (0x01ff & (virt>> (12 + (lvl-1)*9))); 
@@ -207,13 +246,13 @@ void setup_paging(
 	table[510] = (kernel_pml4-> base) | 3; // 511 is being used by kernel memory
 
 
-	kernel_vrt =  k_mem_map_v((uint64_t)physbase, (uint64_t)physfree, kernel_vrt, kernel_pml4->base);
-	k_mem_map_v((uint64_t)displaybase, (uint64_t)displayfree, kernel_vrt, kernel_pml4->base);
+	kernel_vrt = k_mem_map_v((uint64_t)physbase, (uint64_t)physfree, kernel_vrt, kernel_pml4->base);
+	set_display_address(kernel_vrt| KERNEL_MAPPING);
+	kernel_vrt = k_mem_map_v(displaybase, displayfree, kernel_vrt, kernel_pml4->base);
+
 
 	_page_list = (mem_page *)(((uint64_t)_page_list)|KERNEL_MAPPING);
-
-	set_display_address(kernel_vrt| KERNEL_MAPPING);
-
+	_available_virt_mem = kernel_vrt;
 
 	// CHANEG PAGING
 	_set_cr3((uint64_t)kernel_pml4->base);
