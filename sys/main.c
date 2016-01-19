@@ -33,7 +33,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 
 	idts_setup();
 	PIC_setup();
-	// process_init();
+	process_init();
 
 	__asm__ volatile("sti");
 
