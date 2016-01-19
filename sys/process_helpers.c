@@ -4,7 +4,7 @@
 #include <sys/sysutil.h>
 
 uint64_t _prev_pid ;
-uint64_t _active_pid;
+uint64_t _active_pid ;
 
 pcb_list runableq;
 pcb_list waitlist;
@@ -34,11 +34,15 @@ void process_init(){
 	// create PCB for kernel!!!
 	kernel_pcb = kmalloc(sizeof(pcb));
 	kernel_pcb -> pid = 0;
-	
+	_active_pid = 0;
 }
 
 void enqueue_process(pcb_list* list, pcb* process){
 	//TODO : 
+}
+
+pcb* dequeue_process(pcb_list* list){
+	// TODO :
 }
 
 // void kexecve(pcb* prog, char* path, int argc, char* argv[], char* envp[]){
@@ -58,12 +62,12 @@ void exec_empty(char* path){
 	prog -> rsp = get_new_page_v();
 
 	switch_to_ring_3();
-
-	_active_pid = prog -> pid;
+	printf("Hello, User World!\n");
+	// _active_pid = prog -> pid;
 	// kexecve(command, 1, &command, )
 }
 
 void schedule(){
- // TODO: 
+	// TODO :
 }
 

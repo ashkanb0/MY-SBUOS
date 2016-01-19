@@ -169,7 +169,6 @@ void filter_out_pages(uint64_t base, uint64_t top){
 		if (_free_page_list_head == 0){
 			// SHOULD NOT HAPPEN <<<<EVER>>>> !
 			printf("<<PANIC!: 01>>\n");
-			//TODO : shut_down();
 			while(1);
 		}
 	}
