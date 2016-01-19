@@ -29,11 +29,11 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	// setup_paging(physbase, physfree, 0xb8000, 0xbb200, &kernmem);
 
 	printf("tarfs in [%p:%p]\n", &_binary_tarfs_start, &_binary_tarfs_end);
-	// init_tarfs(&_binary_tarfs_start, &_binary_tarfs_end);
+	init_tarfs(&_binary_tarfs_start, &_binary_tarfs_end);
 
 	idts_setup();
 	PIC_setup();
-	process_init();
+	// process_init();
 
 	__asm__ volatile("sti");
 
