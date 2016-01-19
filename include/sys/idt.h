@@ -63,19 +63,6 @@ void int_e_srv(){
 }
 
 
-// TODO : OFF WITH THESE!!!!
-// void dummy_interrupt_handler_0(void);
-// void dummy_interrupt_handler_1(void);
-
-// void int_dmmy_srv_0(){
-// 	printf("Unimplemented Interrupt 0!\n");
-// 	outb(0x20,0x20);
-// }
-// void int_dmmy_srv_1(){
-// 	printf("Unimplemented Interrupt 1!\n");
-// 	outb(0x20,0x20); outb(0xa0,0x20);
-// }
-
 IDTDescriptor idt [IDT_SIZE];
 
 

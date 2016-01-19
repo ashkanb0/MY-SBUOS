@@ -224,7 +224,16 @@ uint64_t _read_cr4(){
 }
 
 
+mem_page* get_new_page_table(){
+	mem_page* page = get_free_page();
+	zero_out(page);
 
+	// self referencing entry
+	uint64_t* table = (uint64_t*) page-> base;
+	table[510] = (page-> base) | 3; // 511 is being used by kernel memory
+
+	return page;
+}
 
 void setup_paging(
 	void* physbase, void* physfree, 
@@ -238,13 +247,7 @@ void setup_paging(
 
 	uint64_t kernel_vrt = (uint64_t)kernel_virtual;
 
-	kernel_pml4 = get_free_page();
-	zero_out(kernel_pml4);
-
-	// self referencing entry
-	uint64_t* table = (uint64_t*) kernel_pml4-> base;
-	table[510] = (kernel_pml4-> base) | 3; // 511 is being used by kernel memory
-
+	kernel_pml4 = get_new_page_table();
 
 	kernel_vrt = k_mem_map_v((uint64_t)physbase, (uint64_t)physfree, kernel_vrt, kernel_pml4->base);
 	set_display_address(kernel_vrt| KERNEL_MAPPING);

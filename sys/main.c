@@ -39,7 +39,9 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 
 	exec_empty("/bin/init");
 
-	while(1);
+	while(1){
+		schedule();
+	}
 }
 
 #define INITIAL_STACK_SIZE 4096

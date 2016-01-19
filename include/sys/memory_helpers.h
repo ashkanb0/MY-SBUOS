@@ -15,15 +15,12 @@ typedef struct memory_page_linked_list
 
 
 void * init_pages(void* physfree);
-void self_map_filtered_out_pages(void);
-void setup_paging();
-void filter_out_pages(uint64_t base, uint64_t top);
 
+void setup_paging();
 
 void * make_pages(uint64_t base, uint64_t length, void * physfree);
 
-void _enable_paging();
-void _disable_paging();
-void _set_cr3(uint64_t);
+void* kmalloc(uint64_t no_bytes);
+mem_page* get_new_page_table();
 
 #endif
