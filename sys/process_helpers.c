@@ -43,6 +43,7 @@ void enqueue_process(pcb_list* list, pcb* process){
 
 pcb* dequeue_process(pcb_list* list){
 	// TODO :
+	return NULL;
 }
 
 // void kexecve(pcb* prog, char* path, int argc, char* argv[], char* envp[]){
