@@ -12,7 +12,10 @@ typedef struct process_control_block
 {
 	uint64_t pid;
 	uint64_t pml4;
-	char command [50];
+	uint16_t rsp;
+	char pname [50];
+	char wd [50];
+
 	uint16_t status;
 	// TODO : complete pcb as it goes;
 }pcb;
@@ -31,5 +34,6 @@ void process_init();
 void exec_empty(char* path);
 
 void schedule();
+
 
 #endif

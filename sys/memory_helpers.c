@@ -76,7 +76,7 @@ uint64_t map_page (uint64_t phys, uint64_t virt){
 		// create it!
 			mem_page* next_lvl_page = get_free_page();
 			zero_out(next_lvl_page);
-			table[index] = ((uint64_t)next_lvl_page->base|3); 
+			table[index] = ((uint64_t)next_lvl_page->base|PRESENT|READ_WRITE|USER_ACCESSIBLE); 
 		}
 		table = (uint64_t*)((((uint64_t)(table))|0xffffff8000000000| (index>>3))>>9);
 	}
@@ -84,6 +84,12 @@ uint64_t map_page (uint64_t phys, uint64_t virt){
 	table [index] = phys;
 
 	return virt+ PAGESIZE;
+}
+
+uint64_t get_new_page_v(){
+	mem_page* mal = get_free_page();
+	_available_virt_mem = map_page(mal->base, _available_virt_mem);
+	return _available_virt_mem - 1;
 }
 
 
@@ -129,25 +135,19 @@ void k_map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 	uint64_t index = (0x01ff & (virt>> (12 + (lvl-1)*9))); 
 	
 	if (lvl == 1){
-		table[index] = (phys & 0xffffffffff000)|3;
+		table[index] = (phys & 0xffffffffff000)|PRESENT|READ_WRITE;
 		// table[index] = (phys & 0xffffffffff000);
 		return;
 	}
 
 	if(table[index] == 0){
 		// create it!
-		// printf("creating page for index %x out of virtual %x in level %d\n",index, virt, lvl );
 		mem_page* next_lvl_page = get_free_page();
 		zero_out(next_lvl_page);
-		table[index] = ((uint64_t)next_lvl_page->base|3); 
-		// table[index] = ((uint64_t)next_lvl_page->base); 
+		table[index] = ((uint64_t)next_lvl_page->base|PRESENT|READ_WRITE|USER_ACCESSIBLE); 
 	}
-	// TODO : use virtual memory of (table[index])
-	// map_v(phys, virt, (uint64_t*)(virt_mem(table[index] & ~3, lvl)), lvl - 1);
-	// if (self_referencing_enabled==0)
-		k_map_v(phys, virt, (uint64_t*)(table[index] & ~3), lvl - 1);
-	// else
-		// map_v(phys, virt, get_vitrual_address(table[index] & ~3), lvl - 1);
+	k_map_v(phys, virt, (uint64_t*)(table[index] & ~3), lvl - 1);
+
 }
 
 uint64_t k_mem_map_v(uint64_t base, uint64_t end, uint64_t vrtlmm, uint64_t table){
@@ -204,7 +204,7 @@ void * make_pages(uint64_t base, uint64_t length, void * physfree){
 
 
 void _set_cr3(uint64_t table){
-	__asm__ volatile("movq %0, %%cr3\n\r"::"r"(table): );
+	__asm__ volatile("movq %0, %%cr3"::"r"(table): );
 }
 
 uint64_t _read_cr0(){
