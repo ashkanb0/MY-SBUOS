@@ -35,7 +35,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	// PIC_setup();
 	// process_init();
 
-	__asm__ volatile("sti");
+	// __asm__ volatile("sti");
 
 	// exec_empty("/bin/init");
 
