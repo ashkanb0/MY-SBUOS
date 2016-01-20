@@ -67,7 +67,7 @@ mem_page* get_free_page(){
 	
 // 	return (uint64_t*)(page_table[index]);
 // }
-uint64_t map_page (uint64_t phys, uint64_t virt){
+uint64_t map_page (uint64_t phys, uint64_t virt, uint64_t flags){
 	uint64_t* table = (uint64_t*) (0xffffff7fbfdfe000);
 	uint64_t index;
 	for (int lvl = 4; lvl>1; lvl--){
@@ -81,7 +81,7 @@ uint64_t map_page (uint64_t phys, uint64_t virt){
 		table = (uint64_t*)((((uint64_t)(table))|0xffffff8000000000| (index<<3))<<9);
 	}
 	index = (0x01ff & (virt >> 12 ));
-	table [index] = phys;
+	table [index] = (phys & 0xffffffffff000)|flags;
 
 	return virt+ PAGESIZE;
 }
@@ -98,7 +98,7 @@ void * kmalloc(uint64_t no_bytes){
 	if (_kmalloc_page == NULL || _kmalloc_index + no_bytes >= PAGESIZE){
 		mem_page* mal = get_free_page();
 		_kmalloc_page = (char*)_available_virt_mem;
-		_available_virt_mem = map_page(mal->base, _available_virt_mem);
+		_available_virt_mem = map_page(mal->base, _available_virt_mem, PRESENT|READ_WRITE);
 		_kmalloc_index = 0;
 	}
 

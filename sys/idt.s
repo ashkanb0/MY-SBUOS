@@ -82,7 +82,7 @@ syscall_interrupt_handler:
 	push %r11
 	# pushf
 	# cld
-	call int_tmr_srv
+	call int_syscall_srv
 	# popad
 	pop %r11
 	pop %r10
@@ -114,7 +114,7 @@ d_interrupt_handler:
 	push %r11
 	# pushf
 	# cld
-	call int_tmr_srv
+	call int_d_srv
 	# popad
 	pop %r11
 	pop %r10
@@ -147,7 +147,7 @@ e_interrupt_handler:
 	push %r11
 	# pushf
 	# cld
-	call int_tmr_srv
+	call int_e_srv
 	# popad
 	pop %r11
 	pop %r10
