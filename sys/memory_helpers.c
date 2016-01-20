@@ -78,7 +78,7 @@ uint64_t map_page (uint64_t phys, uint64_t virt){
 			zero_out(next_lvl_page);
 			table[index] = ((uint64_t)next_lvl_page->base|PRESENT|READ_WRITE|USER_ACCESSIBLE); 
 		}
-		table = (uint64_t*)((((uint64_t)(table))|0xffffff8000000000| (index>>3))>>9);
+		table = (uint64_t*)((((uint64_t)(table))|0xffffff8000000000| (index<<3))<<9);
 	}
 	index = (0x01ff & (virt >> 12 ));
 	table [index] = phys;
