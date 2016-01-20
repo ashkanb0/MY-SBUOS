@@ -88,7 +88,7 @@ uint64_t map_page (uint64_t phys, uint64_t virt, uint64_t flags){
 
 uint64_t get_new_page_v(){
 	mem_page* mal = get_free_page();
-	_available_virt_mem = map_page(mal->base, _available_virt_mem);
+	_available_virt_mem = map_page(mal->base, _available_virt_mem, PRESENT|READ_WRITE|USER_ACCESSIBLE);
 	return _available_virt_mem - 1;
 }
 
