@@ -146,7 +146,7 @@ void k_map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 		zero_out(next_lvl_page);
 		table[index] = ((uint64_t)next_lvl_page->base|PRESENT|READ_WRITE|USER_ACCESSIBLE); 
 	}
-	k_map_v(phys, virt, (uint64_t*)(table[index] & ~3), lvl - 1);
+	k_map_v(phys, virt, (uint64_t*)(table[index] & 0xffffffffff000), lvl - 1);
 
 }
 
