@@ -62,7 +62,7 @@ void exec_empty(char* path){
 	strcpy(prog -> pname, path);
 	prog -> rsp = get_new_page_v();
 
-	// switch_to_ring_3();
+	switch_to_ring_3();
 	printf("Hello, User World!\n");
 	// _active_pid = prog -> pid;
 	// kexecve(command, 1, &command, )
