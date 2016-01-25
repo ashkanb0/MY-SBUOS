@@ -3,6 +3,7 @@
 #include <sys/memory_helpers.h>
 #include <sys/sysutil.h>
 
+
 uint64_t _prev_pid ;
 uint64_t _active_pid ;
 
@@ -58,9 +59,15 @@ void exec_empty(char* path){
 	_prev_pid ++;
 	prog -> pid = _prev_pid;
 	strcpy(prog -> wd, "/");
-	prog -> pml4 = get_new_page_table()->base;
+	prog -> pml4 = get_new_page_table(prog->pid)->base;
+
+	copy_kernel_pml4(prog->pml4);
+
 	strcpy(prog -> pname, path);
-	prog -> rsp = get_new_page_v();
+	prog -> rsp = get_new_page_v(prog->pid)+ PAGESIZE - 1; // BOTTOM OF PAGE!
+	
+	prog -> status = READY;
+
 
 	switch_to_ring_3();
 	printf("Hello, User World!\n");

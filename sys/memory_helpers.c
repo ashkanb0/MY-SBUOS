@@ -1,6 +1,6 @@
 #include <sys/sbunix.h>
 #include <sys/memory_helpers.h>
-
+#include <sys/vma.h>
 
 // LINKED LIST OF FREE PAGES
 mem_page* _page_list = NULL;
@@ -12,13 +12,21 @@ uint64_t _free_page_list_tail = 0;
 uint64_t _used_page_list_head = 0;
 uint64_t _used_page_list_tail = 0;
 
-mem_page* kernel_pml4 = NULL;
-
-
 uint64_t _available_virt_mem;
 
 char* _kmalloc_page = NULL;
 uint64_t _kmalloc_index = 0;
+
+void copy_kernel_pml4(uint64_t prog_page_table){
+	uint64_t* kernel_pml4 = (uint64_t*) (0xffffff7fbfdfe000);
+	uint64_t* prog_pml4 = (uint64_t*) (prog_page_table);
+
+	// TODO : is this enough?
+	prog_pml4[511] = kernel_pml4[511];
+
+}
+
+
 
 mem_page* dequeue_page(uint64_t* list_head, uint64_t* list_tail){
 	if(*list_head == 0 && list_tail==0)
@@ -86,10 +94,12 @@ uint64_t map_page (uint64_t phys, uint64_t virt, uint64_t flags){
 	return virt+ PAGESIZE;
 }
 
-uint64_t get_new_page_v(){
+uint64_t get_new_page_v(uint64_t pid){
 	mem_page* mal = get_free_page();
+	vma_register_page(mal, pid);
+	uint64_t temp = _available_virt_mem;
 	_available_virt_mem = map_page(mal->base, _available_virt_mem, PRESENT|READ_WRITE|USER_ACCESSIBLE);
-	return _available_virt_mem - 1;
+	return temp;
 }
 
 
@@ -223,13 +233,14 @@ uint64_t _read_cr4(){
 }
 
 
-mem_page* get_new_page_table(){
+mem_page* get_new_page_table(int pid){
 	mem_page* page = get_free_page();
+	vma_register_page(page, pid);
 	zero_out(page);
 
 	// self referencing entry
 	uint64_t* table = (uint64_t*) page-> base;
-	table[510] = (page-> base) | 3; // 511 is being used by kernel memory
+	table[510] = (page-> base) | PRESENT| READ_WRITE|USER_ACCESSIBLE;
 
 	return page;
 }
@@ -239,6 +250,8 @@ void setup_paging(
 	uint64_t displaybase, uint64_t displayfree, 
 	void* kernel_virtual){
 	
+	mem_page* kernel_pml4 = NULL;
+	
 
 	filter_out_pages((uint64_t)physbase, (uint64_t)physfree); // kernel
 	filter_out_pages(0xb8000 - PAGESIZE, 0xbb200); // mem-mapped display // TODO: is this correct?
@@ -246,7 +259,7 @@ void setup_paging(
 
 	uint64_t kernel_vrt = (uint64_t)kernel_virtual;
 
-	kernel_pml4 = get_new_page_table();
+	kernel_pml4 = get_new_page_table(0);
 
 	kernel_vrt = k_mem_map_v((uint64_t)physbase, (uint64_t)physfree, kernel_vrt, kernel_pml4->base);
 	set_display_address(kernel_vrt| KERNEL_MAPPING);

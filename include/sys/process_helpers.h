@@ -6,7 +6,7 @@
 #define PROCESS_QUEUE_SIZE 100
 
 
-enum{RUNNING = 0, WAITING = 1, FINISHED = 2};
+enum{READY = 0, RUNNING = 1, WAITING = 2, FINISHED = 3};
 
 typedef struct process_control_block
 {
@@ -34,6 +34,8 @@ void process_init();
 void exec_empty(char* path);
 
 void schedule();
+
+void copy_kernel_pml4(uint64_t prog_page_table);
 
 
 #endif
