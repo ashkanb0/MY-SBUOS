@@ -267,7 +267,8 @@ void setup_paging(
 
 	uint64_t kernel_vrt = (uint64_t)kernel_virtual;
 
-	kernel_pml4 = get_new_page_table(0);
+	kernel_pml4 = get_free_page();
+	zero_out(kernel_pml4->base);
 
 	kernel_vrt = k_mem_map_v((uint64_t)physbase, (uint64_t)physfree, kernel_vrt, kernel_pml4->base);
 	set_display_address(kernel_vrt| KERNEL_MAPPING);
