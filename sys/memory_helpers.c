@@ -270,7 +270,7 @@ void setup_paging(
 	kernel_pml4 = get_free_page();
 	zero_out(kernel_pml4->base);
 
-	((uint64_t*)(kernel_pml4->base))[510] = kernel_pml4->base;
+	((uint64_t*)(kernel_pml4->base))[0x1fe] = kernel_pml4->base|PRESENT|READ_WRITE|USER_ACCESSIBLE;
 
 	kernel_vrt = k_mem_map_v((uint64_t)physbase, (uint64_t)physfree, kernel_vrt, kernel_pml4->base);
 	set_display_address(kernel_vrt| KERNEL_MAPPING);
