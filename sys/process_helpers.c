@@ -61,7 +61,7 @@ void exec_empty(char* path){
 	kstrcpy(prog -> wd, "/", 50);
 	prog -> pml4 = get_new_page_table(prog->pid)->base;
 
-	copy_kernel_pml4(prog->pml4);
+	// copy_kernel_pml4(prog->pml4);
 
 	kstrcpy(prog -> pname, path, 50);
 	prog -> rsp = get_new_page_v(prog->pid)+ PAGESIZE - 1; // BOTTOM OF PAGE!
