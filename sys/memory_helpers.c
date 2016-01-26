@@ -42,8 +42,8 @@ mem_page* dequeue_page(uint64_t* list_head, uint64_t* list_tail){
 }
 
 
-void zero_out(mem_page* page){
-	char* bt = (char*) page-> base;
+void zero_out(uint64_t address){
+	char* bt = (char*) address;
 	for (int i = 0; i < PAGESIZE; ++i)
 		bt[i] = 0;
 }
@@ -75,7 +75,8 @@ mem_page* get_free_page(){
 	
 // 	return (uint64_t*)(page_table[index]);
 // }
-uint64_t map_page (uint64_t phys, uint64_t virt, uint64_t flags){
+
+uint64_t map_page (uint64_t phys, uint64_t virt, uint64_t flags, uint64_t pid){
 	uint64_t* table = (uint64_t*) (0xffffff7fbfdfe000);
 	uint64_t index;
 	for (int lvl = 4; lvl>1; lvl--){
@@ -83,8 +84,11 @@ uint64_t map_page (uint64_t phys, uint64_t virt, uint64_t flags){
 	 	if(table[index] == 0){
 		// create it!
 			mem_page* next_lvl_page = get_free_page();
-			zero_out(next_lvl_page);
+			vma_register_page(next_lvl_page, pid);
 			table[index] = ((uint64_t)next_lvl_page->base|PRESENT|READ_WRITE|USER_ACCESSIBLE); 
+			uint64_t temp = _available_virt_mem;
+			_available_virt_mem = map_page(next_lvl_page->base, _available_virt_mem, PRESENT|READ_WRITE|USER_ACCESSIBLE, pid);
+			zero_out(temp);
 		}
 		table = (uint64_t*)((((uint64_t)(table))|0xffffff8000000000| (index<<3))<<9);
 	}
@@ -94,21 +98,21 @@ uint64_t map_page (uint64_t phys, uint64_t virt, uint64_t flags){
 	return virt+ PAGESIZE;
 }
 
+
 uint64_t get_new_page_v(uint64_t pid){
 	mem_page* mal = get_free_page();
 	vma_register_page(mal, pid);
 	uint64_t temp = _available_virt_mem;
-	_available_virt_mem = map_page(mal->base, _available_virt_mem, PRESENT|READ_WRITE|USER_ACCESSIBLE);
+	_available_virt_mem = map_page(mal->base, _available_virt_mem, PRESENT|READ_WRITE|USER_ACCESSIBLE, pid);
 	return temp;
 }
-
 
 void * kmalloc(uint64_t no_bytes){
 	if (no_bytes > PAGESIZE) return NULL;
 	if (_kmalloc_page == NULL || _kmalloc_index + no_bytes >= PAGESIZE){
 		mem_page* mal = get_free_page();
 		_kmalloc_page = (char*)_available_virt_mem;
-		_available_virt_mem = map_page(mal->base, _available_virt_mem, PRESENT|READ_WRITE);
+		_available_virt_mem = map_page(mal->base, _available_virt_mem, PRESENT|READ_WRITE, 0);
 		_kmalloc_index = 0;
 	}
 
@@ -153,7 +157,7 @@ void k_map_v(uint64_t phys, uint64_t virt, uint64_t* table, int lvl){
 	if(table[index] == 0){
 		// create it!
 		mem_page* next_lvl_page = get_free_page();
-		zero_out(next_lvl_page);
+		zero_out(next_lvl_page->base);
 		table[index] = ((uint64_t)next_lvl_page->base|PRESENT|READ_WRITE|USER_ACCESSIBLE); 
 	}
 	k_map_v(phys, virt, (uint64_t*)(table[index] & 0xffffffffff000), lvl - 1);
@@ -236,10 +240,14 @@ uint64_t _read_cr4(){
 mem_page* get_new_page_table(int pid){
 	mem_page* page = get_free_page();
 	vma_register_page(page, pid);
-	zero_out(page);
+	uint64_t temp = _available_virt_mem;
+	_available_virt_mem = map_page(page->base, _available_virt_mem, PRESENT|READ_WRITE|USER_ACCESSIBLE, pid);
+
+
+	zero_out(temp);
 
 	// self referencing entry
-	uint64_t* table = (uint64_t*) page-> base;
+	uint64_t* table = (uint64_t*) temp;
 	table[510] = (page-> base) | PRESENT| READ_WRITE|USER_ACCESSIBLE;
 
 	return page;

@@ -17,7 +17,6 @@ typedef struct process_control_block
 	char wd [50];
 
 	uint16_t status;
-	// TODO : complete pcb as it goes;
 }pcb;
 
 typedef struct process_control_block_list

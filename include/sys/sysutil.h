@@ -3,7 +3,7 @@
 
 #include <sys/defs.h>
 
-void strcpy(char* dest, char* src);
+void kstrcpy(char* dest, char* src, int);
 
 
 #endif

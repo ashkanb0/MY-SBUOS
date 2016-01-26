@@ -58,12 +58,12 @@ void exec_empty(char* path){
 	pcb* prog = kmalloc(sizeof(pcb));
 	_prev_pid ++;
 	prog -> pid = _prev_pid;
-	strcpy(prog -> wd, "/");
+	kstrcpy(prog -> wd, "/", 50);
 	prog -> pml4 = get_new_page_table(prog->pid)->base;
 
 	copy_kernel_pml4(prog->pml4);
 
-	strcpy(prog -> pname, path);
+	kstrcpy(prog -> pname, path, 50);
 	prog -> rsp = get_new_page_v(prog->pid)+ PAGESIZE - 1; // BOTTOM OF PAGE!
 	
 	prog -> status = READY;
