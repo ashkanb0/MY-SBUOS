@@ -15,6 +15,7 @@
 typedef struct memory_page_linked_list
 {
 	uint64_t base;
+	// TODO : ref_count?
 	uint64_t next;
 }mem_page;
 

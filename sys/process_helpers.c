@@ -2,7 +2,7 @@
 #include <sys/process_helpers.h>
 #include <sys/memory_helpers.h>
 #include <sys/sysutil.h>
-
+#include <sys/tarfs.h>
 
 uint64_t _prev_pid ;
 uint64_t _active_pid ;
@@ -54,7 +54,7 @@ pcb* dequeue_process(pcb_list* list){
 // 	enqueue_process(&runableq, prog);
 // }
 
-void exec_empty(char* path){
+void init(){
 	pcb* prog = kmalloc(sizeof(pcb));
 	_prev_pid ++;
 	prog -> pid = _prev_pid;
@@ -63,16 +63,16 @@ void exec_empty(char* path){
 
 	copy_kernel_pml4(prog->pml4);
 
-	kstrcpy(prog -> pname, path, 50);
+	kstrcpy(prog -> pname, "/bin/init", 50);
+
+	// TODO : map a page to a proper stack place, move this to schedule?
 	prog -> rsp = get_new_page_v(prog->pid)+ PAGESIZE - 1; // BOTTOM OF PAGE!
 	
 	prog -> status = READY;
 
-
 	switch_to_ring_3();
+	printf("start_of_file = %x\n", map_file("/bin/init"));
 	printf("Hello, User World!\n");
-	// _active_pid = prog -> pid;
-	// kexecve(command, 1, &command, )
 }
 
 void schedule(){

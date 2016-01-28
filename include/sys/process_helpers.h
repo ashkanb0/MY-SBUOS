@@ -30,7 +30,7 @@ typedef struct process_control_block_list
 
 void process_init();
 
-void exec_empty(char* path);
+void init();
 
 void schedule();
 

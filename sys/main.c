@@ -37,7 +37,7 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 
 	__asm__ volatile("sti");
 
-	exec_empty("/bin/init");
+	init();
 
 	while(1){
 		schedule();

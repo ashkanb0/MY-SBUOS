@@ -4,6 +4,6 @@
 #include <sys/defs.h>
 
 void kstrcpy(char* dest, char* src, int);
-
+int kstrcmp(char* s1, char* s2);
 
 #endif

@@ -34,6 +34,6 @@ void init_tarfs(void* tar_start, void* tar_end);
 
 uint64_t tar_size( char* s);
 uint64_t tar_size_roundup( uint64_t);
-
+uint64_t map_file(char* path);
 
 #endif
