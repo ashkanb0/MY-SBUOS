@@ -71,7 +71,8 @@ void init(){
 	prog -> status = READY;
 
 	switch_to_ring_3();
-	printf("start_of_file = %x\n", map_file("bin/init"));
+	uint64_t t = map_file("bin/init");
+	printf("start_of_file = %x\n| >%s<", t, (char*)t);
 	printf("Hello, User World!\n");
 }
 
