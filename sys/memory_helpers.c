@@ -237,7 +237,7 @@ uint64_t _read_cr4(){
 }
 
 
-mem_page* get_new_page_table(int pid){
+uint64_t get_new_page_table(int pid){
 	mem_page* page = get_free_page();
 	vma_register_page(page, pid);
 	uint64_t temp = _available_virt_mem;
@@ -250,7 +250,7 @@ mem_page* get_new_page_table(int pid){
 	uint64_t* table = (uint64_t*) temp;
 	table[510] = (page-> base) | PRESENT| READ_WRITE|USER_ACCESSIBLE;
 
-	return page;
+	return temp;
 }
 
 void setup_paging(
