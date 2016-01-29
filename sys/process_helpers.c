@@ -72,7 +72,7 @@ void init(){
 
 	switch_to_ring_3();
 	uint64_t t = map_file("bin/init");
-	printf("start_of_file = %x\n| >%s<", t, (char*)t);
+	printf("start_of_file = %x\n", t);
 	printf("Hello, User World!\n");
 }
 

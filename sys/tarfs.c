@@ -1,6 +1,7 @@
 #include <sys/tarfs.h>
 #include <sys/sysutil.h>
 #include <sys/sbunix.h>
+#include <sys/exec.h>
 
 
 uint64_t _tar_start, _tar_end;
@@ -32,8 +33,14 @@ uint64_t map_file(char* path){
 		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
 		uint64_t size = tar_size(p->size);
 		printf("name: %s, size: %s = %d\n", p->name, p->size, size);
-		if(kstrcmp(p->name, path)==0)
-			return (uint64_t)(p+1);
+		if(kstrcmp(p->name, path)==0){
+			
+			if(check_elf((elf_header*)(p+1))){
+				return map_elf((elf_header*)(p+1));
+			}else{
+				return 0;
+			}
+		}
 		offset += size + sizeof(tarfs_header) + tar_size_roundup(size);
 	}
 	return 0;

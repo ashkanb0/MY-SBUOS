@@ -32,4 +32,7 @@ typedef struct {
 	uint64_t   p_align;
 }elf_pheader;
 
+int check_elf(elf_header* header);
+int map_elf(elf_header* header);
+
 #endif
