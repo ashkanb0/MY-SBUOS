@@ -74,6 +74,8 @@ void int_pgflt_srv(){
 	printf("ERROR 25 = %x %x\n", *(stack_top+25), error);
 	printf("ERROR 26 = %x %x\n", *(stack_top+26), error);
 
+	while(1);
+
 	__asm__ volatile("movq %%cr2, %0":"=r"(address):);
 	if(address== 0x00){
 		printf("(segmantation fault)\n");
