@@ -55,11 +55,9 @@ void int_syscall_srv(){
 
 void d_interrupt_handler(void);
 void int_d_srv(){
-	printf("(segmantation fault)\n");
+	printf("(unauthorized access)\n");
 	k_process_exit();
-	printf("D INTERRUPT NOT IMPLEMENTED\n");
-	return;
-	
+	return;	
 }
 
 void pagefault_interrupt_handler(void);

@@ -85,10 +85,12 @@ void k_process_exit(){
 	// TODO : free vma pages
 
 	runableq.list[_active_pid] -> status = FINISHED; 
+	schedule();
 }
 
 
 void schedule(){
 	// TODO :
+	while(1);
 }
 
