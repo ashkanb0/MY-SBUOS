@@ -4,13 +4,18 @@
 #include <sys/sysutil.h>
 #include <sys/tarfs.h>
 
-uint64_t _prev_pid ;
-uint64_t _active_pid ;
+int _prev_pid ;
+int _active_pid ;
 
 pcb_list runableq;
 pcb_list waitlist;
 
 pcb* kernel_pcb;
+
+
+int get_active_pid(){
+	return _active_pid;
+}
 
 
 void switch_to_ring_3(){
@@ -75,6 +80,13 @@ void init(){
 	// printf("start_of_file =\n",);
 	printf("Hello, User World!\n");
 }
+
+void k_process_exit(){
+	// TODO : free vma pages
+
+	runableq.list[_active_pid] -> status = FINISHED; 
+}
+
 
 void schedule(){
 	// TODO :

@@ -130,9 +130,9 @@ d_interrupt_handler:
 	iretq
 
 
-.globl e_interrupt_handler
+.globl pagefault_interrupt_handler
 .align 4
-e_interrupt_handler:
+pagefault_interrupt_handler:
 	# pushad
 	# pushf
 	cli
@@ -147,7 +147,7 @@ e_interrupt_handler:
 	push %r11
 	# pushf
 	# cld
-	call int_e_srv
+	call int_pgflt_srv
 	# popad
 	pop %r11
 	pop %r10

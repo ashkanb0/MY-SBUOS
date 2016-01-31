@@ -37,5 +37,8 @@ void schedule();
 
 void copy_kernel_pml4(uint64_t prog_page_table);
 
+void k_process_exit();
+
+int get_active_pid();
 
 #endif

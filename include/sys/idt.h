@@ -4,6 +4,8 @@
 #include <sys/defs.h>
 #include <sys/pic_helpers.h>
 #include <sys/sbunix.h>
+#include <sys/process_helpers.h>
+#include <sys/memory_helpers.h>
 
 #define IDT_SIZE 256
 
@@ -53,13 +55,24 @@ void int_syscall_srv(){
 
 void d_interrupt_handler(void);
 void int_d_srv(){
+	printf("(segmantation fault)\n");
+	k_process_exit();
 	printf("D INTERRUPT NOT IMPLEMENTED\n");
+	return;
 	
 }
 
-void e_interrupt_handler(void);
-void int_e_srv(){
-	printf("E INTERRUPT NOT IMPLEMENTED\n");
+void pagefault_interrupt_handler(void);
+void int_pgflt_srv(){
+	uint64_t address = 0;
+	__asm__ volatile("movq %%cr2, %0":"=r"(address):);
+	if(address== 0x00){
+		printf("(segmantation fault)\n");
+		k_process_exit();
+		return;
+	}
+	// TODO : COW pages
+	add_physical_page_in(address&(~0x0fff));
 }
 
 
@@ -82,7 +95,7 @@ void idts_setup(){
 
 
 	set_isr(idt, 0x0d, (uint64_t)(&d_interrupt_handler));
-	set_isr(idt, 0x0e, (uint64_t)(&e_interrupt_handler));
+	set_isr(idt, 0x0e, (uint64_t)(&pagefault_interrupt_handler));
 	set_isr(idt, 0x20, (uint64_t)(&timer_interrupt_handler));
 	set_isr(idt, 0x21, (uint64_t)(&keyboard_interrupt_handler));
 	set_isr(idt, 0x80, (uint64_t)(&syscall_interrupt_handler));
