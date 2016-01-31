@@ -63,6 +63,17 @@ void int_d_srv(){
 void pagefault_interrupt_handler(void);
 void int_pgflt_srv(){
 	uint64_t address = 0;
+	uint32_t* stack_top = (uint32_t*)(&address);
+	uint32_t error = *(stack_top+23);// TODO: VERIFIY
+	
+	printf("ERROR 20 = %x %x\n", *(stack_top+20), error);
+	printf("ERROR 21 = %x %x\n", *(stack_top+21), error);
+	printf("ERROR 22 = %x %x\n", *(stack_top+22), error);
+	printf("ERROR 23 = %x %x\n", *(stack_top+23), error);
+	printf("ERROR 24 = %x %x\n", *(stack_top+24), error);
+	printf("ERROR 25 = %x %x\n", *(stack_top+25), error);
+	printf("ERROR 26 = %x %x\n", *(stack_top+26), error);
+
 	__asm__ volatile("movq %%cr2, %0":"=r"(address):);
 	if(address== 0x00){
 		printf("(segmantation fault)\n");

@@ -125,6 +125,7 @@ d_interrupt_handler:
 	pop %si
 	pop %di
 	pop %ax
+	add $0x08, %rsp # popping error code,
 	
 	sti
 	iretq
@@ -158,6 +159,6 @@ pagefault_interrupt_handler:
 	pop %si
 	pop %di
 	pop %ax
-	
+	add $0x08, %rsp # popping error code,
 	sti
 	iretq
