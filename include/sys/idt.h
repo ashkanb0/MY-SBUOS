@@ -19,6 +19,19 @@ typedef struct IDTDescriptor{
 	uint32_t zero2;
 }IDTDescriptor;
 
+typedef struct exception_pushed_stack_structure{
+	uint64_t r11;
+	uint64_t r10;
+	uint64_t r9;
+	uint64_t r8;
+	uint64_t cx;
+	uint64_t dx;
+	uint64_t si;
+	uint64_t di;
+	uint64_t ax;
+	uint32_t error;
+}exception_stack;
+
 
 void set_isr(IDTDescriptor* idt, int int_num, uint64_t handler){
 	idt[int_num].offset_low = (uint16_t)(handler & 0x00ffff);
@@ -61,12 +74,12 @@ void int_d_srv(){
 }
 
 void pagefault_interrupt_handler(void);
-void int_pgflt_srv(){
+void int_pgflt_srv(exception_stack stack){
+
 	uint64_t address = 0;
-	uint32_t* stack_top = (uint32_t*)(&address);
-	uint32_t error = *(stack_top+23);// TODO: VERIFIY
-	
-	printf("ERROR %x\n", error);
+	uint32_t error = stack.error;
+
+	printf("ERROR: %x\n", error);
 
 	__asm__ volatile("movq %%cr2, %0":"=r"(address):);
 	if(address== 0x00){
