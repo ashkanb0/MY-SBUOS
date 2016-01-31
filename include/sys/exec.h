@@ -33,6 +33,6 @@ typedef struct {
 }elf_pheader;
 
 int check_elf(elf_header* header);
-int map_elf(elf_header* header);
+uint64_t map_elf(elf_header* header);
 
 #endif

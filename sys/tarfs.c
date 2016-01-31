@@ -25,7 +25,7 @@ void init_tarfs(void* tar_start, void* tar_end){
 	_tar_end = (uint64_t) tar_end;
 }
 
-uint64_t map_file(char* path){
+uint64_t map_file(char* path, int pid){
 	uint64_t offset = 0;
 
 	for (int i = 0; i < 10; ++i)
@@ -34,7 +34,7 @@ uint64_t map_file(char* path){
 		uint64_t size = tar_size(p->size);
 		printf("name: %s, size: %s = %d\n", p->name, p->size, size);
 		if(kstrcmp(p->name, path)==0){
-			
+
 			if(check_elf((elf_header*)(p+1))){
 				return map_elf((elf_header*)(p+1));
 			}else{

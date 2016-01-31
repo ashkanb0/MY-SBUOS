@@ -66,13 +66,13 @@ void init(){
 	kstrcpy(prog -> pname, "/bin/init", 50);
 
 	// TODO : map a page to a proper stack place, move this to schedule?
-	prog -> rsp = get_new_page_v(prog->pid)+ PAGESIZE - 1; // BOTTOM OF PAGE!
+	prog -> sp = get_new_page_v(prog->pid)+ PAGESIZE - 1; // BOTTOM OF PAGE!
 	
 	prog -> status = READY;
 
 	switch_to_ring_3();
-	uint64_t t = map_file("bin/init");
-	printf("start_of_file = %x\n", t);
+	prog -> ip = map_file("bin/init",prog->pid);
+	// printf("start_of_file =\n",);
 	printf("Hello, User World!\n");
 }
 
