@@ -77,7 +77,6 @@ void init(){
 
 	switch_to_ring_3();
 	prog -> ip = map_file("bin/init",prog->pid);
-	// printf("start_of_file =\n",);
 	printf("Hello, User World!\n");
 }
 

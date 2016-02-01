@@ -101,8 +101,10 @@ uint64_t map_page (uint64_t phys, uint64_t virt, uint64_t flags, uint64_t pid){
 
 void add_physical_page_in(uint64_t virt){
 	mem_page* pg = get_free_page();
-	vma_register_page(pg, get_active_pid());
-	map_page(pg->base, virt, PRESENT|READ_WRITE|USER_ACCESSIBLE, get_active_pid());
+	int pid = get_active_pid();
+	vma_register_page(pg, pid);
+	uint64_t flags = (pid==0)?PRESENT|READ_WRITE:PRESENT|READ_WRITE|USER_ACCESSIBLE;
+	map_page(pg->base, virt, PRESENT|READ_WRITE|USER_ACCESSIBLE, pid);
 }
 
 
