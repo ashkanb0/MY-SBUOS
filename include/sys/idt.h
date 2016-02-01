@@ -29,7 +29,7 @@ typedef struct exception_pushed_stack_structure{
 	uint64_t si;
 	uint64_t di;
 	uint64_t ax;
-	uint64_t error;
+	uint32_t error;
 }exception_stack;
 
 
@@ -79,9 +79,11 @@ void int_pgflt_srv(exception_stack stack){
 	uint64_t address = 0;
 	uint32_t error = stack.error;
 
-	printf("ERROR: %x\n", error);
-
 	__asm__ volatile("movq %%cr2, %0":"=r"(address):);
+
+	printf("error: %x\n", error);
+	printf("address: %x\n", address);
+	
 	if(address== 0x00){
 		printf("(segmantation fault)\n");
 		k_process_exit();
