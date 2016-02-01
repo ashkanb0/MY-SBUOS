@@ -80,16 +80,17 @@ mem_page* get_free_page(){
 uint64_t map_page (uint64_t phys, uint64_t virt, uint64_t flags, uint64_t pid){
 	uint64_t* table = (uint64_t*) (0xffffff7fbfdfe000);
 	uint64_t index;
+	int new_page_flag = 0;
 	for (int lvl = 4; lvl>1; lvl--){
 		index = (0x01ff & (virt>> (12 + (lvl-1)*9)));
+	 	if(new_page_flag) zero_out((uint64_t)table);
+	 	new_page_flag = 0;
 	 	if(table[index] == 0){
 		// create it!
 			mem_page* next_lvl_page = get_free_page();
 			vma_register_page(next_lvl_page, pid);
 			table[index] = ((uint64_t)next_lvl_page->base|PRESENT|READ_WRITE|USER_ACCESSIBLE); 
-			uint64_t temp = _available_virt_mem;
-			_available_virt_mem = map_page(next_lvl_page->base, _available_virt_mem, PRESENT|READ_WRITE|USER_ACCESSIBLE, pid);
-			zero_out(temp);
+			new_page_flag = 1;
 		}
 		table = (uint64_t*)((((uint64_t)(table))|0xffffff8000000000| (index<<3))<<9);
 	}
@@ -103,7 +104,7 @@ void add_physical_page_in(uint64_t virt){
 	mem_page* pg = get_free_page();
 	int pid = get_active_pid();
 	vma_register_page(pg, pid);
-	uint64_t flags = (pid==0)?PRESENT|READ_WRITE:PRESENT|READ_WRITE|USER_ACCESSIBLE;
+	uint64_t flags = PRESENT|READ_WRITE|USER_ACCESSIBLE;// TODO : 
 	map_page(pg->base, virt, flags, pid);
 }
 

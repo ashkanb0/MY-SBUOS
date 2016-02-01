@@ -88,7 +88,7 @@ void int_pgflt_srv(exception_stack stack){
 		return;
 	}
 	// TODO : COW pages
-	add_physical_page_in(address&(~0x0fff));
+	add_physical_page_in(address);
 }
 
 
