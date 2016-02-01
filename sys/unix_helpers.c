@@ -19,7 +19,7 @@ void do_newline(){
 	}
 	col = 0;
 	row ++;	
-	if (row>=22) row =0;
+	if (row>23) row =0;
 }
 void write_k(char v){
 	if (v=='\n'){

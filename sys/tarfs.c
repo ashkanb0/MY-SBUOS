@@ -32,7 +32,6 @@ uint64_t map_file(char* path, int pid){
 	{
 		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
 		uint64_t size = tar_size(p->size);
-		printf("name: %s, size: %s = %d\n", p->name, p->size, size);
 		if(kstrcmp(p->name, path)==0){
 
 			if(check_elf((elf_header*)(p+1))){
