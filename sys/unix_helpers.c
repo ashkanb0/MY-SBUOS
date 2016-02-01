@@ -7,12 +7,16 @@ uint64_t display_mem = 0xb8000;
 void set_display_address(uint64_t add){
 	display_mem = add;
 }
-void write_k(char v);
 
 
 void do_newline(){
-	while(col<80)
-		write_k(' ');
+	while(col<80){
+		char* position = (char*)(display_mem + 160*row+ 2*col);
+		*position = ' ';
+		position++;
+		*position = 0;
+		col ++;
+	}
 	col = 0;
 	row ++;	
 	if (row>=22) row =0;
