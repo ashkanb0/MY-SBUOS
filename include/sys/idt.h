@@ -66,8 +66,8 @@ void int_syscall_srv(){
 	
 }
 
-void d_interrupt_handler(void);
-void int_d_srv(){
+void protection_failure_interrupt_handler(void);
+void int_prtctn_srv(){
 	printf("(unauthorized access)\n");
 	k_process_exit();
 	return;	
@@ -110,7 +110,7 @@ void idts_setup(){
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
 
 
-	set_isr(idt, 0x0d, (uint64_t)(&d_interrupt_handler));
+	set_isr(idt, 0x0d, (uint64_t)(&protection_failure_interrupt_handler));
 	set_isr(idt, 0x0e, (uint64_t)(&pagefault_interrupt_handler));
 	set_isr(idt, 0x20, (uint64_t)(&timer_interrupt_handler));
 	set_isr(idt, 0x21, (uint64_t)(&keyboard_interrupt_handler));

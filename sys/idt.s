@@ -97,9 +97,9 @@ syscall_interrupt_handler:
 	sti
 	iretq
 
-.globl d_interrupt_handler
+.globl protection_failure_interrupt_handler
 .align 4
-d_interrupt_handler:
+protection_failure_interrupt_handler:
 	# pushad
 	# pushf
 	cli
@@ -114,7 +114,7 @@ d_interrupt_handler:
 	push %r11
 	# pushf
 	# cld
-	call int_d_srv
+	call int_prtctn_srv
 	# popad
 	pop %r11
 	pop %r10
