@@ -9,10 +9,10 @@ void set_display_address(uint64_t add){
 }
 
 void do_newline(){
-	// TODO : clear rest of the line :))
+	while(col<80)
+		write_k(' ');
 	col = 0;
-	row ++;
-	// TODO: rollup;	
+	row ++;	
 	if (row>=22) row =0;
 }
 void write_k(char v){
