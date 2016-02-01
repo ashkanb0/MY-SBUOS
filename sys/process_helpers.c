@@ -75,9 +75,10 @@ void init(){
 	
 	prog -> status = READY;
 
-	switch_to_ring_3();
 	_active_pid = prog->pid;
 	prog -> ip = map_file("bin/init",prog->pid);
+	
+	switch_to_ring_3();
 	printf("Hello, User World!\n");
 }
 
