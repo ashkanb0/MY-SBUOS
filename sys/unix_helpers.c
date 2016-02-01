@@ -7,6 +7,8 @@ uint64_t display_mem = 0xb8000;
 void set_display_address(uint64_t add){
 	display_mem = add;
 }
+void write_k(char v);
+
 
 void do_newline(){
 	while(col<80)
