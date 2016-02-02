@@ -80,9 +80,6 @@ void int_pgflt_srv(exception_stack stack){
 	uint32_t error = stack.error;
 
 	__asm__ volatile("movq %%cr2, %0":"=r"(address):);
-
-	printf("error: %x\n", error);
-	printf("address: %x\n", address);
 	
 	if(address== 0x00){
 		printf("(segmantation fault)\n");
@@ -90,7 +87,8 @@ void int_pgflt_srv(exception_stack stack){
 		return;
 	}
 	// TODO : COW pages
-	add_physical_page_in(address);
+	if((error&2)==2) // PAGE NOT MAPPED
+		add_physical_page_in(address);
 }
 
 

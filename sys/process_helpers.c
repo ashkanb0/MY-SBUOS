@@ -77,7 +77,9 @@ void init(){
 
 	_active_pid = prog->pid;
 	prog -> ip = map_file("bin/init",prog->pid);
-	
+
+	runableq.list[1] = prog;
+
 	switch_to_ring_3();
 	printf("Hello, User World!\n");
 }
@@ -92,6 +94,19 @@ void k_process_exit(){
 
 void schedule(){
 	// TODO :
+
+	pcb* prog = runableq.list[1];
+
+	__asm volatile("\
+	push $0x23;\
+	push %0;\
+	pushf;\
+	push $0x1B;\
+	push %1"::"g"((prog->sp)),"g"(prog->ip):);
+	__asm volatile("\
+	iretq;\
+	");
+
 	while(1);
 }
 
