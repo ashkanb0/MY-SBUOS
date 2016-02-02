@@ -6,11 +6,11 @@ keyboard_interrupt_handler:
 	# pushad
 	# pushf
 	cli
-	push %ax
-	push %di
-	push %si
-	push %dx
-	push %cx
+	push %rax
+	push %rdi
+	push %rsi
+	push %rdx
+	push %rcx
 	push %r8
 	push %r9
 	push %r10
@@ -23,11 +23,11 @@ keyboard_interrupt_handler:
 	pop %r10
 	pop %r9
 	pop %r8
-	pop %cx
-	pop %dx
-	pop %si
-	pop %di
-	pop %ax
+	pop %rcx
+	pop %rdx
+	pop %rsi
+	pop %rdi
+	pop %rax
 	
 	sti
 	iretq
@@ -39,11 +39,11 @@ timer_interrupt_handler:
 	# pushad
 	# pushf
 	cli
-	push %ax
-	push %di
-	push %si
-	push %dx
-	push %cx
+	push %rax
+	push %rdi
+	push %rsi
+	push %rdx
+	push %rcx
 	push %r8
 	push %r9
 	push %r10
@@ -56,11 +56,11 @@ timer_interrupt_handler:
 	pop %r10
 	pop %r9
 	pop %r8
-	pop %cx
-	pop %dx
-	pop %si
-	pop %di
-	pop %ax
+	pop %rcx
+	pop %rdx
+	pop %rsi
+	pop %rdi
+	pop %rax
 	
 	sti
 	iretq
@@ -71,11 +71,11 @@ syscall_interrupt_handler:
 	# pushad
 	# pushf
 	cli
-	push %ax
-	push %di
-	push %si
-	push %dx
-	push %cx
+	push %rax
+	push %rdi
+	push %rsi
+	push %rdx
+	push %rcx
 	push %r8
 	push %r9
 	push %r10
@@ -88,11 +88,11 @@ syscall_interrupt_handler:
 	pop %r10
 	pop %r9
 	pop %r8
-	pop %cx
-	pop %dx
-	pop %si
-	pop %di
-	pop %ax
+	pop %rcx
+	pop %rdx
+	pop %rsi
+	pop %rdi
+	pop %rax
 	
 	sti
 	iretq
@@ -103,11 +103,11 @@ protection_failure_interrupt_handler:
 	# pushad
 	# pushf
 	cli
-	push %ax
-	push %di
-	push %si
-	push %dx
-	push %cx
+	push %rax
+	push %rdi
+	push %rsi
+	push %rdx
+	push %rcx
 	push %r8
 	push %r9
 	push %r10
@@ -120,11 +120,11 @@ protection_failure_interrupt_handler:
 	pop %r10
 	pop %r9
 	pop %r8
-	pop %cx
-	pop %dx
-	pop %si
-	pop %di
-	pop %ax
+	pop %rcx
+	pop %rdx
+	pop %rsi
+	pop %rdi
+	pop %rax
 	add $0x08, %rsp # popping error code,
 	
 	sti
