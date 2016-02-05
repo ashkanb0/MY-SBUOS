@@ -264,7 +264,7 @@ uint64_t get_new_page_table(int pid){
 	uint64_t* table = (uint64_t*) temp;
 	table[510] = (page-> base) | PRESENT| READ_WRITE|USER_ACCESSIBLE;
 
-	return temp;
+	return page->base;
 }
 
 void setup_paging(
