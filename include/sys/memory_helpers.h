@@ -32,4 +32,6 @@ void* kmalloc(uint64_t no_bytes);
 uint64_t get_new_page_table();
 uint64_t get_new_page_v();
 
+void _set_cr3(uint64_t table);
+uint64_t get_active_pml4();
 #endif

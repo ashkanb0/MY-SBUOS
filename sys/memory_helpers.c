@@ -27,6 +27,10 @@ void copy_kernel_pml4(uint64_t prog_page_table){
 
 }
 
+uint64_t get_active_pml4(){
+	uint64_t* active_pml4 = (uint64_t*) (0xffffff7fbfdfe000);
+	return active_pml4[510];
+}
 
 
 mem_page* dequeue_page(uint64_t* list_head, uint64_t* list_tail){

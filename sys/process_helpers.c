@@ -40,6 +40,7 @@ void process_init(){
 	// create PCB for kernel!!!
 	kernel_pcb = kmalloc(sizeof(pcb));
 	kernel_pcb -> pid = 0;
+	kernel_pcb -> pml4 = get_active_pml4();
 	_active_pid = 0;
 }
 
@@ -70,7 +71,7 @@ void init(){
 
 	kstrcpy(prog -> pname, "/bin/init", 50);
 
-	set_cr3(prog->pml4);
+	_set_cr3(prog->pml4);
 
 	// TODO : do all this in prog -> pml4! right?
 	prog -> sp = get_new_page_v(prog->pid)+ PAGESIZE - 1; // BOTTOM OF PAGE!
@@ -82,7 +83,7 @@ void init(){
 
 	runableq.list[1] = prog;
 
-	set_cr3(kernel_pml4);
+	_set_cr3(kernel_pcb->pml4);
 	// switch_to_ring_3();
 	// printf("Hello, User World!\n");
 }
