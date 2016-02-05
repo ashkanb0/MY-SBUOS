@@ -67,7 +67,6 @@ void init(){
 	kstrcpy(prog -> wd, "/", 50);
 
 	prog -> pml4 = get_new_page_table(prog->pid);
-	copy_kernel_pml4(prog->pml4);
 
 	kstrcpy(prog -> pname, "/bin/init", 50);
 

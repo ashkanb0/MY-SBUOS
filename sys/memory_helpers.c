@@ -259,6 +259,7 @@ uint64_t get_new_page_table(int pid){
 
 
 	zero_out(temp);
+	copy_kernel_pml4(temp);
 
 	// self referencing entry
 	uint64_t* table = (uint64_t*) temp;
