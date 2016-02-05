@@ -71,6 +71,7 @@ void init(){
 	kstrcpy(prog -> pname, "/bin/init", 50);
 
 	// TODO : map a page to a proper stack place, move this to schedule?
+	// TODO : do all this in prog -> pml4! right?
 	prog -> sp = get_new_page_v(prog->pid)+ PAGESIZE - 1; // BOTTOM OF PAGE!
 	
 	prog -> status = READY;
@@ -107,9 +108,7 @@ void schedule(){
 		"iretq \n\t"
 		:
 		: "r"(prog->ip)
-		: "%eax"
+		: "%rax"
 		);
-
-	while(1);
 }
 
