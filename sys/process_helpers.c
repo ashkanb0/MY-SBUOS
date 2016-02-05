@@ -81,8 +81,8 @@ void init(){
 
 	runableq.list[1] = prog;
 
-	switch_to_ring_3();
-	printf("Hello, User World!\n");
+	// switch_to_ring_3();
+	// printf("Hello, User World!\n");
 }
 
 void k_process_exit(){
@@ -97,6 +97,8 @@ void schedule(){
 	// TODO :
 
 	pcb* prog = runableq.list[1];
+
+	switch_to_ring_3();
 
 	__asm__ volatile(
 		"mov %%rsp, %%rax \n\t"
