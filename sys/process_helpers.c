@@ -19,9 +19,9 @@ int get_active_pid(){
 
 
 void switch_to_ring_3(){
-	// TODO : why not 0x28 ?
-		// "movq , %%lax\n\t"
-	uint32_t tss= 0x2b; 
+	// TODO : why not 0x28 ? why not 0x2B ?
+	uint32_t tss= 0x28; 
+	// uint32_t tss= 0x2b; 
 	__asm__ volatile("ltr (%0)" : : "r"(&tss) );
 
 }
@@ -94,6 +94,21 @@ void k_process_exit(){
 
 void schedule(){
 	// TODO :
+
+	pcb* prog = runableq.list[1];
+
+	__asm__ volatile(
+		"mov %%rsp, %%rax \n\t"
+		"push $0x23  \n\t"
+		"push %%rax \n\t"
+		"pushf \n\t"
+		"push $0x1B \n\t"
+		"push %0 \n\t"
+		"iretq \n\t"
+		:
+		: "r"(prog->ip)
+		: "%eax"
+		);
 
 	while(1);
 }
