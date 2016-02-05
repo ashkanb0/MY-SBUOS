@@ -100,17 +100,17 @@ void schedule(){
 
 	switch_to_ring_3();
 
+		// "mov %%rsp, %%rax\n\t"
 	__asm__ volatile(
-		"mov %%rsp, %%rax \n\t"
-		"push $0x23  \n\t"
-		"push %1 \n\t"
-		"pushf \n\t"
-		"push $0x1B \n\t"
-		"push %0 \n\t"
-		"iretq \n\t"
+		"push $0x23\n\t"
+		"push %1\n\t"
+		"pushf\n\t"
+		"push $0x1B\n\t"
+		"push %0\n\t"
+		"iretq\n\t"
 		:
 		: "r"(prog->ip), "r"(prog->sp)
-		: "%rax"
+		// : "%rax"
 		);
 }
 
