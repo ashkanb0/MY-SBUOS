@@ -70,7 +70,8 @@ void init(){
 
 	kstrcpy(prog -> pname, "/bin/init", 50);
 
-	// TODO : map a page to a proper stack place, move this to schedule?
+	set_cr3(prog->pml4);
+
 	// TODO : do all this in prog -> pml4! right?
 	prog -> sp = get_new_page_v(prog->pid)+ PAGESIZE - 1; // BOTTOM OF PAGE!
 	
@@ -81,6 +82,7 @@ void init(){
 
 	runableq.list[1] = prog;
 
+	set_cr3(kernel_pml4);
 	// switch_to_ring_3();
 	// printf("Hello, User World!\n");
 }
