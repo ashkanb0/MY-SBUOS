@@ -67,7 +67,7 @@ void int_syscall_srv(){
 }
 
 void protection_failure_interrupt_handler(void);
-void int_prtctn_srv(){
+void int_prtctn_srv(exception_stack stack){
 	printf("(unauthorized access)\n");
 	// k_process_exit();
 	return;	
