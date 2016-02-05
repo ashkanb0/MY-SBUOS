@@ -101,6 +101,7 @@ void schedule(){
 
 	pcb* prog = runableq.list[1];
 
+	_set_cr3(prog->pml4);
 	switch_to_ring_3();
 
 		// "mov %%rsp, %%rax\n\t"
