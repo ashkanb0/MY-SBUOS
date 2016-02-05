@@ -29,7 +29,7 @@ typedef struct exception_pushed_stack_structure{
 	uint64_t si;
 	uint64_t di;
 	uint64_t ax;
-	uint32_t error;
+	uint64_t error;
 }exception_stack;
 
 
