@@ -20,8 +20,8 @@ int get_active_pid(){
 
 void switch_to_ring_3(){
 	// TODO : why not 0x28 ? why not 0x2B ?
-	// uint32_t tss= 0x28; 
-	uint32_t tss= 0x2b; 
+	uint32_t tss= 0x28; 
+	// uint32_t tss= 0x2b; 
 	__asm__ volatile("ltr (%0)" : : "r"(&tss) );
 
 }
@@ -108,7 +108,7 @@ void schedule(){
 		"push $0x23\n\t"
 		"push %1\n\t"
 		"pushf\n\t"
-		"push $0x1B\n\t"
+		"push $0x1b\n\t"
 		"push %0\n\t"
 		"iretq\n\t"
 		:
