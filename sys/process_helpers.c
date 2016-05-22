@@ -103,7 +103,8 @@ void schedule(){
 	_set_cr3(prog->pml4);
 	switch_to_ring_3();
 
-		// "mov %%rsp, %%rax\n\t"
+
+	printf("ip: %x, sp:%x", prog->ip, prog->sp);
 	__asm__ volatile(
 		"push $0x23\n\t"
 		"push %1\n\t"
