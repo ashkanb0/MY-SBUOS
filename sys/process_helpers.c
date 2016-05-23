@@ -124,7 +124,7 @@ void schedule(){
 	uint64_t sp;
 	__asm__ volatile("movq %%rsp, %0":"=r"(sp):);
 
-	printf("rsp:\n", sp);
+	printf("rsp: %x\n", sp);
 
 	while(1);
 
