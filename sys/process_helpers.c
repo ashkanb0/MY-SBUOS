@@ -104,7 +104,7 @@ void schedule(){
 	switch_to_ring_3();
 
 
-	printf("ip: %x, sp:%x", prog->ip, prog->sp);
+	printf("ip: %x, sp:%x \n", prog->ip, prog->sp);
 	uint64_t tem = 0x28; 
 	__asm__ volatile("mov %0,%%rax;"::"r"(tem));
 	__asm__ volatile("ltr %ax");
@@ -122,7 +122,7 @@ void schedule(){
 		// "iretq\n\t"
 
 	uint64_t sp;
-	__asm__ volatile("movq %%rsp, %0":"=r"(res):);
+	__asm__ volatile("movq %%rsp, %0":"=r"(sp):);
 
 	printf("rsp:\n", sp);
 
