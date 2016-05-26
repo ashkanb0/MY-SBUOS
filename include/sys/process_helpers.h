@@ -12,7 +12,7 @@ typedef struct process_control_block
 {
 	uint64_t pid;
 	uint64_t pml4;
-	uint16_t sp;
+	uint64_t sp;
 	uint64_t ip;
 	char pname [50];
 	char wd [50];
