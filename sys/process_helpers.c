@@ -117,14 +117,9 @@ void schedule(){
 		"push %0\n\t"
 		:
 		: "r"(prog->ip), "r"(prog->sp)
-		// : "%rax"
+		: "%rax"
 		);
 		// "iretq\n\t"
-
-	uint64_t sp;
-	__asm__ volatile("movq %%rsp, %0":"=r"(sp):);
-
-	printf("rsp: %x\n", sp);
 
 	while(1);
 
