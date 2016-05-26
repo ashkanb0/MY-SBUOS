@@ -110,6 +110,7 @@ void schedule(){
 	__asm__ volatile("ltr %ax");
 
 	__asm__ volatile(
+		"push $0x23\n\t"
 		"push %0\n\t"
 		"push $0x1b\n\t"
 		"push %1\n\t"
@@ -117,7 +118,6 @@ void schedule(){
 		:
 		: "r"(prog->ip), "r"(prog->sp)
 		);
-		// "push $0x23\n\t"
 		// "pushf\n\t"
 		// : "%rax"
 
