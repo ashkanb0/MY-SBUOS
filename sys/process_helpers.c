@@ -109,37 +109,19 @@ void schedule(){
 	__asm__ volatile("mov %0,%%rax;"::"r"(tem));
 	__asm__ volatile("ltr %ax");
 
-		// "push $0x23\n\t"
-	// TODO : remove comment __asm__ volatile(
-	// 	"push $0x22\n\t"
-	// 	"push $0x33\n\t"
-	// 	"push $0x43\n\t"
-	// 	"push %1\n\t"
-	// 	"push $0x1b\n\t"
-	// 	"push %0\n\t"
-	// 	"iretq\n\t"
-	// 	:
-	// 	: "r"(prog->ip), "r"(prog->sp)
-	// 	);
-	// 	// "pushf\n\t"
-	// 	// : "%rax"
 	__asm__ volatile(
 		"push $0x23\n\t"
 		"push $0x23\n\t"
 		"push $0x23\n\t"
 		"push $0x23\n\t"
-		"push $0x23\n\t"
-		"push $0x23\n\t"
-		"push $0x23\n\t"
-		"push $0x23\n\t"
-		"push $0x23\n\t"
-		"push $0x23\n\t"
-		"push $0x23\n\t"
+		"push %1\n\t"
+		"pushf\n\t"
+		"push %0\n\t"
 		"iretq\n\t"
 		:
 		: "r"(prog->ip), "r"(prog->sp)
 		);
-		// "pushf\n\t"
+		// "push $0x1b\n\t"
 		// : "%rax"
 
 	while(1);
