@@ -109,13 +109,11 @@ void schedule(){
 	__asm__ volatile("mov %0,%%rax;"::"r"(tem));
 	__asm__ volatile("ltr %ax");
 
-		// "push $0x11\n\t"
-		// "push $0x22\n\t"
+		// "push $0x23\n\t"
 	__asm__ volatile(
+		"push $0x22\n\t"
 		"push $0x33\n\t"
-		"push $0x44\n\t"
-		"push $0x55\n\t"
-		"push $0x66\n\t"
+		"push $0x43\n\t"
 		"push %1\n\t"
 		"push $0x1b\n\t"
 		"push %0\n\t"
