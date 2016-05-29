@@ -114,13 +114,13 @@ void schedule(){
 		"push $0x23\n\t"
 		"push $0x23\n\t"
 		"push %1\n\t"
-		"pushf\n\t"
+		// "push $0x1b\n\t"
 		"push %0\n\t"
 		"iretq\n\t"
 		:
 		: "r"(prog->ip), "r"(prog->sp)
 		);
-		// "push $0x1b\n\t"
+		// "pushf\n\t"
 		// : "%rax"
 
 	while(1);
