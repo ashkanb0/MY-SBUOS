@@ -113,7 +113,6 @@ void schedule(){
 		"push $0x23\n\t"
 		"push $0x23\n\t"
 		"push $0x23\n\t"
-		"push $0x23\n\t"
 		"push %1\n\t"
 		"pushf\n\t"
 		"push %0\n\t"
