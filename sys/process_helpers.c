@@ -111,21 +111,18 @@ void schedule(){
 
 		// "push $0x33\n\t"
 		// "pushf\n\t"
-		// "iretq\n\t"
 	__asm__ volatile(
 		"push $0x23\n\t"
 		"push %1\n\t"
 		"push $0x43\n\t"
 		"push $0x1b\n\t"
 		"push %0\n\t"
+		"iretq\n\t"
 		:
 		: "r"(prog->ip), "r"(prog->sp)
 		);
 		// "pushf\n\t"
 		// : "%rax"
-	__asm__ volatile(
-		"iretq\n\t"
-		);
 
 	while(1);
 
