@@ -105,7 +105,7 @@ void schedule(){
 
 
 	printf("ip: %x, sp:%x \n", prog->ip, prog->sp);
-	uint64_t tem = 0x28; 
+	uint64_t tem = 0x2B; 
 	__asm__ volatile("mov %0,%%rax;"::"r"(tem));
 	__asm__ volatile("ltr %ax");
 
