@@ -60,6 +60,11 @@ pcb* dequeue_process(pcb_list* list){
 // 	enqueue_process(&runableq, prog);
 // }
 
+void dummy_process(){
+	printf("WOOHOO! I AM RUNNING!!!\n");
+	while(1);
+}
+
 void init(){
 	pcb* prog = kmalloc(sizeof(pcb));
 	_prev_pid ++;
@@ -78,7 +83,8 @@ void init(){
 	prog -> status = READY;
 
 	_active_pid = prog->pid;
-	prog -> ip = map_file("bin/init",prog->pid);
+	prog -> ip = (uint64_t)(dummy_process);
+	// prog -> ip = map_file("bin/init",prog->pid);
 
 	runableq.list[1] = prog;
 
