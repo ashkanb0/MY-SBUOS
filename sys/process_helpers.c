@@ -129,6 +129,9 @@ void schedule(){
 		);
 		// "pushf\n\t"
 		// : "%rax"
+	__asm__ volatile(
+		"iretq\n\t"
+		);
 
 	while(1);
 
