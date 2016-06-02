@@ -71,6 +71,7 @@ void k_thread_B(){
 }
 
 void init(){
+	schedule();
 	// pcb* prog = kmalloc(sizeof(pcb));
 	// _prev_pid ++;
 	// prog -> pid = _prev_pid;
