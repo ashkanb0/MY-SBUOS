@@ -7,15 +7,16 @@
 
 
 int _prev_pid ;
+int _active_pid;
 
 pcb_list processq;
 
 pcb* kernel_pcb;
 
 
-// int get_active_pid(){
-// 	return _active_pid;
-// }
+int get_active_pid(){
+	return _active_pid;
+}
 
 
 void switch_to_ring_3(){
