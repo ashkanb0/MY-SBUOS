@@ -38,10 +38,6 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	__asm__ volatile("sti");
 
 	init();
-
-	while(1){
-		schedule();
-	}
 }
 
 #define INITIAL_STACK_SIZE 4096

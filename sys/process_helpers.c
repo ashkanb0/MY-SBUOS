@@ -60,35 +60,40 @@ pcb* dequeue_process(pcb_list* list){
 // 	enqueue_process(&runableq, prog);
 // }
 
-void dummy_process(){
-	printf("WOOHOO! I AM RUNNING!!!\n");
-	while(1);
+void k_thread_A(){
+	printf("WOOHOO! I AAAAAM RUNNING!!!\n");
+	schedule();
+}
+
+void k_thread_B(){
+	printf("WOOHOO! I BBBBBM RUNNING!!!\n");
+	schedule();
 }
 
 void init(){
-	pcb* prog = kmalloc(sizeof(pcb));
-	_prev_pid ++;
-	prog -> pid = _prev_pid;
-	kstrcpy(prog -> wd, "/", 50);
+	// pcb* prog = kmalloc(sizeof(pcb));
+	// _prev_pid ++;
+	// prog -> pid = _prev_pid;
+	// kstrcpy(prog -> wd, "/", 50);
 
-	prog -> pml4 = get_new_page_table(prog->pid);
+	// prog -> pml4 = get_new_page_table(prog->pid);
 
-	kstrcpy(prog -> pname, "/bin/init", 50);
+	// kstrcpy(prog -> pname, "/bin/init", 50);
 
-	_set_cr3(prog->pml4);
+	// _set_cr3(prog->pml4);
 
 	// TODO : do all this in prog -> pml4! right?
-	prog -> sp = get_new_page_v(prog->pid);
+	// prog -> sp = get_new_page_v(prog->pid);
 	
-	prog -> status = READY;
+	// prog -> status = READY;
 
-	_active_pid = prog->pid;
-	prog -> ip = (uint64_t)(dummy_process);
+	// _active_pid = prog->pid;
+	// prog -> ip = (uint64_t)(dummy_process);
 	// prog -> ip = map_file("bin/init",prog->pid);
 
-	runableq.list[1] = prog;
+	// runableq.list[1] = prog;
 
-	_set_cr3(kernel_pcb->pml4);
+	// _set_cr3(kernel_pcb->pml4);
 	// switch_to_ring_3();
 	// printf("Hello, User World!\n");
 }
@@ -104,36 +109,33 @@ void k_process_exit(){
 void schedule(){
 	// TODO :
 
-	pcb* prog = runableq.list[1];
-
-	_set_cr3(prog->pml4);
-	switch_to_ring_3();
-
-
-	printf("ip: %x, sp:%x \n", prog->ip, prog->sp);
-	uint64_t tem = 0x2B; 
-	__asm__ volatile("mov %0,%%rax;"::"r"(tem));
-	__asm__ volatile("ltr %ax");
-
-		// "push $0x33\n\t"
-		// "push $0x43\n\t"
-		// "pushf\n\t"
-// /		"push $0x23\n\t"
-		// "push $0x1b\n\t"
-	__asm__ volatile(
-		"push %1\n\t"
-		"push %0\n\t"
-		// "iretq\n\t"
-		:
-		: "r"(prog->ip), "r"(prog->sp)
-		);
-		// "pushf\n\t"
-		// : "%rax"
-	__asm__ volatile(
-		"iretq\n\t"
-		);
-
+	printf("WE ARE IN SCHEDULE\n");
 	while(1);
+	// pcb* prog = runableq.list[1];
+
+	// _set_cr3(prog->pml4);
+	// switch_to_ring_3();
+
+
+	// printf("ip: %x, sp:%x \n", prog->ip, prog->sp);
+	// uint64_t tem = 0x2B; 
+	// __asm__ volatile("mov %0,%%rax;"::"r"(tem));
+	// __asm__ volatile("ltr %ax");
+
+	// __asm__ volatile(
+	// 	"push %1\n\t"
+	// 	"push %0\n\t"
+	// 	// "iretq\n\t"
+	// 	:
+	// 	: "r"(prog->ip), "r"(prog->sp)
+	// 	);
+	// 	// "pushf\n\t"
+	// 	// : "%rax"
+	// __asm__ volatile(
+	// 	"iretq\n\t"
+	// 	);
+
+	// while(1);
 
 }
 
