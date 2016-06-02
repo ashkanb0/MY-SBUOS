@@ -88,8 +88,10 @@ void int_pgflt_srv(exception_stack stack){
 	
 	if(address== 0x00){
 		printf("(segmantation fault)\n");
-		k_process_exit();
-		return;
+		while(1);
+		// TODO : 
+		// k_process_exit();
+		// return;
 	}
 	// TODO : COW pages
 	if((error&2)==2) // PAGE NOT MAPPED
