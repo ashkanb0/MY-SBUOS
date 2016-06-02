@@ -3,19 +3,19 @@
 #include <sys/memory_helpers.h>
 #include <sys/sysutil.h>
 #include <sys/tarfs.h>
+#include <sys/gdt.h>
+
 
 int _prev_pid ;
-int _active_pid ;
 
-pcb_list runableq;
-pcb_list waitlist;
+pcb_list processq;
 
 pcb* kernel_pcb;
 
 
-int get_active_pid(){
-	return _active_pid;
-}
+// int get_active_pid(){
+// 	return _active_pid;
+// }
 
 
 void switch_to_ring_3(){
@@ -29,28 +29,45 @@ void switch_to_ring_3(){
 
 void process_init(){
 	_prev_pid = 0;
-	runableq.head = runableq.tail = 0;
-	waitlist.head = waitlist.tail = 0;
+	processq.head = processq.tail = 0;
 
 	for (int ind = 0; ind < PROCESS_QUEUE_SIZE; ++ind)
 	{
-		runableq.list[ind] = NULL;
-		waitlist.list[ind] = NULL;
+		processq.list[ind] = NULL;
 	}
 	// create PCB for kernel!!!
 	kernel_pcb = kmalloc(sizeof(pcb));
 	kernel_pcb -> pid = 0;
 	kernel_pcb -> pml4 = get_active_pml4();
-	_active_pid = 0;
 }
 
 void enqueue_process(pcb_list* list, pcb* process){
-	//TODO : 
+	list->list[list->tail] = process;
+	list->tail++;
 }
 
 pcb* dequeue_process(pcb_list* list){
 	// TODO :
 	return NULL;
+}
+
+pcb* get_next_context(){
+	// TODO :
+	processq.head++;
+	return processq.list[processq.head-1];
+}
+
+pcb* _get_new_pcb(){
+	pcb* res = kmalloc(sizeof(pcb));
+	_prev_pid ++;
+	res -> pid = _prev_pid;
+	
+	// TODO: 
+	res -> kernel_stack = get_new_page_v(res->pid);
+	res -> kernel_sp = (uint64_t*)(res->kernel_stack+PAGESIZE);
+
+
+	return res;
 }
 
 // void kexecve(pcb* prog, char* path, int argc, char* argv[], char* envp[]){
@@ -71,48 +88,40 @@ void k_thread_B(){
 }
 
 void init(){
-	schedule();
-	// pcb* prog = kmalloc(sizeof(pcb));
-	// _prev_pid ++;
-	// prog -> pid = _prev_pid;
+	pcb* pcba = _get_new_pcb();
 	// kstrcpy(prog -> wd, "/", 50);
 
-	// prog -> pml4 = get_new_page_table(prog->pid);
+	pcba->kernel_sp --;
+	*(pcba->kernel_sp) = (uint64_t)(gdt);
+	pcba->kernel_sp --;
+	*(pcba->kernel_sp) = (uint64_t)(k_thread_A);
 
-	// kstrcpy(prog -> pname, "/bin/init", 50);
+	pcb* pcbb = _get_new_pcb();
+	// kstrcpy(prog -> wd, "/", 50);
 
-	// _set_cr3(prog->pml4);
+	pcbb->kernel_sp --;
+	*(pcbb->kernel_sp) = (uint64_t)(gdt);
+	pcbb->kernel_sp --;
+	*(pcbb->kernel_sp) = (uint64_t)(k_thread_B);
 
-	// TODO : do all this in prog -> pml4! right?
-	// prog -> sp = get_new_page_v(prog->pid);
-	
-	// prog -> status = READY;
-
-	// _active_pid = prog->pid;
-	// prog -> ip = (uint64_t)(dummy_process);
-	// prog -> ip = map_file("bin/init",prog->pid);
-
-	// runableq.list[1] = prog;
-
-	// _set_cr3(kernel_pcb->pml4);
-	// switch_to_ring_3();
-	// printf("Hello, User World!\n");
-}
-
-void k_process_exit(){
-	// TODO : free vma pages
-
-	runableq.list[_active_pid] -> status = FINISHED; 
 	schedule();
+
 }
+
+// void k_process_exit(){
+// 	// TODO : free vma pages
+
+// 	runableq.list[_active_pid] -> status = FINISHED; 
+// 	schedule();
+// }
 
 
 void schedule(){
 	// TODO :
 
-	printf("WE ARE IN SCHEDULE\n");
-	while(1);
-	// pcb* prog = runableq.list[1];
+	pcb* prog = get_next_context();
+
+	__asm__ volatile("movq %%rsp, %0":"=r"(prog->kernel_sp):);
 
 	// _set_cr3(prog->pml4);
 	// switch_to_ring_3();
