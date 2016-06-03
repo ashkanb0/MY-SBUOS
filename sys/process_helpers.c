@@ -126,6 +126,7 @@ void schedule(){
 	pcb* prog = get_next_context();
 
 	__asm__ volatile("movq %%rsp, %0":"=r"(prog->kernel_sp):);
+	__asm__ volatile("retq":);
 
 	// _set_cr3(prog->pml4);
 	// switch_to_ring_3();
