@@ -105,6 +105,9 @@ void init(){
 	pcbb->kernel_sp --;
 	*(pcbb->kernel_sp) = (uint64_t)(k_thread_B);
 
+	enqueue_process(&processq, pcba);
+	enqueue_process(&processq, pcbb);
+
 	schedule();
 
 }
