@@ -135,14 +135,12 @@ void init(){
 void schedule(){
 	// TODO :
 
-	pcb* prog = get_next_context();
-
 	enqueue_process(&processq, _active_pcb);
 
 	__asm__ volatile("movq %%rsp, %0":"=r"(_active_pcb -> kernel_sp):);
 
-	_active_pcb = prog ;
-	__asm__ volatile("movq %0, %%rsp"::"r"(prog->kernel_sp):);
+	_active_pcb = get_next_context() ;
+	__asm__ volatile("movq %0, %%rsp"::"r"(_active_pcb -> kernel_sp):);
 	__asm__ volatile("retq":);
 
 	// _set_cr3(prog->pml4);
