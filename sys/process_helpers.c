@@ -7,15 +7,15 @@
 
 
 int _prev_pid ;
-int _active_pid;
 
 pcb_list processq;
 
+pcb* _active_pcb;
 pcb* kernel_pcb;
 
 
 int get_active_pid(){
-	return _active_pid;
+	return _active_pcb -> pid;
 }
 
 
@@ -125,6 +125,11 @@ void schedule(){
 
 	pcb* prog = get_next_context();
 
+
+	// uint64_t current_sp;
+	__asm__ volatile("movq %%rsp, %0":"=r"(_active_pcb -> kernel_sp):);
+	
+	_active_pcb = prog ;
 	__asm__ volatile("movq %0, %%rsp"::"r"(prog->kernel_sp):);
 	__asm__ volatile("retq":);
 
