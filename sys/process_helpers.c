@@ -45,6 +45,7 @@ void process_init(){
 void enqueue_process(pcb_list* list, pcb* process){
 	list->list[list->tail] = process;
 	list->tail++;
+	list->tail %= PROCESS_QUEUE_SIZE;
 }
 
 pcb* dequeue_process(pcb_list* list){
@@ -54,8 +55,10 @@ pcb* dequeue_process(pcb_list* list){
 
 pcb* get_next_context(){
 	// TODO :
+	pcb* res = processq.list[processq.head];
 	processq.head++;
-	return processq.list[processq.head-1];
+	processq.head %= PROCESS_QUEUE_SIZE;
+	return res;
 }
 
 pcb* _get_new_pcb(){
@@ -90,8 +93,8 @@ void k_thread_B(){
 
 void init(){
 	pcb* pcba = _get_new_pcb();
-	// kstrcpy(prog -> wd, "/", 50);
 
+	kstrcpy(pcba -> pname, "A", 50);
 	pcba->kernel_sp --;
 	*(pcba->kernel_sp) = (uint64_t)(gdt);
 	pcba->kernel_sp --;
@@ -100,6 +103,7 @@ void init(){
 	pcb* pcbb = _get_new_pcb();
 	// kstrcpy(prog -> wd, "/", 50);
 
+	kstrcpy(pcbb -> pname, "B", 50);
 	pcbb->kernel_sp --;
 	*(pcbb->kernel_sp) = (uint64_t)(gdt);
 	pcbb->kernel_sp --;
