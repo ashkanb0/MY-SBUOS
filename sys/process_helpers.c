@@ -108,6 +108,8 @@ void init(){
 	enqueue_process(&processq, pcba);
 	enqueue_process(&processq, pcbb);
 
+	_active_pcb = pcba;
+
 	schedule();
 
 }
@@ -128,7 +130,7 @@ void schedule(){
 
 	// uint64_t current_sp;
 	__asm__ volatile("movq %%rsp, %0":"=r"(_active_pcb -> kernel_sp):);
-	
+
 	_active_pcb = prog ;
 	__asm__ volatile("movq %0, %%rsp"::"r"(prog->kernel_sp):);
 	__asm__ volatile("retq":);
