@@ -129,8 +129,8 @@ void schedule(){
 
 	pcb* prog = get_next_context();
 
+	enqueue_process(&processq, _active_pcb);
 
-	// uint64_t current_sp;
 	__asm__ volatile("movq %%rsp, %0":"=r"(_active_pcb -> kernel_sp):);
 
 	_active_pcb = prog ;
