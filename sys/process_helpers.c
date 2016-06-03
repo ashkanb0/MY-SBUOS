@@ -110,7 +110,7 @@ void init(){
 	enqueue_process(&processq, pcba);
 
 	_active_pcb = pcba;
-	runableq.head++;
+	processq.head++;
 	__asm__ volatile("movq %0, %%rsp"::"r"(pcba->kernel_sp):);
 	__asm__ volatile("retq":);
 
