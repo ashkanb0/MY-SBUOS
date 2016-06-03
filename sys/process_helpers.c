@@ -82,13 +82,17 @@ pcb* _get_new_pcb(){
 // }
 
 void k_thread_A(){
-	printf("WOOHOO! I AAAAAM RUNNING!!!\n");
-	schedule();
+	while(1){
+		printf("WOOHOO! I AAAAAM RUNNING!!!\n");
+		schedule();
+	}
 }
 
 void k_thread_B(){
-	printf("WOOHOO! I BBBBBM RUNNING!!!\n");
-	schedule();
+	while(1){
+		printf("WOOHOO! I BBBBBM RUNNING!!!\n");
+		schedule();
+	}
 }
 
 void init(){
