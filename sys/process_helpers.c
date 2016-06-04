@@ -121,7 +121,6 @@ void init(){
 
 	enqueue_process(&processq, pcba);
 	enqueue_process(&processq, pcbb);
-	enqueue_process(&processq, pcba);
 
 	_active_pcb = pcba;
 	processq.head++;
