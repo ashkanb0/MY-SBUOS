@@ -111,6 +111,8 @@ void init(){
 	pcbb->kernel_sp --;
 	*(pcbb->kernel_sp) = (uint64_t)(gdt);
 	pcbb->kernel_sp --;
+	*(pcbb->kernel_sp) = (uint64_t)(_active_pcb);
+	pcbb->kernel_sp --;
 	*(pcbb->kernel_sp) = (uint64_t)(k_thread_B);
 
 	enqueue_process(&processq, pcba);
