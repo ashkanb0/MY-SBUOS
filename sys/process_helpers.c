@@ -54,7 +54,8 @@ pcb* dequeue_process(pcb_list* list){
 }
 
 pcb* get_next_context(){
-	// TODO :
+	enqueue_process(&processq, _active_pcb);
+
 	pcb* res = processq.list[processq.head];
 	processq.head++;
 	processq.head %= PROCESS_QUEUE_SIZE;
@@ -116,8 +117,8 @@ void init(){
 	// *(pcbb->kernel_sp) = (uint64_t)(_active_pcb);
 	pcbb->kernel_sp --;
 	*(pcbb->kernel_sp) = (uint64_t)(k_thread_B);
-	pcbb->kernel_sp --;
-	*(pcbb->kernel_sp) = 0;
+	// pcbb->kernel_sp --;
+	// *(pcbb->kernel_sp) = 0;
 
 	enqueue_process(&processq, pcba);
 	enqueue_process(&processq, pcbb);
@@ -140,7 +141,6 @@ void init(){
 void schedule(){
 	// TODO :
 
-	enqueue_process(&processq, _active_pcb);
 
 	__asm__ volatile("movq %%rsp, %0":"=r"(_active_pcb -> kernel_sp):);
 
