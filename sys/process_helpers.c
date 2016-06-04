@@ -138,7 +138,6 @@ void schedule(){
 	enqueue_process(&processq, _active_pcb);
 
 	__asm__ volatile("movq %%rsp, %0":"=r"(_active_pcb -> kernel_sp):);
-	_active_pcb -> kernel_sp ++;
 
 	_active_pcb = get_next_context() ;
 	
