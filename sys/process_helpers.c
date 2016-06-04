@@ -99,8 +99,8 @@ void init(){
 	pcb* pcba = _get_new_pcb();
 
 	kstrcpy(pcba -> pname, "A", 50);
-	pcba->kernel_sp --;
-	*(pcba->kernel_sp) = (uint64_t)(gdt);
+	// pcba->kernel_sp --;
+	// *(pcba->kernel_sp) = (uint64_t)(gdt);
 	pcba->kernel_sp --;
 	*(pcba->kernel_sp) = (uint64_t)(k_thread_A);
 
@@ -108,10 +108,10 @@ void init(){
 	// kstrcpy(prog -> wd, "/", 50);
 
 	kstrcpy(pcbb -> pname, "B", 50);
-	pcbb->kernel_sp --;
-	*(pcbb->kernel_sp) = (uint64_t)(gdt);
-	pcbb->kernel_sp --;
-	*(pcbb->kernel_sp) = (uint64_t)(_active_pcb);
+	// pcbb->kernel_sp --;
+	// *(pcbb->kernel_sp) = (uint64_t)(gdt);
+	// pcbb->kernel_sp --;
+	// *(pcbb->kernel_sp) = (uint64_t)(_active_pcb);
 	pcbb->kernel_sp --;
 	*(pcbb->kernel_sp) = (uint64_t)(k_thread_B);
 
@@ -141,7 +141,7 @@ void schedule(){
 
 	__asm__ volatile("movq %%rsp, %0":"=r"(_active_pcb -> kernel_sp):);
 
-	_active_pcb = get_next_context() ;
+	_active_pcb = get_next_context();
 	
 	__asm__ volatile("movq %0, %%rsp"::"r"(_active_pcb -> kernel_sp):);
 	__asm__ volatile("retq":);
