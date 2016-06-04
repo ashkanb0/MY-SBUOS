@@ -69,6 +69,8 @@ pcb* _get_new_pcb(){
 	// TODO: 
 	res -> kernel_stack = get_new_page_v(res->pid);
 	res -> kernel_sp = (uint64_t*)(res->kernel_stack+PAGESIZE);
+	res->kernel_sp --;
+	*(res->kernel_sp) = 0;
 
 
 	return res;
