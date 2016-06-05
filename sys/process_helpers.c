@@ -93,7 +93,7 @@ void k_thread_kernel(){
 			"push %1\n\t"
 			"iretq\n\t"
 			:
-			: "r"(prog->ip), "r"(prog->user_sp)
+			: "r"(_active_pcb->ip), "r"(_active_pcb->user_sp)
 			);
 	}
 	printf("[k_thread_kernel]: Shouldn't have gotten here!! PANIC!!!!\n");
