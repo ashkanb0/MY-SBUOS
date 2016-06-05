@@ -100,7 +100,7 @@ void k_thread_kernel(){
 	}
 	//just an extra check! It should always be true!
 	if (_active_pcb -> status == RUNNING){
-		
+		_switch_to_ring_3();	
 	}
 	printf("[k_thread_kernel]: Shouldn't have gotten here!! PANIC!!!!\n");
 	while(1);
