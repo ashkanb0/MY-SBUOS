@@ -19,14 +19,6 @@ int get_active_pid(){
 }
 
 
-void switch_to_ring_3(){
-	// TODO : why not 0x28 ? why not 0x2B ?
-	uint32_t tss= 0x28; 
-	// uint32_t tss= 0x2b; 
-	__asm__ volatile("ltr (%0)" : : "r"(&tss) );
-
-}
-
 
 void process_init(){
 	_prev_pid = 0;
@@ -36,21 +28,12 @@ void process_init(){
 	{
 		processq.list[ind] = NULL;
 	}
-	// create PCB for kernel!!!
-	kernel_pcb = kmalloc(sizeof(pcb));
-	kernel_pcb -> pid = 0;
-	kernel_pcb -> pml4 = get_active_pml4();
 }
 
 void enqueue_process(pcb_list* list, pcb* process){
 	list->list[list->tail] = process;
 	list->tail++;
 	list->tail %= PROCESS_QUEUE_SIZE;
-}
-
-pcb* dequeue_process(pcb_list* list){
-	// TODO :
-	return NULL;
 }
 
 pcb* get_next_context(){
@@ -66,8 +49,7 @@ pcb* _get_new_pcb(){
 	pcb* res = kmalloc(sizeof(pcb));
 	_prev_pid ++;
 	res -> pid = _prev_pid;
-	
-	// TODO: 
+
 	res -> kernel_stack = get_new_page_v(res->pid);
 	res -> kernel_sp = (uint64_t*)(res->kernel_stack+PAGESIZE);
 	res->kernel_sp --;
@@ -77,101 +59,79 @@ pcb* _get_new_pcb(){
 	return res;
 }
 
-// void kexecve(pcb* prog, char* path, int argc, char* argv[], char* envp[]){
+void prepare_user_memory(pcb* process){
+	process -> pml4 = get_new_page_table();
+	_set_cr3(process -> pml4);
 
-// 	strcpy(prog->command, path);
+	process -> ip = map_file(process->pname, process->pid);
 
-// 	enqueue_process(&runableq, prog);
-// }
+	//TODO: any better way?
+	process -> user_sp = process->ip - (40*PAGESIZE); 
 
-void k_thread_A(){
+	process -> status = RUNNING;
+}
+
+void k_thread_0(){
 	while(1){
-		printf("WOOHOO! I AAAAAM RUNNING!!!\n");
 		schedule();
 	}
 }
 
-void k_thread_B(){
-	while(1){
-		printf("WOOHOO! I BBBBBM RUNNING!!!\n");
-		schedule();
+void k_thread_kernel(){
+	
+	if (_active_pcb -> status == READY){
+		prepare_user_memory(_active_pcb);
 	}
+	//just an extra check! It should always be true!
+	if (_active_pcb -> status == RUNNING){
+		// http://wiki.osdev.org/Getting_to_Ring_3
+		__asm__ volatile(
+			"push 0x23\n\t"
+			"push %0\n\t"
+			"pushf\n\t"
+			"push 0x1b\n\t"
+			"push %1\n\t"
+			"iretq\n\t"
+			:
+			: "r"(prog->ip), "r"(prog->user_sp)
+			);
+	}
+	printf("[k_thread_kernel]: Shouldn't have gotten here!! PANIC!!!!\n");
+	while(1);
 }
 
 void init(){
-	pcb* pcba = _get_new_pcb();
+	pcb* sys_idle = _get_new_pcb();
 
-	kstrcpy(pcba -> pname, "A", 50);
-	// pcba->kernel_sp --;
-	// *(pcba->kernel_sp) = (uint64_t)(gdt);
-	pcba->kernel_sp --;
-	*(pcba->kernel_sp) = (uint64_t)(k_thread_A);
+	kstrcpy(sys_idle -> pname, "system_idle_process", 50);
+	sys_idle->status = RUNNING;
+	sys_idle->kernel_sp --;
+	*(sys_idle->kernel_sp) = (uint64_t)(k_thread_0);
 
-	pcb* pcbb = _get_new_pcb();
-	// kstrcpy(prog -> wd, "/", 50);
+	pcb* shell = _get_new_pcb();
 
-	kstrcpy(pcbb -> pname, "B", 50);
-	// pcbb->kernel_sp --;
-	// *(pcbb->kernel_sp) = (uint64_t)(gdt);
-	// pcbb->kernel_sp --;
-	// *(pcbb->kernel_sp) = (uint64_t)(_active_pcb);
-	pcbb->kernel_sp --;
-	*(pcbb->kernel_sp) = (uint64_t)(k_thread_B);
-	pcbb->kernel_sp --;
-	*(pcbb->kernel_sp) = 0;
+	kstrcpy(shell -> pname, "/bin/sbush", 50);
+	kstrcpy(shell -> wd, "/", 50);
+	shell->status = READY;
+	shell->kernel_sp --;
+	*(shell->kernel_sp) = (uint64_t)(k_thread_kernel);
+	shell->kernel_sp --;
+	*(shell->kernel_sp) = 0;
 
-	enqueue_process(&processq, pcba);
-	enqueue_process(&processq, pcbb);
+	enqueue_process(&processq, sys_idle);
+	enqueue_process(&processq, shell);
 
-	_active_pcb = pcba;
+	_active_pcb = sys_idle;
 	processq.head++;
-	__asm__ volatile("movq %0, %%rsp"::"r"(pcba->kernel_sp):);
+	__asm__ volatile("movq %0, %%rsp"::"r"(sys_idle->kernel_sp):);
 	__asm__ volatile("retq":);
 
 }
 
-// void k_process_exit(){
-// 	// TODO : free vma pages
-
-// 	runableq.list[_active_pid] -> status = FINISHED; 
-// 	schedule();
-// }
-
-
 void schedule(){
-	// TODO :
-
-
 	__asm__ volatile("movq %%rsp, %0":"=r"(_active_pcb -> kernel_sp):);
-
 	_active_pcb = get_next_context();
-	
 	__asm__ volatile("movq %0, %%rsp"::"r"(_active_pcb -> kernel_sp):);
-	// __asm__ volatile("retq":);
-
-	// _set_cr3(prog->pml4);
-	// switch_to_ring_3();
-
-
-	// printf("ip: %x, sp:%x \n", prog->ip, prog->sp);
-	// uint64_t tem = 0x2B; 
-	// __asm__ volatile("mov %0,%%rax;"::"r"(tem));
-	// __asm__ volatile("ltr %ax");
-
-	// __asm__ volatile(
-	// 	"push %1\n\t"
-	// 	"push %0\n\t"
-	// 	// "iretq\n\t"
-	// 	:
-	// 	: "r"(prog->ip), "r"(prog->sp)
-	// 	);
-	// 	// "pushf\n\t"
-	// 	// : "%rax"
-	// __asm__ volatile(
-	// 	"iretq\n\t"
-	// 	);
-
-	// while(1);
 
 }
 

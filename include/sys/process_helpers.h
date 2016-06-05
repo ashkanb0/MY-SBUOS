@@ -6,19 +6,20 @@
 #define PROCESS_QUEUE_SIZE 100
 
 
-enum{READY = 0, RUNNING = 1, WAITING = 2, FINISHED = 3};
+enum process_status{READY = 0, RUNNING = 1, WAITING = 2, FINISHED = 3};
 
 typedef struct process_control_block
 {
 	uint64_t pid;
 	uint64_t pml4;
+	uint64_t user_sp;
 	uint64_t* kernel_sp;
 	uint64_t kernel_stack;
 	uint64_t ip;
 	char pname [50];
 	char wd [50];
 
-	uint16_t status;
+	enum process_status status;
 }pcb;
 
 typedef struct process_control_block_list

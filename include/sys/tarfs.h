@@ -4,6 +4,7 @@
 #include <sys/defs.h>
 // #include <sys/sbunix.h>
 
+#define NUM_FILES 100
 
 extern char _binary_tarfs_start;
 extern char _binary_tarfs_end;
