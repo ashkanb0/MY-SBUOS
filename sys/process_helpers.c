@@ -100,6 +100,9 @@ void _switch_to_ring_3(){
 		:
 		: "r"(_active_pcb->user_sp), "r"(_active_pcb->ip), "r"(&tss)
 	);
+	__asm__ volatile(
+		"iretq\n\t"
+	);
 }
 
 void k_thread_kernel(){
