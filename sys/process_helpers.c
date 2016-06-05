@@ -110,7 +110,7 @@ void init(){
 
 	pcb* shell = _get_new_pcb();
 
-	kstrcpy(shell -> pname, "/bin/sbush", 50);
+	kstrcpy(shell -> pname, "bin/sbush", 50);
 	kstrcpy(shell -> wd, "/", 50);
 	shell->status = READY;
 	shell->kernel_sp --;
