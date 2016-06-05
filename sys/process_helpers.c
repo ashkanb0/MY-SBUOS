@@ -90,6 +90,7 @@ void _switch_to_ring_3(){
 	tss= 0x2b;
 	__asm__ volatile(
 		"ltr (%2)\n\t" 
+		"push 0x24\n\t"
 		"push 0x23\n\t"
 		"push %0\n\t"
 		"pushf\n\t"
