@@ -81,15 +81,15 @@ void _switch_to_ring_3(){
 	// http://wiki.osdev.org/Getting_to_Ring_3
 	tss.rsp0 = (uint64_t) (_active_pcb -> kernel_stack + PAGESIZE - 16);
 	uint64_t tss= 0x2b;
-	__asm__ volatile(
-		"popq %0\n\t"
-		"popq %0\n\t"
-		: "=r"(tss)
-	);
+	// __asm__ volatile(
+	// 	"popq %0\n\t"
+	// 	"popq %0\n\t"
+	// 	: "=r"(tss)
+	// );
 
 	tss= 0x2b;
 	__asm__ volatile(
-		"ltr (%2)\n\t" 
+		// "ltr (%2)\n\t" 
 		"push 0x24\n\t"
 		"push 0x23\n\t"
 		"push %0\n\t"
