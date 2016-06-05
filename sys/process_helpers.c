@@ -94,7 +94,7 @@ void _switch_to_ring_3(){
 	(*rsp) = 0x1b;
 	rsp --;
 	(*rsp) = _active_pcb-> ip;
-	__asm__ volatile("movq %0, %%rsp"::"r"(_active_pcb -> kernel_sp):);
+	__asm__ volatile("movq %0, %%rsp"::"r"(rsp):);
 	__asm__ volatile("iretq":);
 
 	printf("HUH!\n");
