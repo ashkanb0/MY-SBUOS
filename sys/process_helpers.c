@@ -82,6 +82,9 @@ void _switch_to_ring_3(){
 	tss.rsp0 = (uint64_t) (_active_pcb -> kernel_stack + PAGESIZE - 16);
 
 	__asm__ volatile(
+		"push 0x28\n\t"
+		"push 0x27\n\t"
+		"push 0x26\n\t"
 		"push 0x25\n\t"
 		"push 0x23\n\t"
 		"push 0x27\n\t"
