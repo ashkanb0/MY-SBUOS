@@ -96,7 +96,7 @@ void _switch_to_ring_3(){
 		"pushf\n\t"
 		"push 0x1b\n\t"
 		"push %1\n\t"
-		"iretq\n\t"
+		// "iretq\n\t"
 		:
 		: "r"(_active_pcb->user_sp), "r"(_active_pcb->ip), "r"(&tss)
 	);
