@@ -97,7 +97,7 @@ void _switch_to_ring_3(){
 	__asm__ volatile(
 		"push %0\n\t"
 		:
-		: "r"(_active_pcb->ip),
+		: "r"(_active_pcb->ip)
 	);
 	// __asm__ volatile(
 	// 	:
