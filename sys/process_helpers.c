@@ -95,9 +95,11 @@ void k_thread_kernel(){
 		// http://wiki.osdev.org/Getting_to_Ring_3
 		tss.rsp0 = (uint64_t) (_active_pcb -> kernel_stack + PAGESIZE - 16);
 		// uint64_t number0x23 = 0x23, number0x1b = 0x1b;
-		uint64_t tem = 0x28; 
-		__asm volatile("mov %0,%%rax;"::"r"(tem));
-		__asm volatile("ltr %ax");
+		uint64_t tem = 0x2B; 
+		__asm volatile(
+			"mov %0,%%rax;"
+			"ltr %ax"
+			::"r"(tem));
 		__asm__ volatile(
 			"push 0x23\n\t"
 			"push %0\n\t"
@@ -108,8 +110,7 @@ void k_thread_kernel(){
 			// "push %2\n\t"
 			// "push %3\n\t"
 			"iretq\n\t"
-			:
-			: "r"(_active_pcb->user_sp), 
+			::"r"(_active_pcb->user_sp),
 			  "r"(_active_pcb->ip)
 		);
 	}
