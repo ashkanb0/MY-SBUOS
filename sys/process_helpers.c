@@ -82,34 +82,18 @@ void k_thread_0(){
 void _switch_to_ring_3(){
 	// http://wiki.osdev.org/Getting_to_Ring_3
 	tss.rsp0 = (uint64_t) (_active_pcb -> kernel_stack + PAGESIZE - 16);
-
-	uint64_t* rsp;
-	__asm__ volatile("movq %%rsp, %0":"=r"(rsp):);
-
-	rsp --;
-	(*rsp) = 0x23;
-	rsp --;
-	(*rsp) = _active_pcb->user_sp;
-	rsp --;
-	(*rsp) = 0;
-	rsp --;
-	(*rsp) = 0x1b;
-	rsp --;
-	(*rsp) = _active_pcb-> ip;
-	__asm__ volatile("movq %0, %%rsp"::"r"(rsp):);
-	__asm__ volatile("iretq":);
-
+	__asm__ volatile(
+		"push 0x23\n\t"
+		"push %0\n\t"
+		"pushf\n\t"
+		"push 0x1b\n\t"
+		"push %1\n\t"
+		"iretq\n\t"
+		:
+		: "r"(_active_pcb->user_sp), "r"(_active_pcb->ip)
+	);
 	printf("HUH!\n");
-	// __asm__ volatile(
-	// 	"push 0x23\n\t"
-	// 	"push %0\n\t"
-	// 	"pushf\n\t"
-	// 	"push 0x1b\n\t"
-	// 	"push %1\n\t"
-	// 	"iretq\n\t"
-	// 	:
-	// 	: "r"(_active_pcb->user_sp), "r"(_active_pcb->ip)
-	// );
+	while(1);
 }
 
 void k_thread_kernel(){
