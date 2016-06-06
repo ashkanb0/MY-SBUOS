@@ -21,6 +21,8 @@ uint64_t map_elf(elf_header* header){
 
 	int seg_n = header-> e_phnum;
 
+	printf("# of entries in the program header table : %d\n", seg_n);
+
 	for (int seg = 0; seg < seg_n; ++seg)
 	{
 		elf_pheader* phdr= (elf_pheader*) p_base;

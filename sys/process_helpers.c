@@ -68,7 +68,7 @@ void prepare_user_memory(pcb* process){
 	process -> ip = map_file(process->pname, process->pid);
 
 	//TODO: any better way?
-	process -> user_sp = process->ip - (40*PAGESIZE); 
+	process -> user_sp = 0xFFFFFFFF800F8000; 
 	*((uint64_t*)(process-> user_sp)-1) = 0;
 
 	process -> status = RUNNING;
@@ -103,15 +103,11 @@ void k_thread_kernel(){
 			// "push 0x1b\n\t"
 			"push %2\n\t"
 			"push %3\n\t"
+			"iretq\n\t"
 			:
 			: "r"(number0x23), "r"(_active_pcb->user_sp), 
 				"r"(number0x1b), "r"(_active_pcb->ip)
 		);
-		__asm__ volatile(
-			"iretq\n\t"
-		);
-		printf("HUH!\n");
-		while(1);	
 	}
 	printf("[k_thread_kernel]: Shouldn't have gotten here!! PANIC!!!!\n");
 	while(1);
