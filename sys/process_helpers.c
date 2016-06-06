@@ -100,16 +100,17 @@ void k_thread_kernel(){
 		__asm volatile("ltr %ax");
 		__asm__ volatile(
 			"push 0x23\n\t"
-			// "push %0\n\t"
-			"push %1\n\t"
+			"push %0\n\t"
+			// "push %1\n\t"
 			"pushf\n\t"
 			"push 0x1b\n\t"
+			"push %1\n\t"
 			// "push %2\n\t"
-			"push %3\n\t"
+			// "push %3\n\t"
 			"iretq\n\t"
 			:
-			: "r"(number0x23), "r"(_active_pcb->user_sp), 
-				"r"(number0x1b), "r"(_active_pcb->ip)
+			: "r"(_active_pcb->user_sp), 
+			  "r"(_active_pcb->ip)
 		);
 	}
 	printf("[k_thread_kernel]: Shouldn't have gotten here!! PANIC!!!!\n");
