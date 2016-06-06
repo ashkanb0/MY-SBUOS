@@ -94,7 +94,7 @@ void k_thread_kernel(){
 		_set_cr3(_active_pcb -> pml4);
 		// http://wiki.osdev.org/Getting_to_Ring_3
 		tss.rsp0 = (uint64_t) (_active_pcb -> kernel_stack + PAGESIZE - 16);
-		uint64_t number0x23 = 0x23, number0x1b = 0x1b;
+		// uint64_t number0x23 = 0x23, number0x1b = 0x1b;
 		uint64_t tem = 0x28; 
 		__asm volatile("mov %0,%%rax;"::"r"(tem));
 		__asm volatile("ltr %ax");
