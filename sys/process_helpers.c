@@ -103,10 +103,12 @@ void k_thread_kernel(){
 			// "push 0x1b\n\t"
 			"push %2\n\t"
 			"push %3\n\t"
-			"iretq\n\t"
 			:
 			: "r"(number0x23), "r"(_active_pcb->user_sp), 
 				"r"(number0x1b), "r"(_active_pcb->ip)
+		);
+		__asm__ volatile(
+			"iretq\n\t"
 		);
 		printf("HUH!\n");
 		while(1);	
