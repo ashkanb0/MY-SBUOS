@@ -98,6 +98,7 @@ void k_thread_kernel(){
 		__asm__ volatile("mov %0,%%rax"::"r"(tem));
 		__asm__ volatile("ltr %ax");
 		__asm__ volatile(
+			"push 0x34\n\t"
 			"push 0x23\n\t"
 			"push %0\n\t"
 			"pushf\n\t"
