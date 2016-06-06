@@ -91,16 +91,19 @@ void k_thread_kernel(){
 	if (_active_pcb -> status == RUNNING){
 		// http://wiki.osdev.org/Getting_to_Ring_3
 		tss.rsp0 = (uint64_t) (_active_pcb -> kernel_stack + PAGESIZE - 16);
-		// uint64_t number0x23 = 0x23, number0x1b = 0x1b;
+		uint64_t number0x23 = 0x23, number0x1b = 0x1b;
 		__asm__ volatile(
-			"push 0x23\n\t"
+			// "push 0x23\n\t"
 			"push %0\n\t"
+			"push %1\n\t"
 			"pushf\n\t"
 			// "push 0x1b\n\t"
-			"push %1\n\t"
+			"push %2\n\t"
+			"push %3\n\t"
 			// "iretq\n\t"
 			:
-			: "r"(_active_pcb->user_sp), "r"(_active_pcb->ip)
+			: "r"(number0x23), "r"(_active_pcb->user_sp), 
+				"r"(number0x1b), "r"(_active_pcb->ip)
 		);
 		printf("HUH!\n");
 		while(1);	
