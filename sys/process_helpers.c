@@ -106,7 +106,7 @@ void k_thread_kernel(){
 			:: "r"(_active_pcb->user_sp),
 			   "r"(_active_pcb->ip)
 		);
-		__asm__ volatile("iretq")
+		__asm__ volatile("iretq");
 	}
 	printf("[k_thread_kernel]: Shouldn't have gotten here!! PANIC!!!!\n");
 	while(1);
