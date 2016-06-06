@@ -28,7 +28,7 @@ void init_tarfs(void* tar_start, void* tar_end){
 uint64_t map_file(char* path, int pid){
 	uint64_t offset = 0;
 
-	for (int i = 0; i < NUM_FILES; ++i)
+	for (; _tar_start + offset<_tar_end ;)
 	{
 		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
 		uint64_t size = tar_size(p->size);

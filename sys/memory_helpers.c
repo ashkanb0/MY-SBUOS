@@ -22,8 +22,8 @@ void copy_kernel_pml4(uint64_t prog_page_table){
 	uint64_t* kernel_pml4 = (uint64_t*) (0xffffff7fbfdfe000);
 	uint64_t* prog_pml4 = (uint64_t*) (prog_page_table);
 
-	// TODO : is this enough?
-	prog_pml4[511] = kernel_pml4[511];
+	for (int i = 0; i < 512; ++i)
+		prog_pml4[i] = kernel_pml4[i];
 
 }
 
@@ -90,7 +90,7 @@ uint64_t map_page (uint64_t phys, uint64_t virt, uint64_t flags, uint64_t pid){
 	 	if(new_page_flag) zero_out((uint64_t)table);
 	 	new_page_flag = 0;
 	 	if(table[index] == 0){
-		// create it!
+			// create it!
 			mem_page* next_lvl_page = get_free_page();
 			vma_register_page(next_lvl_page, pid);
 			table[index] = ((uint64_t)next_lvl_page->base|PRESENT|READ_WRITE|USER_ACCESSIBLE); 
@@ -109,7 +109,7 @@ void add_physical_page_in(uint64_t virt){
 	int pid = get_active_pid();
 	vma_register_page(pg, pid);
 	uint64_t flags = PRESENT|READ_WRITE|USER_ACCESSIBLE;// TODO : 
-	map_page(pg->base, virt, flags, pid);
+	map_page(pg->base, virt& 0xfffffffffffff000, flags, pid);
 }
 
 
