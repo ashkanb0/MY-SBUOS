@@ -116,6 +116,7 @@ void k_thread_kernel(){
 		rsp--;
 		*rsp = _active_pcb->ip;
 		rsp--;
+		__asm__ volatile("mov %0, %%rsp"::"r"(rsp):);
 		__asm__ volatile("iretq");
 	}
 	printf("[k_thread_kernel]: Shouldn't have gotten here!! PANIC!!!!\n");
