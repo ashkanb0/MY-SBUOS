@@ -94,19 +94,28 @@ void k_thread_kernel(){
 		_set_cr3(_active_pcb -> pml4);
 		// http://wiki.osdev.org/Getting_to_Ring_3
 		tss.rsp0 = (uint64_t) (_active_pcb -> kernel_stack + PAGESIZE - 16);
-		uint64_t tem = 0x2B; 
-		__asm__ volatile("mov %0,%%rax"::"r"(tem));
+		uint64_t temp = 0x2b; 
+		__asm__ volatile("mov %0,%%rax"::"r"(temp));
 		__asm__ volatile("ltr %ax");
-		__asm__ volatile(
-			"push 0x34\n\t"
-			"push 0x23\n\t"
-			"push %0\n\t"
-			"pushf\n\t"
-			"push 0x1b\n\t"
-			"push %1\n\t"
-			:: "r"(_active_pcb->user_sp),
-			   "r"(_active_pcb->ip)
-		);
+		// __asm__ volatile(
+		// 	"push 0x23\n\t"
+		// 	"push %0\n\t"
+		// 	"pushf\n\t"
+		// 	"push 0x1b\n\t"
+		// 	"push %1\n\t"
+		// 	:: "r"(_active_pcb->user_sp),
+		// 	   "r"(_active_pcb->ip)
+		// );
+		uint64_t* rsp;
+		__asm__ volatile("mov %%rsp, %0":"=r"(rsp):);
+		*rsp = 0x23;
+		rsp--;
+		*rsp = _active_pcb->user_sp;
+		rsp--;
+		*rsp = 0x1b;
+		rsp--;
+		*rsp = _active_pcb->ip;
+		rsp--;
 		__asm__ volatile("iretq");
 	}
 	printf("[k_thread_kernel]: Shouldn't have gotten here!! PANIC!!!!\n");
