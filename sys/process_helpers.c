@@ -96,11 +96,11 @@ void k_thread_kernel(){
 		// __asm__ volatile("mov %0,%%rax"::"r"(temp));
 		// __asm__ volatile("ltr %%ax");
 		__asm__ volatile(
-			"push 0x23\n\t"
-			"push %0\n\t"
-			"pushf\n\t"
-			"push 0x1b\n\t"
-			"push %1\n\t"
+			"pushq $0x23\n\t"
+			"pushq %0\n\t"
+			"pushf \n\t"
+			"pushq $0x1b\n\t"
+			"pushq %1\n\t"
 			:: "r"(_active_pcb->user_sp),
 			   "r"(_active_pcb->ip)
 		);
