@@ -68,7 +68,7 @@ void prepare_user_memory(pcb* process){
 	process -> ip = map_file(process->pname, process->pid);
 
 	//TODO: any better way?
-	process -> user_sp = 0xFFFFFFFF800F8000; 
+	process -> user_sp = 0xffffffff60000000; 
 	*((uint64_t*)(process-> user_sp)-1) = 0;
 
 	process -> status = RUNNING;
@@ -92,9 +92,6 @@ void k_thread_kernel(){
 	//just an extra check! It should always be true!
 	if (_active_pcb -> status == RUNNING){
 		// http://wiki.osdev.org/Getting_to_Ring_3
-		// uint64_t temp = 0x2b; 
-		// __asm__ volatile("mov %0,%%rax"::"r"(temp));
-		// __asm__ volatile("ltr %%ax");
 		__asm__ volatile(
 			"pushq $0x23\n\t"
 			"pushq %0\n\t"
@@ -106,17 +103,6 @@ void k_thread_kernel(){
 		);
 		_set_cr3(_active_pcb -> pml4);
 		tss.rsp0 = (uint64_t) (_active_pcb -> kernel_stack + PAGESIZE - 16);
-		// uint64_t* rsp;
-		// __asm__ volatile("mov %%rsp, %0":"=r"(rsp):);
-		// rsp--;
-		// *rsp = 0x23;
-		// rsp--;
-		// *rsp = _active_pcb->user_sp;
-		// rsp--;
-		// *rsp = 0x1b;
-		// rsp--;
-		// *rsp = _active_pcb->ip;
-		// __asm__ volatile("mov %0, %%rsp"::"r"(rsp):);
 		__asm__ volatile("iretq");
 	}
 	printf("[k_thread_kernel]: Shouldn't have gotten here!! PANIC!!!!\n");
