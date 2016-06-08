@@ -80,9 +80,22 @@ void k_thread_0(){
 	}
 }
 
-// void _switch_to_ring_3(){
-	
-// }
+void _switch_to_ring_3(){
+	// http://wiki.osdev.org/Getting_to_Ring_3
+	printf("switching to: %x , sp: %x\n", _active_pcb->ip, _active_pcb->user_sp);
+	__asm__ volatile(
+		"pushq $0x23\n\t"
+		"pushq %0\n\t"
+		"pushf \n\t"
+		"pushq $0x1b\n\t"
+		"pushq %1\n\t"
+		:: "r"(_active_pcb->user_sp),
+		   "r"(_active_pcb->ip)
+	);
+	_set_cr3(_active_pcb -> pml4);
+	tss.rsp0 = (uint64_t) (_active_pcb -> kernel_stack + PAGESIZE - 16);
+	__asm__ volatile("iretq");
+}
 
 void k_thread_kernel(){
 	
@@ -91,19 +104,7 @@ void k_thread_kernel(){
 	}
 	//just an extra check! It should always be true!
 	if (_active_pcb -> status == RUNNING){
-		// http://wiki.osdev.org/Getting_to_Ring_3
-		__asm__ volatile(
-			"pushq $0x23\n\t"
-			"pushq %0\n\t"
-			"pushf \n\t"
-			"pushq $0x1b\n\t"
-			"pushq %1\n\t"
-			:: "r"(_active_pcb->user_sp),
-			   "r"(_active_pcb->ip)
-		);
-		_set_cr3(_active_pcb -> pml4);
-		tss.rsp0 = (uint64_t) (_active_pcb -> kernel_stack + PAGESIZE - 16);
-		__asm__ volatile("iretq");
+		_switch_to_ring_3();
 	}
 	printf("[k_thread_kernel]: Shouldn't have gotten here!! PANIC!!!!\n");
 	while(1);
