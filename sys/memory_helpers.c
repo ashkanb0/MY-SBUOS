@@ -104,7 +104,15 @@ uint64_t map_page (uint64_t phys, uint64_t virt, uint64_t flags, uint64_t pid){
 	return virt+ PAGESIZE;
 }
 
-void add_physical_page_in(uint64_t virt){
+void add_sl_physical_page_in(uint64_t virt){
+	mem_page* pg = get_free_page();
+	int pid = get_active_pid();
+	vma_register_page(pg, pid);
+	uint64_t flags = PRESENT|READ_WRITE;
+	map_page(pg->base, virt& 0xfffffffffffff000, flags, pid);
+}
+
+void add_ul_physical_page_in(uint64_t virt){
 	mem_page* pg = get_free_page();
 	int pid = get_active_pid();
 	vma_register_page(pg, pid);
