@@ -108,6 +108,7 @@ void k_thread_kernel(){
 		// );
 		uint64_t* rsp;
 		__asm__ volatile("mov %%rsp, %0":"=r"(rsp):);
+		rsp--;
 		*rsp = 0x23;
 		rsp--;
 		*rsp = _active_pcb->user_sp;
@@ -115,7 +116,6 @@ void k_thread_kernel(){
 		*rsp = 0x1b;
 		rsp--;
 		*rsp = _active_pcb->ip;
-		rsp--;
 		__asm__ volatile("mov %0, %%rsp"::"r"(rsp):);
 		__asm__ volatile("iretq");
 	}
