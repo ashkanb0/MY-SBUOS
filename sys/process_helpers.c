@@ -91,9 +91,7 @@ void k_thread_kernel(){
 	}
 	//just an extra check! It should always be true!
 	if (_active_pcb -> status == RUNNING){
-		_set_cr3(_active_pcb -> pml4);
 		// http://wiki.osdev.org/Getting_to_Ring_3
-		tss.rsp0 = (uint64_t) (_active_pcb -> kernel_stack + PAGESIZE - 16);
 		// uint64_t temp = 0x2b; 
 		// __asm__ volatile("mov %0,%%rax"::"r"(temp));
 		// __asm__ volatile("ltr %%ax");
@@ -106,6 +104,8 @@ void k_thread_kernel(){
 			:: "r"(_active_pcb->user_sp),
 			   "r"(_active_pcb->ip)
 		);
+		_set_cr3(_active_pcb -> pml4);
+		tss.rsp0 = (uint64_t) (_active_pcb -> kernel_stack + PAGESIZE - 16);
 		// uint64_t* rsp;
 		// __asm__ volatile("mov %%rsp, %0":"=r"(rsp):);
 		// rsp--;
