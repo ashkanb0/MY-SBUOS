@@ -68,7 +68,7 @@ void prepare_user_memory(pcb* process){
 	process -> ip = map_file(process->pname, process->pid);
 
 	//TODO: any better way?
-	process -> user_sp = 0xffffffff60000000; 
+	process -> user_sp = 0xffffffff00000000; 
 	// *((uint64_t*)(process-> user_sp)-1) = 0;
 
 	process -> status = RUNNING;
