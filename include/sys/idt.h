@@ -85,6 +85,7 @@ void int_pgflt_srv(exception_stack stack){
 
 	uint64_t address = 0;
 	uint32_t error = stack.error;
+	printf("(page fault):%x, %x\n", address, error);
 
 	__asm__ volatile("movq %%cr2, %0":"=r"(address):);
 	
@@ -99,7 +100,7 @@ void int_pgflt_srv(exception_stack stack){
 	if((error&2)==2 || (error&5)==4) // PAGE NOT MAPPED
 		add_physical_page_in(address);
 	else{
-		printf("(page fault):%x, %x\n", address, error);
+		printf("(page fault - not handled):%x, %x\n", address, error);
 		while(1);
 	}
 }
