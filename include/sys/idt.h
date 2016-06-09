@@ -85,9 +85,9 @@ void int_pgflt_srv(exception_stack stack){
 
 	uint64_t address = 0;
 	uint32_t error = stack.error;
-	printf("(page fault):%x, %x\n", address, error);
 
 	__asm__ volatile("movq %%cr2, %0":"=r"(address):);
+	printf("(page fault):%x, %x\n", address, error);
 	
 	if(address== 0x00){
 		printf("(segmantation fault)\n");
