@@ -94,11 +94,8 @@ void int_pgflt_srv(exception_stack stack){
 		// return;
 	}
 	// TODO : COW pages
-	if((error&2)==2) // PAGE NOT MAPPED/ KERNEL
-		add_ul_physical_page_in(address);
-	else if((error&5)==4){ // PAGE NOT MAPPED / USER 
-		add_ul_physical_page_in(address);
-	}
+	if((error&2)==2 || (error&5)==4) // PAGE NOT MAPPED
+		add_physical_page_in(address);
 	else{
 		printf("(page fault):%x, %x\n", address, error);
 		while(1);

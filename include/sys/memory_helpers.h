@@ -24,8 +24,7 @@ void * init_pages(void* physfree);
 
 void setup_paging();
 
-void add_sl_physical_page_in(uint64_t virt);
-void add_ul_physical_page_in(uint64_t virt);
+void add_physical_page_in(uint64_t virt);
 
 void * make_pages(uint64_t base, uint64_t length, void * physfree);
 
