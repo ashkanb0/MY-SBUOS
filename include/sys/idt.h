@@ -95,7 +95,7 @@ void int_pgflt_srv(exception_stack stack){
 	}
 	// TODO : COW pages
 	if((error&2)==2) // PAGE NOT MAPPED/ KERNEL
-		add_sl_physical_page_in(address);
+		add_ul_physical_page_in(address);
 	else if((error&5)==4){ // PAGE NOT MAPPED / USER 
 		add_ul_physical_page_in(address);
 	}
