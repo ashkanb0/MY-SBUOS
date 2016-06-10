@@ -80,6 +80,20 @@ void int_prtctn_srv(exception_stack stack){
 	return;	
 }
 
+void double_fault_interrupt_handler(void);
+void int_dblflt_srv(exception_stack stack){
+	uint64_t address = 0;
+	uint32_t error = stack.error;
+
+	__asm__ volatile("movq %%cr2, %0":"=r"(address):);
+
+	printf("(unauthorized access):%x, %x\n", address, error);
+	while(1);
+	// TODO: 
+	// k_process_exit();
+	return;	
+}
+
 void pagefault_interrupt_handler(void);
 void int_pgflt_srv(exception_stack stack){
 
@@ -124,6 +138,7 @@ void idts_setup(){
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
 
 
+	set_isr(idt, 0x08, (uint64_t)(&double_fault_interrupt_handler));
 	set_isr(idt, 0x0d, (uint64_t)(&protection_failure_interrupt_handler));
 	set_isr(idt, 0x0e, (uint64_t)(&pagefault_interrupt_handler));
 	set_isr(idt, 0x20, (uint64_t)(&timer_interrupt_handler));
