@@ -33,7 +33,7 @@ typedef struct exception_pushed_stack_structure{
 }exception_stack;
 
 
-void set_isr(IDTDescriptor* idt, int int_num, uint64_t handler, uint16_t ring){
+void set_isr(IDTDescriptor* idt, int int_num, uint64_t handler){
 	idt[int_num].offset_low = (uint16_t)(handler & 0x00ffff);
 	idt[int_num].offset_mid = (uint16_t)((handler>>16) & 0x00ffff);
 	idt[int_num].offset_high= (uint32_t)((handler>>32) & 0x00ffffffff);
@@ -41,7 +41,7 @@ void set_isr(IDTDescriptor* idt, int int_num, uint64_t handler, uint16_t ring){
 	idt[int_num].zero1= 0;
 	idt[int_num].zero2= 0;
 	idt[int_num].selector= 0x0008;
-	idt[int_num].type_attr= 0x8E|((ring&0x07)<<4);
+	idt[int_num].type_attr= 0x8E;
 }
 
 void keyboard_interrupt_handler(void);
@@ -137,12 +137,12 @@ void idts_setup(){
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
 
 
-	set_isr(idt, 0x08, (uint64_t)(&double_fault_interrupt_handler),0);
-	set_isr(idt, 0x0d, (uint64_t)(&protection_fault_interrupt_handler),0);
-	set_isr(idt, 0x0e, (uint64_t)(&pagefault_interrupt_handler),0);
-	set_isr(idt, 0x20, (uint64_t)(&timer_interrupt_handler),0);
-	set_isr(idt, 0x21, (uint64_t)(&keyboard_interrupt_handler),0);
-	set_isr(idt, 0x80, (uint64_t)(&syscall_interrupt_handler),3);
+	set_isr(idt, 0x08, (uint64_t)(&double_fault_interrupt_handler));
+	set_isr(idt, 0x0d, (uint64_t)(&protection_fault_interrupt_handler));
+	set_isr(idt, 0x0e, (uint64_t)(&pagefault_interrupt_handler));
+	set_isr(idt, 0x20, (uint64_t)(&timer_interrupt_handler));
+	set_isr(idt, 0x21, (uint64_t)(&keyboard_interrupt_handler));
+	set_isr(idt, 0x80, (uint64_t)(&syscall_interrupt_handler));
 
 
 	IDTDescriptor* l = (IDTDescriptor*)(IDTR.base);
