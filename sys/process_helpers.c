@@ -74,7 +74,7 @@ void prepare_user_memory(pcb* process){
 	process -> status = RUNNING;
 }
 
-void k_thread_0(){
+void _sys_idle(){
 	while(1){
 		schedule();
 	}
@@ -116,7 +116,7 @@ void init(){
 	kstrcpy(sys_idle -> pname, "system_idle_process", 50);
 	sys_idle->status = RUNNING;
 	sys_idle->kernel_sp --;
-	*(sys_idle->kernel_sp) = (uint64_t)(k_thread_0);
+	*(sys_idle->kernel_sp) = (uint64_t)(_sys_idle);
 
 	pcb* shell = _get_new_pcb();
 
