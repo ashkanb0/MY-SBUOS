@@ -95,7 +95,8 @@ void _switch_to_ring_3(){
 
 		"pushq $0x23\n\t"
 		"pushq %0\n\t"
-		"pushf \n\t"
+		// "pushf \n\t"
+		"pushq $0x200\n\t"
 		"pushq $0x1b\n\t"
 		"pushq %1\n\t"
 		:: "r"(_active_pcb->user_sp),
