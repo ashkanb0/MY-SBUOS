@@ -66,14 +66,14 @@ void int_syscall_srv(){
 	while(1);
 }
 
-void protection_failure_interrupt_handler(void);
+void protection_fault_interrupt_handler(void);
 void int_prtctn_srv(exception_stack stack){
 	// uint64_t address = 0;
 	uint32_t error = stack.error;
 
 	// __asm__ volatile("movq %%cr2, %0":"=r"(address):);
 
-	printf("(general protection failure): %x\n", error);
+	printf("(general protection fault): %x\n", error);
 	while(1);
 	// TODO: 
 	// k_process_exit();
@@ -138,7 +138,7 @@ void idts_setup(){
 
 
 	set_isr(idt, 0x08, (uint64_t)(&double_fault_interrupt_handler));
-	set_isr(idt, 0x0d, (uint64_t)(&protection_failure_interrupt_handler));
+	set_isr(idt, 0x0d, (uint64_t)(&protection_fault_interrupt_handler));
 	set_isr(idt, 0x0e, (uint64_t)(&pagefault_interrupt_handler));
 	set_isr(idt, 0x20, (uint64_t)(&timer_interrupt_handler));
 	set_isr(idt, 0x21, (uint64_t)(&keyboard_interrupt_handler));

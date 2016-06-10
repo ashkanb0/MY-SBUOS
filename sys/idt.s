@@ -97,9 +97,9 @@ syscall_interrupt_handler:
 	sti
 	iretq
 
-.globl protection_failure_interrupt_handler
+.globl protection_fault_interrupt_handler
 .align 4
-protection_failure_interrupt_handler:
+protection_fault_interrupt_handler:
 	# pushad
 	# pushf
 	cli
