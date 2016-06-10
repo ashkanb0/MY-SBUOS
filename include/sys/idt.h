@@ -73,7 +73,7 @@ void int_prtctn_srv(exception_stack stack){
 
 	__asm__ volatile("movq %%cr2, %0":"=r"(address):);
 
-	printf("(general protection failure): %x\n", error);
+	printf("(general protection failure): %x: %x\n",address, error);
 	while(1);
 	// TODO: 
 	// k_process_exit();
