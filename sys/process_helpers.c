@@ -86,11 +86,11 @@ void _switch_to_ring_3(){
 
 	__asm__ volatile(
 		// "cli\n\t"
-		// "mov $0x23, %%ax\n\t"
-		// "mov %%ax, %%ds\n\t"
-		// "mov %%ax, %%es\n\t"
-		// "mov %%ax, %%fs\n\t"
-		// "mov %%ax, %%gs\n\t"
+		"mov $0x23, %%ax\n\t"
+		"mov %%ax, %%ds\n\t"
+		"mov %%ax, %%es\n\t"
+		"mov %%ax, %%fs\n\t"
+		"mov %%ax, %%gs\n\t"
 
 
 		"pushq $0x23\n\t"
