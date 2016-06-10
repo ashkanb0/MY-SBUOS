@@ -131,7 +131,7 @@ void init(){
 	enqueue_process(&processq, sys_idle);
 	enqueue_process(&processq, shell);
 
-	__asm__ volatile("int 0x80":);
+	__asm__ volatile("int $0x80":);
 	_active_pcb = sys_idle;
 	processq.head++;
 	__asm__ volatile("movq %0, %%rsp"::"r"(sys_idle->kernel_sp):);
