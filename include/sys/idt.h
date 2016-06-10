@@ -68,7 +68,7 @@ void int_syscall_srv(){
 
 void protection_failure_interrupt_handler(void);
 void int_prtctn_srv(exception_stack stack){
-	uint32_t error = 0;
+	uint64_t error = 0;
 
 	__asm__ volatile("movq %%cr2, %0":"=r"(error):);
 
