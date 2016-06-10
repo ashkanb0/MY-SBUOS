@@ -134,7 +134,6 @@ void idts_setup(){
 
 	IDTR.base = (uint64_t)(&idt); IDTR.length = sizeof(IDTDescriptor)*IDT_SIZE;
 
-	// printf("idtent  SIZE [%d]\n", sizeof(IDTDescriptor));
 	printf("IDTR.base [%x] , IDTR.length [%d]\n", IDTR.base, IDTR.length);
 
 
@@ -144,7 +143,6 @@ void idts_setup(){
 	set_isr(idt, 0x20, (uint64_t)(&timer_interrupt_handler));
 	set_isr(idt, 0x21, (uint64_t)(&keyboard_interrupt_handler));
 	set_isr(idt, 0x80, (uint64_t)(&syscall_interrupt_handler));
-	// set_isr(idt, 0x100, (uint64_t)(&syscall_interrupt_handler));
 
 
 	IDTDescriptor* l = (IDTDescriptor*)(IDTR.base);
