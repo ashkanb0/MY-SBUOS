@@ -103,6 +103,7 @@ void _switch_to_ring_3(){
 		"pushq %1\n\t"
 		:: "r"(_active_pcb->user_sp),
 		   "r"(_active_pcb->ip)
+		  :"%eax"
 	);
 	__asm__ volatile("iretq");
 }
