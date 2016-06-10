@@ -85,10 +85,17 @@ void _switch_to_ring_3(){
 	printf("switching to: %x , sp: %x\n", _active_pcb->ip, _active_pcb->user_sp);
 
 	__asm__ volatile(
+		"cli\n\t"
+		"mov $0x23, %%ax\n\t"
+		"mov %%ax, %%ds\n\t"
+		"mov %%ax, %%es\n\t"
+		"mov %%ax, %%fs\n\t"
+		"mov %%ax, %%gs\n\t"
+
+
 		"pushq $0x23\n\t"
 		"pushq %0\n\t"
-		// "pushf \n\t"
-		"pushq $0x200\n\t"
+		"pushf \n\t"
 		"pushq $0x1b\n\t"
 		"pushq %1\n\t"
 		:: "r"(_active_pcb->user_sp),
