@@ -83,6 +83,9 @@ void k_thread_0(){
 void _switch_to_ring_3(){
 	// http://wiki.osdev.org/Getting_to_Ring_3
 	printf("switching to: %x , sp: %x\n", _active_pcb->ip, _active_pcb->user_sp);
+	uint64_t tem = 0x2b; 
+	__asm volatile("mov %0,%%rax;"::"r"(tem));
+	__asm volatile("ltr %ax");
 	__asm__ volatile(
 		"pushq $0x23\n\t"
 		"pushq %0\n\t"
