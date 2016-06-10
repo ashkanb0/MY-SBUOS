@@ -69,7 +69,7 @@ void prepare_user_memory(pcb* process){
 
 	//TODO: any better way?
 	process -> user_sp = 0xffff000000000000; 
-	*((uint64_t*)(process-> user_sp)-1) = 0;
+	// *((uint64_t*)(process-> user_sp)-1) = 0;
 
 	process -> status = RUNNING;
 }
