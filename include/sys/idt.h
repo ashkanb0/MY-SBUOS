@@ -87,11 +87,11 @@ void int_dblflt_srv(exception_stack stack){
 
 	__asm__ volatile("movq %%cr2, %0":"=r"(address):);
 
-	printf("(unauthorized access):%x, %x\n", address, error);
-	while(1);
+	printf("(double_fault):%x, %x\n", address, error);
+	// while(1);
 	// TODO: 
 	// k_process_exit();
-	return;	
+	// return;	
 }
 
 void pagefault_interrupt_handler(void);
