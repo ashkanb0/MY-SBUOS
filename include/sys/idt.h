@@ -68,12 +68,11 @@ void int_syscall_srv(){
 
 void protection_failure_interrupt_handler(void);
 void int_prtctn_srv(exception_stack stack){
-	uint64_t address = 0;
-	uint32_t error = stack.error;
+	uint32_t error = 0;
 
-	__asm__ volatile("movq %%cr2, %0":"=r"(address):);
+	__asm__ volatile("movq %%cr2, %0":"=r"(error):);
 
-	printf("(unauthorized access):%x, %x\n", address, error);
+	printf("(general protection failure): %x\n", error);
 	while(1);
 	// TODO: 
 	// k_process_exit();
