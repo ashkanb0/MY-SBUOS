@@ -67,7 +67,7 @@ void int_syscall_srv(){
 	uint64_t* rsp;
 	uint64_t arg3, arg2, arg1, syscall_no, res;
 	
-	arg1 = arg2 = arg3 = 5;
+	syscall_no = arg1 = arg2 = arg3 = 5;
 
 	__asm__ volatile("movq %%rsp, %0":"=r"(rsp):);
 
