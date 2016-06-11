@@ -74,6 +74,7 @@ void int_syscall_srv(){
 	res = do_system_call(syscall_no, arg1, arg2, arg3);
 	
 
+	 arg2 = arg1 + res;
 	// while(1);
 }
 
