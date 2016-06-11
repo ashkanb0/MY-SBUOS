@@ -67,17 +67,20 @@ void int_syscall_srv(){
 	uint64_t* rsp;
 	uint64_t arg3, arg2, arg1, syscall_no, res;
 	
-	syscall_no = arg1 = arg2 = arg3 = 5;
+	syscall_no = rsp[5];
+	arg1 = rsp[4];
+	arg2 = rsp[3];
+	arg3 = rsp[2];
+
+
 
 	__asm__ volatile("movq %%rsp, %0":"=r"(rsp):);
 
-	// printf("syscall_no: %x, arg1, %x, arg2, %x, arg3, %x\n",syscall_no, arg1, arg2, arg3);
-	// printf("SYSCALL INTERRUPT NOT IMPLEMENTED\n");
+
 	res = do_system_call(syscall_no, arg1, arg2, arg3);
 	
 
-	 arg2 = arg1 + res;
-	// while(1);
+	rsp[5] = res;
 }
 
 void protection_fault_interrupt_handler(void);
