@@ -2,6 +2,7 @@
 #define _SYSTEMCALL_H
 
 #include <sys/defs.h>
+#include <sys/sbunix.h>
 
 
 uint64_t do_system_call(syscall_code, arg1, arg2, agr3);
