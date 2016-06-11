@@ -2,6 +2,7 @@
 #define _IDT_H
 
 #include <sys/defs.h>
+#include <sys/systemcall.h>
 #include <sys/pic_helpers.h>
 #include <sys/sbunix.h>
 #include <sys/process_helpers.h>
@@ -85,11 +86,12 @@ void int_syscall_srv(){
 		"pushq %1\n\t"
 		"pushq %0\n\t"
 		"subq $0x10, %%rsp\n\t"
-		: "=r"(arg3),
-		  "=r"(arg2),
-		  "=r"(arg1),
-		  "=r"(res)
-		::
+		:
+		: "r"(arg3),
+		  "r"(arg2),
+		  "r"(arg1),
+		  "r"(res)
+		:
 	);
 
 	// while(1);
