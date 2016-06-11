@@ -72,8 +72,8 @@ void int_syscall_srv(){
 		: "=r"(arg3),
 		  "=r"(arg2),
 		  "=r"(arg1),
-		  "=r"(syscall_no),
-		
+		  "=r"(syscall_no)
+		::
 	);
 	printf("syscall_no: %x, arg1, %x, arg2, %x, arg3, %x\n",syscall_no, arg1, arg2, arg3);
 	// printf("SYSCALL INTERRUPT NOT IMPLEMENTED\n");
