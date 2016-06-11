@@ -142,7 +142,7 @@ void int_pgflt_srv(exception_stack stack){
 		// return;
 	}
 	// TODO : COW pages
-	if((error&2)==2 || (error&5)==4) // PAGE NOT MAPPED
+	if((error&5)==0 || (error&5)==4) // PAGE NOT MAPPED
 		add_physical_page_in(address);
 	else{
 		printf("(page fault - not handled):%x, %x\n", address, error);
