@@ -75,6 +75,10 @@ syscall_interrupt_handler:
 	pushq %rdi
 	pushq %rsi
 	pushq %rdx
+	pushq $0x4444
+	pushq $0x3333
+	pushq $0x2222
+	pushq $0x1111
 	# push %rcx
 	# push %r8
 	# push %r9
