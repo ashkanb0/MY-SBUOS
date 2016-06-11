@@ -64,7 +64,7 @@ void int_tmr_srv(){
 void syscall_interrupt_handler(void);
 void int_syscall_srv(){
 	printf("SYSCALL INTERRUPT NOT IMPLEMENTED\n");
-	while(1);
+	// while(1);
 }
 
 void protection_fault_interrupt_handler(void);
