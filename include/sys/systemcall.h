@@ -5,6 +5,6 @@
 #include <sys/sbunix.h>
 
 
-uint64_t do_system_call(syscall_code, arg1, arg2, agr3);
+uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uint64_t agr3);
 
 #endif
