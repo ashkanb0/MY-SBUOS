@@ -91,11 +91,11 @@ syscall_interrupt_handler:
 	# pop %r9
 	# pop %r8
 	# pop %rcx
-	pop %rdx
-	pop %rsi
-	pop %rdi
-	addq $0x8, %rsp
-	
+	popq %rdx
+	popq %rsi
+	popq %rdi
+	popq %rax
+
 	sti
 	iretq
 
