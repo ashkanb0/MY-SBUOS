@@ -65,7 +65,7 @@ void syscall_interrupt_handler(void);
 void int_syscall_srv(){
 	uint64_t arg3, arg2, arg1, syscall_no;
 	__asm__ volatile(
-		"addq $0x10 %%rsp\n\t"
+		"addq $0x10, %%rsp\n\t"
 		"popq %0\n\t"
 		"popq %1\n\t"
 		"popq %2\n\t"
