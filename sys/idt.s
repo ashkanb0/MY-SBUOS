@@ -11,19 +11,25 @@ keyboard_interrupt_handler:
 	push %rsi
 	push %rdx
 	push %rcx
-	sti
+	push %r8
+	push %r9
+	push %r10
+	push %r11
 	# pushf
 	# cld
 	call int_kbd_srv
 	# popad
-	cli
+	pop %r11
+	pop %r10
+	pop %r9
+	pop %r8
 	pop %rcx
 	pop %rdx
 	pop %rsi
 	pop %rdi
-	# add %rsp, $8, $rsp
-	sti
+	pop %rax
 	
+	sti
 	iretq
 
 
@@ -69,20 +75,22 @@ syscall_interrupt_handler:
 	push %rdi
 	push %rsi
 	push %rdx
-	push %rcx
-	push %r8
-	push %r9
-	push %r10
-	push %r11
+	# push %rcx
+	# push %r8
+	# push %r9
+	# push %r10
+	# push %r11
+	sti
 	# pushf
 	# cld
 	call int_syscall_srv
 	# popad
-	pop %r11
-	pop %r10
-	pop %r9
-	pop %r8
-	pop %rcx
+	cli
+	# pop %r11
+	# pop %r10
+	# pop %r9
+	# pop %r8
+	# pop %rcx
 	pop %rdx
 	pop %rsi
 	pop %rdi
