@@ -71,10 +71,14 @@ syscall_interrupt_handler:
 	# pushad
 	# pushf
 	cli
-	push %rax
-	push %rdi
-	push %rsi
-	push %rdx
+	pushq %rax
+	pushq %rdi
+	pushq %rsi
+	pushq %rdx
+	pushq $0x4444
+	pushq $0x3333
+	pushq $0x2222
+	pushq $0x1111
 	# push %rcx
 	# push %r8
 	# push %r9
@@ -94,7 +98,7 @@ syscall_interrupt_handler:
 	pop %rdx
 	pop %rsi
 	pop %rdi
-	pop %rax
+	addq $0x8, %rsp
 	
 	sti
 	iretq

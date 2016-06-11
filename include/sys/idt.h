@@ -62,7 +62,7 @@ void int_tmr_srv(){
 }
 
 void syscall_interrupt_handler(void);
-void int_syscall_srv(){
+void int_syscall_srv(uint64_t arg3, uint64_t arg2, uint64_t arg1, uint64_t sys_no ){
 	printf("SYSCALL INTERRUPT NOT IMPLEMENTED\n");
 	// while(1);
 }
