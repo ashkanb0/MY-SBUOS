@@ -62,9 +62,22 @@ void int_tmr_srv(){
 }
 
 void syscall_interrupt_handler(void);
-void int_syscall_srv(uint64_t arg3, uint64_t arg2, uint64_t arg1, uint64_t sys_no ){
-	printf("SYSCALL INTERRUPT NOT IMPLEMENTED\n");
-	// while(1);
+void int_syscall_srv(){
+	uint64_t arg3, arg2, arg1, syscall_no;
+		__asm__ volatile(
+		"popq %0\n\t"
+		"popq %1\n\t"
+		"popq %2\n\t"
+		"popq %3\n\t"
+		: "=r"(arg3),
+		  "=r"(arg2),
+		  "=r"(arg1),
+		  "=r"(syscall_no),
+		::
+	);
+	printf("syscall_no: %x, arg1, %x, arg2, %x, arg3, %x\n",syscall_no, arg1, arg2, arg3);
+	// printf("SYSCALL INTERRUPT NOT IMPLEMENTED\n");
+	while(1);
 }
 
 void protection_fault_interrupt_handler(void);
