@@ -64,7 +64,7 @@ void int_tmr_srv(){
 
 void syscall_interrupt_handler(void);
 void int_syscall_srv(){
-	uint64_t* rsp;
+	uint64_t* rsp = 0;
 	uint64_t arg3, arg2, arg1, syscall_no, res;
 	
 	syscall_no = rsp[5];
