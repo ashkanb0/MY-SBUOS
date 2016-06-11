@@ -6,13 +6,14 @@ int kstrlen(char* s){
 	return i;
 }
 
-void kstrcpy(char* dest, char* src, int size){
+int kstrcpy(char* dest, char* src, int size){
 	int i;
 	for(i=0; src[i]; i++){
 		dest[i] = src[i];
-		if (i>=size)return;
+		if (i>=size) return -1;
 	}
-	dest[i]=0; 
+	dest[i]=0;
+	return i; 
 }
 
 int kstrcmp(char* s1, char* s2){
