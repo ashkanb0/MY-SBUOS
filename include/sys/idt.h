@@ -64,35 +64,15 @@ void int_tmr_srv(){
 
 void syscall_interrupt_handler(void);
 void int_syscall_srv(){
+	uint64_t* rsp;
 	uint64_t arg3, arg2, arg1, syscall_no, res;
-	__asm__ volatile(
-		"addq $0x20, %%rsp\n\t"
-		"popq %0\n\t"
-		"popq %1\n\t"
-		"popq %2\n\t"
-		"popq %3\n\t"
-		: "=r"(arg3),
-		  "=r"(arg2),
-		  "=r"(arg1),
-		  "=r"(syscall_no)
-		::
-	);
+	
+	__asm__ volatile("movq %%rsp, %0":"=r"(rsp):);
+
 	// printf("syscall_no: %x, arg1, %x, arg2, %x, arg3, %x\n",syscall_no, arg1, arg2, arg3);
 	// printf("SYSCALL INTERRUPT NOT IMPLEMENTED\n");
 	res = do_system_call(syscall_no, arg1, arg2, arg3);
-	__asm__ volatile(
-		"pushq %3\n\t"
-		"pushq %2\n\t"
-		"pushq %1\n\t"
-		"pushq %0\n\t"
-		"subq $0x20, %%rsp\n\t"
-		:
-		: "r"(arg3),
-		  "r"(arg2),
-		  "r"(arg1),
-		  "r"(res)
-		:
-	);
+	
 
 	// while(1);
 }
