@@ -161,6 +161,15 @@ int parse_envp(char* envp[]){
 		var_add(varname, varval);
 	}
 
+	var_list* user = var_find("USER");
+	if(user== NULL){
+		char* varname = (char*)malloc(6);
+		char* varval = (char*)malloc(20);
+		strcpy("USER", varname);
+		strcpy("abanitalebid", varval);
+		var_add(varname, varval);
+	}
+
 	// printf("PSSED STAGE 3!!!!!! HORAAAAAAAAAY!\n");
 	// print_envp();
 	return 0;
