@@ -220,7 +220,7 @@ int get_formatted_prompt(char* buffer, char* cwd, char* status_str, char* userna
 			char* format_with = NULL;
 			if(ps1[format_index+1]=='u'){
 				formatting = 1;
-				format_with = usernamee;
+				format_with = username;
 			}
 			if(ps1[format_index+1]=='d'){
 				formatting = 1;
