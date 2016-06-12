@@ -130,8 +130,9 @@ int parse_envp(char* envp[]){
 	for (int i=0; envp[i]; i++){
 		int assign_index = strsearch(envp[i], '=');
 		
-		if(assign_index== -1)
+		if(assign_index== -1){
 			// printf("ERROR: line >%s< has no '='!!");
+		}
 		else{
 			char* var [2];
 			str_split_line(envp[i], assign_index, var);
