@@ -182,7 +182,7 @@ int getusrnm(char* buffer, int size){
 	// 	return -1;
 	// }
 
-	l = strcpy(var_find("USER")->varval, buffer);
+	strcpy(var_find("USER")->varval, buffer);
 	return -1;
 
 }
