@@ -128,7 +128,7 @@ void make_prompt(){
 	
 	getusrnm(user_name_str, 30);
 
-	get_formatted_prompt(prompt, cwd, status_str);
+	get_formatted_prompt(prompt, cwd, status_str, user_name_str);
 	
 
 }
