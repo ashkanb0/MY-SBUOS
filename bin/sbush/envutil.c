@@ -177,13 +177,14 @@ int parse_envp(char* envp[]){
 }
 
 int getusrnm(char* buffer, int size){
-	int l = strlen(usrnm);
-	if (l>size){
-		return -1;
-	}
+	// int l = strlen(usrnm);
+	// if (l>size){
+	// 	return -1;
+	// }
 
-	l = strcpy(usrnm, buffer);
+	l = strcpy(var_find("USER")->varval, buffer);
 	return -1;
+
 }
 
 char* get_path(){
