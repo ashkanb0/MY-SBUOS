@@ -131,7 +131,7 @@ int parse_envp(char* envp[]){
 		int assign_index = strsearch(envp[i], '=');
 		
 		if(assign_index== -1)
-			printf("ERROR: line >%s< has no '='!!");
+			// printf("ERROR: line >%s< has no '='!!");
 		else{
 			char* var [2];
 			str_split_line(envp[i], assign_index, var);
@@ -148,6 +148,15 @@ int parse_envp(char* envp[]){
 		char* varval = (char*)malloc(20);
 		strcpy("PS1", varname);
 		strcpy("\\u@sbush:\\d-(\\S)->", varval);
+		var_add(varname, varval);
+	}
+
+	var_list* path = var_find("PATH");
+	if(path== NULL){
+		char* varname = (char*)malloc(6);
+		char* varval = (char*)malloc(20);
+		strcpy("PATH", varname);
+		strcpy("/bin", varval);
 		var_add(varname, varval);
 	}
 
