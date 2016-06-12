@@ -10,6 +10,7 @@
 
 void put_pressed_key(unsigned char key);
 
+void buffer_add_char(unsigned char c);
 // extern char _time_buffer [];
 
 void put_time_since_boot(void);

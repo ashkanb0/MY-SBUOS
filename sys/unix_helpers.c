@@ -22,11 +22,33 @@ void do_newline(){
 	if (row>23) row =0;
 }
 void write_k(char v){
+	if (v=='\0') return;
 	if (v=='\n'){
 		do_newline();
 		return;
 	}
+	if (v=='\t'){
+		for (int i = 0; i < col%4; ++i)
+		{
+			write_k(' ');
+		}
+		return;
+	}
 	char* position = (char*)(display_mem + 160*row+ 2*col);
+	if (v=='\b'){
+		if (col==0&& row>0){
+			col= 79;
+			row --;
+		}
+		else if(col>0) col--;
+		write_k(' ');
+		if (col==0&& row>0){
+			col= 79;
+			row --;
+		}
+		else if(col>0) col--;
+		return;
+	}
 	*position = v;
 	position++;
 	*position = 0;

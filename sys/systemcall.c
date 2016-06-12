@@ -32,6 +32,18 @@ uint64_t do_write (uint64_t fd, uint64_t buffer, uint64_t size){
 	return (uint64_t)NULL;
 }
 
+uint64_t do_read (uint64_t fd, uint64_t buffer, uint64_t size){
+	if (fd== 0){
+		char* str = (char*)buffer;
+		int i;
+		for(i = 0; i<size && str[i]!='\0'; i++){
+			write_k(str[i]);
+		}
+		return (uint64_t)i;
+	}
+	return (uint64_t)NULL;
+}
+
 uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uint64_t arg3){
 	
 	switch(syscall_code)
@@ -44,6 +56,8 @@ uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uin
 		case SYS_getcwd : return do_getcwd(arg1, arg2);
 						break;
 		case SYS_write : return do_write(arg1, arg2, arg3);
+						break;
+		case SYS_read : return do_read(arg1, arg2, arg3);
 						break;
 		default : printf("SYSCALL NOT IMPLEMENTED: %d, 0x%x\n (0x%x, 0x%x, 0x%x)",
 						 syscall_code, syscall_code, arg1, arg2, arg3);
