@@ -16,20 +16,20 @@ uint64_t do_break (uint64_t arg1){
 uint64_t do_getcwd (uint64_t buffer, uint64_t size){
 	pcb* proc = get_active_pcb();
 	int i = kstrcpy((char*)buffer, proc-> wd, size);
-	if (i == -1) return NULL;
+	if (i == -1) return (uint64_t)NULL;
 	return buffer;
 }
 
 uint64_t do_write (uint64_t fd, uint64_t buffer, uint64_t size){
 	if (fd==1){
-		char* str = buffer;
+		char* str = (char*)buffer;
 		int i;
 		for(i = 0; i<size && str[i]!='\0'; i++){
 			write_k(str[i]);
 		}
-		return i;
+		return (uint64_t)i;
 	}
-	return NULL;
+	return (uint64_t)NULL;
 }
 
 uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uint64_t arg3){
