@@ -8,7 +8,7 @@ int getusrnm(char* buffer, int size);
 char* get_path();
 
 char** get_envp();
-int get_formatted_prompt(char* buffer, char* cwd, char* status_str);
+int get_formatted_prompt(char* buffer, char* cwd, char* status_str, char* username);
 int process_argv(char** argv);
 char* process_val(char* val);
 
