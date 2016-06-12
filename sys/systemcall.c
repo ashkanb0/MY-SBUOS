@@ -43,7 +43,7 @@ uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uin
 						break;
 		case SYS_getcwd : return do_getcwd(arg1, arg2);
 						break;
-		case SYS_write : return do_write(arg1, arg2);
+		case SYS_write : return do_write(arg1, arg2, arg3);
 						break;
 		default : printf("SYSCALL NOT IMPLEMENTED: %d, 0x%x\n (0x%x, 0x%x, 0x%x)",
 						 syscall_code, syscall_code, arg1, arg2, arg3);
