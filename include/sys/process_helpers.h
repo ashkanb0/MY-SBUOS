@@ -19,6 +19,7 @@ typedef struct process_control_block
 	uint64_t ip;
 	char pname [50];
 	char wd [50];
+	char waiting_on_stdin;
 
 	enum process_status status;
 }pcb;
