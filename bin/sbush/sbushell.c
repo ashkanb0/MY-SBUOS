@@ -26,6 +26,7 @@ char cwd [DIR_NAME_LEN];
 char joined_filename [DIR_NAME_LEN];
 int last_command_status = 0;
 char status_str [15];
+char user_name_str [30];
 
 int process_command(char* command){
 	int newlind = strsearch(command, '\n');
@@ -125,6 +126,8 @@ void make_prompt(){
 	getcwd(cwd, DIR_NAME_LEN);
 	itoa(status_str, last_command_status);
 	
+	getusrnm(user_name_str, 30);
+
 	get_formatted_prompt(prompt, cwd, status_str);
 	
 

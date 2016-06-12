@@ -199,7 +199,7 @@ char** get_envp(){
 	return env_vars;
 }
 
-int get_formatted_prompt(char* buffer, char* cwd, char* status_str){
+int get_formatted_prompt(char* buffer, char* cwd, char* status_str, char* username){
 	/////////////////////////////////////////////////////
 	//
 	//	supports:
@@ -220,7 +220,7 @@ int get_formatted_prompt(char* buffer, char* cwd, char* status_str){
 			char* format_with = NULL;
 			if(ps1[format_index+1]=='u'){
 				formatting = 1;
-				format_with = usrnm;
+				format_with = usernamee;
 			}
 			if(ps1[format_index+1]=='d'){
 				formatting = 1;
