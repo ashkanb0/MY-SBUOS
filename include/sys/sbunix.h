@@ -19,4 +19,5 @@ void set_display_address(uint64_t add);
 
 void printf(const char *fmt, ...);
 
+void write_k(char v);
 #endif
