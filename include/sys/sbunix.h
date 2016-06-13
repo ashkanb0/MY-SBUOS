@@ -12,7 +12,7 @@
 void put_pressed_key(unsigned char key);
 
 void buffer_add_char(unsigned char c);
-void copy_input(char* buffer, int size);
+int copy_input(char* buffer, int size);
 
 // extern char _time_buffer [];
 int buffer_is_ready();

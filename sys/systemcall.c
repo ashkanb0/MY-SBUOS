@@ -40,8 +40,7 @@ uint64_t do_read (uint64_t fd, uint64_t buffer, uint64_t size){
 			proc -> waiting_on_stdin = -1;
 			schedule();
 		}
-		copy_input((char*)buffer, size);
-		return kstrlen((char*)buffer);
+		return copy_input((char*)buffer, size);
 	}
 	return (uint64_t)NULL;
 }

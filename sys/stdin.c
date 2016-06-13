@@ -29,15 +29,21 @@ int buffer_is_ready(){
 	return input_count >0 ;
 }
 
-void copy_input(char* buffer, int size){
+int copy_input(char* buffer, int size){
 	int i;
 	for (i = 0; _stdin_buffer[start_point]!='\n'; i++){
 		buffer[i] = _stdin_buffer[start_point];
 		start_point = (start_point+1)%STDIN_BUFFER_SIZE;
-		if (i==size-1)break;
+		if (i==size-1){
+			buffer[i]= '\0';
+			return size;
+		}
+
 	}
-	buffer[i] = 0;
+	buffer[i] = '\n';
+	buffer[i+1] = '\0';
 	input_count --;
+	return i+1;
 }
 
 int _stdin_keyboard_feed(unsigned char key){
