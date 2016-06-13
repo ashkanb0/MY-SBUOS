@@ -78,17 +78,17 @@ void buffer_add_char(unsigned char c){
 		if(_stdin_input == 0x01){//ESC
 			to_print = 0;
 		}
-		if(_stdin_input == 0x0e){//backspace
+		else if(_stdin_input == 0x0e){//backspace
 			to_print = '\b';
 		}
-		if(_stdin_input == 0x0f){//tab
+		else if(_stdin_input == 0x0f){//tab
 			to_print = '\t';
 		}
-		if(_stdin_input == 0x1c){//return
+		else if(_stdin_input == 0x1c){//return
 			to_print = '\n';
 		}
 		// OTHER KEYS
-		if(_stdin_shift ||_std_ctrl ){
+		else if(_stdin_shift ||_std_ctrl ){
 			to_print = __capitals[_stdin_input];
 		}else{
 			to_print = __smalls[_stdin_input];
