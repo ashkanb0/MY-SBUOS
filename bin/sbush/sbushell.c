@@ -30,7 +30,7 @@ char user_name_str [30];
 
 int process_command(char* command){
 	int newlind = strsearch(command, '\n');
-	printf("command is: >%s<\n", command);
+	// printf("command is: >%s<\n", command);
 	//Checking to see if it's a complete command
 	if (newlind<0)return -1;
 	command[newlind]=0;
@@ -47,7 +47,7 @@ int do_command(char* command){
 		}
 		return 0;
 	}
-	printf("HEREEEEE 1\n");
+	// printf("HEREEEEE 1\n");
 	if (strcomp("exit", command)==0){
 		exit_yet = 1;
 		exit_status = 0;
@@ -61,7 +61,7 @@ int do_command(char* command){
 		command[l-1]=0;
 	}
 
-	printf("HEREEEEE 2\n");
+	// printf("HEREEEEE 2\n");
 	char ** argv = strsplit(command, ' ');
 
 	// log_argv(argv);
@@ -78,7 +78,7 @@ int do_command(char* command){
 		return 0;
 	}
 
-	printf("HEREEEEE 3\n");
+	// printf("HEREEEEE 3\n");
 	char ** envp = get_envp();
 	int pid = fork();
 	if(pid){
