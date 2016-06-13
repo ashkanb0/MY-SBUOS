@@ -9,7 +9,7 @@ char* __capitals = " ~!@#$%^&*()_+  QWERTYUIOP{}| ASDFGHJKL:\"   ZXCVBNM<>?     
 
 char _stdin_buffer [STDIN_BUFFER_SIZE];
 int start_point = 0;
-int end_point = 1;
+int end_point = 0;
 int input_count = 0;
 int _stdin_input = 0;
 
