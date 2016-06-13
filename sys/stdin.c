@@ -6,10 +6,21 @@ char* __smalls = " `1234567890-=  qwertyuiop[]\\ asdfghjkl;'   zxcvbnm,./     ";
 ;
 char* __capitals = " ~!@#$%^&*()_+  QWERTYUIOP{}| ASDFGHJKL:\"   ZXCVBNM<>?     ";
 
-
+char buffer [256];
+int start_point = 0;
+int end_point = 1;
+int input_count = 0;
 
 void _add_char(char c){
+	if((end_point+1)%256 == start_point) return;
 
+	buffer[end_point]= c;
+	end_point = (end_point+1)%256;
+	if (c=='\n') input_count++;
+}
+
+int buffer_is_ready(){
+	return input_count >0 ;
 }
 
 

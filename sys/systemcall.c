@@ -34,14 +34,14 @@ uint64_t do_write (uint64_t fd, uint64_t buffer, uint64_t size){
 
 uint64_t do_read (uint64_t fd, uint64_t buffer, uint64_t size){
 	if (fd== 0){
-		if buffer_is_ready(){
-			copy_input(buffer, size);
-			return kstrlen(buffer);
+		while( !buffer_is_ready()){
+			pcb* proc = get_active_pcb();
+			proc -> status = WAITING;
+			proc -> waing_on_stdin = -1;
+			schedule();
 		}
-		pcb* proc = get_active_pcb();
-		proc -> status = WAITING;
-		proc -> waing_on_stdin = -1;
-		schedule();
+		copy_input(buffer, size);
+		return kstrlen(buffer);
 	}
 	return (uint64_t)NULL;
 }
