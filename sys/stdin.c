@@ -1,29 +1,43 @@
 #include <sys/sbunix.h>
 #include <sys/keyboard_helpers.h>
+#include <sys/process_helpers.h>
 
 int _stdin_state = S_INPUT, _stdin_key = 0, _stdin_shift = 0, _std_ctrl = 0;
 char* __smalls = " `1234567890-=  qwertyuiop[]\\ asdfghjkl;'   zxcvbnm,./     ";
 ;
 char* __capitals = " ~!@#$%^&*()_+  QWERTYUIOP{}| ASDFGHJKL:\"   ZXCVBNM<>?     ";
 
-char buffer [256];
+char _stdin_buffer [STDIN_BUFFER_SIZE];
 int start_point = 0;
 int end_point = 1;
 int input_count = 0;
 
 void _add_char(char c){
-	if((end_point+1)%256 == start_point) return;
+	if((end_point+1)%STDIN_BUFFER_SIZE == start_point) return;
 
-	buffer[end_point]= c;
-	end_point = (end_point+1)%256;
-	if (c=='\n') input_count++;
+	_stdin_buffer[end_point]= c;
+	end_point = (end_point+1)%STDIN_BUFFER_SIZE;
+	if (c=='\n'){
+		input_count++;
+		notify_stdin();
+	}
+
 }
 
 int buffer_is_ready(){
 	return input_count >0 ;
 }
 
-
+void copy_input(char* buffer, int size){
+	int i;
+	for (i = 0; _stdin_buffer[start_point]!='\n'; i++){
+		buffer[i] = _stdin_buffer[start_point];
+		start_point = (start_point+1)%STDIN_BUFFER_SIZE;
+		if (i==size-1)break;
+	}
+	buffer[i] = 0;
+	input_count --;
+}
 
 int _stdin_keyboard_feed(unsigned char key){
 	if(_stdin_state == S_NEED_1){

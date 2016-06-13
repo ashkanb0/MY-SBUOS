@@ -22,6 +22,17 @@ pcb* get_active_pcb(){
 	return _active_pcb;
 }
 
+void notify_stdin(){
+	
+	for(uint32_t ptr = processq.head; ptr!= processq.tail; ptr = (ptr+1)%PROCESS_QUEUE_SIZE){
+		pcb* proc = processq.list[ptr];
+		if (proc->status==WAITING && proc-> waiting_on_stdin){
+			proc -> status = RUNNING;
+			proc -> waiting_on_stdin = 0;
+		}
+	}
+}
+
 
 
 void process_init(){

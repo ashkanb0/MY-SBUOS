@@ -37,11 +37,11 @@ uint64_t do_read (uint64_t fd, uint64_t buffer, uint64_t size){
 		while( !buffer_is_ready()){
 			pcb* proc = get_active_pcb();
 			proc -> status = WAITING;
-			proc -> waing_on_stdin = -1;
+			proc -> waiting_on_stdin = -1;
 			schedule();
 		}
-		copy_input(buffer, size);
-		return kstrlen(buffer);
+		copy_input((char*)buffer, size);
+		return kstrlen((char*)buffer);
 	}
 	return (uint64_t)NULL;
 }

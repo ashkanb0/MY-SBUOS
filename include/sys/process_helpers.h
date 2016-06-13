@@ -31,7 +31,7 @@ typedef struct process_control_block_list
 	uint32_t tail ;
 }pcb_list;
 
-
+void notify_stdin();
 
 void process_init();
 
