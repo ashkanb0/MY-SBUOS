@@ -30,7 +30,7 @@ char user_name_str [30];
 
 int process_command(char* command){
 	int newlind = strsearch(command, '\n');
-
+	printf("command is: >%s<\n", command);
 	//Checking to see if it's a complete command
 	if (newlind<0)return -1;
 	command[newlind]=0;
