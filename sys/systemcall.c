@@ -49,9 +49,6 @@ uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uin
 	
 	switch(syscall_code)
 	{
-		case SYS_exit : printf("SYS_exit NOT IMPLEMENTED\n");
-						while(1);
-						break;
 		case SYS_brk : return do_break(arg1);
 						break;
 		case SYS_getcwd : return do_getcwd(arg1, arg2);

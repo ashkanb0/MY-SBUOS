@@ -47,6 +47,7 @@ int do_command(char* command){
 		}
 		return 0;
 	}
+	printf("HEREEEEE 1\n");
 	if (strcomp("exit", command)==0){
 		exit_yet = 1;
 		exit_status = 0;
@@ -60,6 +61,7 @@ int do_command(char* command){
 		command[l-1]=0;
 	}
 
+	printf("HEREEEEE 2\n");
 	char ** argv = strsplit(command, ' ');
 
 	// log_argv(argv);
@@ -76,6 +78,7 @@ int do_command(char* command){
 		return 0;
 	}
 
+	printf("HEREEEEE 3\n");
 	char ** envp = get_envp();
 	int pid = fork();
 	if(pid){
