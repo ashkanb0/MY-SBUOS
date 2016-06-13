@@ -59,7 +59,7 @@ pcb* get_next_context(){
 	processq.head %= PROCESS_QUEUE_SIZE;
 
 	_active_pcb = res;
-	if (res->status!=RUNNING || res->status!=READY)
+	if (res->status!=RUNNING && res->status!=READY)
 		res = get_next_context();
 	return res;
 }
