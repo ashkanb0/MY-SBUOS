@@ -11,6 +11,7 @@ char _stdin_buffer [STDIN_BUFFER_SIZE];
 int start_point = 0;
 int end_point = 1;
 int input_count = 0;
+int _stdin_input = 0;
 
 void _add_char(char c){
 	if((end_point+1)%STDIN_BUFFER_SIZE == start_point) return;
@@ -63,6 +64,7 @@ int _stdin_keyboard_feed(unsigned char key){
 	}
 	if (_stdin_state == S_FINISHED){
 		_stdin_state = S_INPUT;
+		_stdin_input = _stdin_key;
 		_stdin_shift = 0;
 		_std_ctrl = 0;
 		_stdin_key = 0;
@@ -73,23 +75,23 @@ int _stdin_keyboard_feed(unsigned char key){
 void buffer_add_char(unsigned char c){
 	if (_stdin_keyboard_feed(c)){
 		char to_print = 0;
-		if(_stdin_key == 0x01){//ESC
+		if(_stdin_input == 0x01){//ESC
 			to_print = 0;
 		}
-		if(_stdin_key == 0x0e){//backspace
+		if(_stdin_input == 0x0e){//backspace
 			to_print = '\b';
 		}
-		if(_stdin_key == 0x0f){//tab
+		if(_stdin_input == 0x0f){//tab
 			to_print = '\t';
 		}
-		if(_stdin_key == 0x1c){//return
+		if(_stdin_input == 0x1c){//return
 			to_print = '\n';
 		}
 		// OTHER KEYS
 		if(_stdin_shift ||_std_ctrl ){
-			to_print = __capitals[_stdin_key];
+			to_print = __capitals[_stdin_input];
 		}else{
-			to_print = __smalls[_stdin_key];
+			to_print = __smalls[_stdin_input];
 		}
 		if(_std_ctrl ){
 			to_print -= 64;
