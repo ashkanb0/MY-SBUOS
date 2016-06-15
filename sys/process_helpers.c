@@ -63,6 +63,10 @@ pcb* get_next_context(){
 	if (res->status!=RUNNING && res->status!=READY)
 		res = get_next_context();
 	return res;
+
+	_set_cr3(_active_pcb -> pml4);
+	tss.rsp0 = (uint64_t) (_active_pcb -> kernel_stack + PAGESIZE - 16);
+
 }
 
 pcb* _get_new_pcb(){
