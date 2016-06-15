@@ -22,6 +22,7 @@ typedef struct process_control_block
 	char wd [50];
 	char waiting_on_stdin;
 	int waiting_on_pid;
+	uint64_t exit_notify_status;
 
 	enum process_status status;
 }pcb;
