@@ -112,7 +112,7 @@ int do_command(char* command){
 			argv[0] = joined_filename;
 			// printf("going to execute: >%s<\n", argv[0]);
 			execve(argv[0], argv, envp);
-			argv[0] = temp;		
+			argv[0] = temp;
 			// TODO: uncomment after fixed get_envp;
 			// str_free_splitted_list(envp);
 		}

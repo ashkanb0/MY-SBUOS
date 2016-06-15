@@ -45,6 +45,35 @@ uint64_t do_read (uint64_t fd, uint64_t buffer, uint64_t size){
 	return (uint64_t)NULL;
 }
 
+uint64_t _return_from_fork_child(){
+	return 0;
+}
+
+uint64_t do_fork(){
+	pcb* proc = get_active_pcb();
+	pcb* child = get_forked_pcb(proc);
+
+	uint64_t* to = (uint64_t*) child -> kernel_stack;
+	uint64_t* from = (uint64_t*) proc -> kernel_stack;
+	for (int i = 0; i < 256; ++i)
+	{
+		to[i] = from [i];
+	}
+
+
+	uint64_t rsp = 0;
+	__asm__ volatile("movq %%rsp, %0":"=r"(rsp):);
+	
+	child -> kernel_sp = (uint64_t*)(child -> kernel_stack + (proc->kernel_stack - rsp));
+	
+	child->kernel_sp --;
+	*(child->kernel_sp) = (uint64_t)(_return_from_fork_child);
+	child->kernel_sp --;
+	*(child->kernel_sp) = 0;
+
+	return child->pid;
+}
+
 uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uint64_t arg3){
 	
 	switch(syscall_code)
@@ -56,6 +85,8 @@ uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uin
 		case SYS_write : return do_write(arg1, arg2, arg3);
 						break;
 		case SYS_read : return do_read(arg1, arg2, arg3);
+						break;
+		case SYS_fork : return do_fork();
 						break;
 		default : printf("SYSCALL NOT IMPLEMENTED: %d, 0x%x\n (0x%x, 0x%x, 0x%x)",
 						 syscall_code, syscall_code, arg1, arg2, arg3);

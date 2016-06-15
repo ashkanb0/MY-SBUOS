@@ -27,8 +27,9 @@ void notify_stdin(){
 	for(uint32_t ptr = processq.head; ptr!= processq.tail; ptr = (ptr+1)%PROCESS_QUEUE_SIZE){
 		pcb* proc = processq.list[ptr];
 		if (proc->status==WAITING && proc-> waiting_on_stdin){
-			proc -> status = RUNNING;
 			proc -> waiting_on_stdin = 0;
+			// TODO : if not waiting on pid;
+			proc -> status = RUNNING;
 		}
 	}
 }
@@ -74,9 +75,26 @@ pcb* _get_new_pcb(){
 	res->kernel_sp --;
 	*(res->kernel_sp) = 0;
 
+	res -> ppid = 0;
+	res -> waiting_on_stdin = 0;
+	res -> waiting_on_pid = 0;
 
 	return res;
 }
+
+pcb* get_forked_pcb(pcb* parent){
+	pcb* child = _get_new_pcb();
+	mark_COW();
+	child -> ppid = parent -> pid;
+	child -> pml4 = get_new_page_table();
+	child -> status = RUNNING;
+	child -> user_brk_point = parent -> user_brk_point;
+	child -> user_sp = parent -> user_sp;
+	
+	return child;
+}
+
+
 
 void prepare_user_memory(pcb* process){
 	process -> pml4 = get_new_page_table();
@@ -99,7 +117,6 @@ void _sys_idle(){
 
 void _switch_to_ring_3(){
 	// http://wiki.osdev.org/Getting_to_Ring_3
-	printf("switching to: %x , sp: %x\n", _active_pcb->ip, _active_pcb->user_sp);
 
 	_set_cr3(_active_pcb -> pml4);
 	tss.rsp0 = (uint64_t) (_active_pcb -> kernel_stack + PAGESIZE - 16);

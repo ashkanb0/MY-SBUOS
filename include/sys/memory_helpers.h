@@ -10,6 +10,7 @@
 #define PRESENT 1
 #define READ_WRITE 2
 #define USER_ACCESSIBLE 4
+#define COW 0x000100
 
 
 typedef struct memory_page_linked_list
@@ -34,4 +35,7 @@ uint64_t get_new_page_v();
 
 void _set_cr3(uint64_t table);
 uint64_t get_active_pml4();
+
+void mark_COW();
+
 #endif

@@ -10,7 +10,8 @@ enum process_status{READY = 0, RUNNING = 1, WAITING = 2, FINISHED = 3};
 
 typedef struct process_control_block
 {
-	uint64_t pid;
+	int pid;
+	int ppid;
 	uint64_t pml4;
 	uint64_t user_sp;
 	uint64_t user_brk_point;
@@ -20,6 +21,7 @@ typedef struct process_control_block
 	char pname [50];
 	char wd [50];
 	char waiting_on_stdin;
+	int waiting_on_pid;
 
 	enum process_status status;
 }pcb;
@@ -45,5 +47,7 @@ void k_process_exit();
 
 int get_active_pid();
 pcb* get_active_pcb();
+pcb* get_forked_pcb(pcb* parent);
+
 
 #endif

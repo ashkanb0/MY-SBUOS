@@ -302,3 +302,17 @@ void setup_paging(
 
 }
 
+void mark_COW(){
+	uint64_t* pml4 = (uint64_t*)(0xffffff7fbfdfe000);
+	for (int i = 0; i < 254; ++i)
+	{
+		if(pml4[i]== 0)continue;
+		pml4[i] &= (~READ_WRITE);
+		pml4[i] |= COW;
+	}
+}
+
+
+
+
+
