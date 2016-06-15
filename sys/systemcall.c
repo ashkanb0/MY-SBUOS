@@ -71,6 +71,8 @@ uint64_t do_fork(){
 	child->kernel_sp --;
 	*(child->kernel_sp) = 0;
 
+	process_run(child);
+
 	return child->pid;
 }
 

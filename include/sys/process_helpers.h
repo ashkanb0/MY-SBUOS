@@ -49,6 +49,7 @@ void k_process_exit();
 int get_active_pid();
 pcb* get_active_pcb();
 pcb* get_forked_pcb(pcb* parent);
+void process_run(pcb* proc);
 
 
 #endif

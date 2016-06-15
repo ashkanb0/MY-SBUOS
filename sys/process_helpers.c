@@ -190,3 +190,6 @@ void schedule(){
 
 }
 
+void process_run(pcb* proc){
+	enqueue_process(&processq, proc);
+}
