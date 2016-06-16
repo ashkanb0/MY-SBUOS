@@ -91,26 +91,35 @@ uint64_t do_waitpid (uint64_t pid, uint64_t status_return, uint64_t options){
 
 uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uint64_t arg3){
 	
+	printf("SYSCALL LOG: %d, 0x%x\n (0x%x, 0x%x, 0x%x)\n",
+						 syscall_code, syscall_code, arg1, arg2, arg3);
+
+	uint64_t res = 0;
+
 	switch(syscall_code)
 	{
-		case SYS_brk : return do_break(arg1);
+		case SYS_brk : res = do_break(arg1);
 						break;
-		case SYS_getcwd : return do_getcwd(arg1, arg2);
+		case SYS_getcwd : res = do_getcwd(arg1, arg2);
 						break;
-		case SYS_write : return do_write(arg1, arg2, arg3);
+		case SYS_write : res = do_write(arg1, arg2, arg3);
 						break;
-		case SYS_read : return do_read(arg1, arg2, arg3);
+		case SYS_read : res = do_read(arg1, arg2, arg3);
 						break;
-		case SYS_fork : return do_fork();
+		case SYS_fork : res = do_fork();
 						break;
-		case SYS_wait4 : return do_waitpid(arg1, arg2, arg3);
+		case SYS_wait4 : res = do_waitpid(arg1, arg2, arg3);
 						break;
 		default : printf("SYSCALL NOT IMPLEMENTED: %d, 0x%x\n (0x%x, 0x%x, 0x%x)",
 						 syscall_code, syscall_code, arg1, arg2, arg3);
 						while(1);
 						break;
-
 	}
+
+	printf("SYSCALL LOG: %d, 0x%x\n -> %d, 0x%x\n",
+					 syscall_code, syscall_code, res, res);
+
+	return res;
 
 
 }
