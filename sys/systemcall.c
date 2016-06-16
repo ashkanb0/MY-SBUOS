@@ -54,8 +54,8 @@ uint64_t do_fork(){
 	pcb* proc = get_active_pcb();
 	pcb* child = get_forked_pcb(proc);
 
-	char* to = (uint64_t*) child -> kernel_stack;
-	char* from = (uint64_t*) proc -> kernel_stack;
+	char* to = (char*) child -> kernel_stack;
+	char* from = (char*) proc -> kernel_stack;
 	
 	for (int i = 0; i < PAGESIZE; ++i)
 	{
