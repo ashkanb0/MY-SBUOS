@@ -2,6 +2,7 @@
 #include <sys/syscall.h>
 #include <sys/sysutil.h>
 #include <sys/process_helpers.h>
+#include <sys/memory_helpers.h>
 
 uint64_t do_break (uint64_t arg1){
 	pcb* proc = get_active_pcb();
