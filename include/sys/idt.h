@@ -80,6 +80,7 @@ void int_syscall_srv(){
 
 	res = do_system_call(syscall_no, arg1, arg2, arg3);
 	
+	__asm__ volatile("movq %%rsp, %0":"=r"(rsp):);
 
 	rsp[5] = res;
 }
