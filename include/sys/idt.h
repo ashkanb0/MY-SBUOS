@@ -80,9 +80,10 @@ void int_syscall_srv(){
 
 	res = do_system_call(syscall_no, arg1, arg2, arg3);
 	
-	__asm__ volatile("movq %%rsp, %0":"=r"(rsp):);
+	// __asm__ volatile("movq %%rsp, %0":"=r"(rsp):);
+	__asm__ volatile("movq  %0, 30(%%rsp)"::"r"(res):);
 
-	rsp[5] = res;
+	// rsp[5] = res;
 }
 
 void protection_fault_interrupt_handler(void);
