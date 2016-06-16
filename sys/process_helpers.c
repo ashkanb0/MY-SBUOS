@@ -65,8 +65,8 @@ pcb* get_next_context(){
 
 	_set_cr3(_active_pcb -> pml4);
 	tss.rsp0 = (_active_pcb -> kernel_stack + PAGESIZE );
-
 	return res;
+
 }
 
 pcb* _get_new_pcb(){
@@ -123,10 +123,10 @@ void _sys_idle(){
 }
 
 void _switch_to_ring_3(){
-	// http://wiki.osdev.org/Getting_to_Ring_3
 
 	_set_cr3(_active_pcb -> pml4);
 	tss.rsp0 = (_active_pcb -> kernel_stack + PAGESIZE );
+	// http://wiki.osdev.org/Getting_to_Ring_3
 	__asm__ volatile(
 
 		"pushq $0x23\n\t"
