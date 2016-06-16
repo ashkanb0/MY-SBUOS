@@ -83,7 +83,7 @@ pcb* _get_new_pcb(){
 	res -> waiting_on_stdin = 0;
 	res -> waiting_on_pid = 0;
 
-	process -> pml4 = get_new_page_table();
+	res -> pml4 = get_new_page_table();
 	return res;
 }
 
@@ -123,10 +123,10 @@ void _sys_idle(){
 }
 
 void _switch_to_ring_3(){
+	// http://wiki.osdev.org/Getting_to_Ring_3
 
 	_set_cr3(_active_pcb -> pml4);
 	tss.rsp0 = (_active_pcb -> kernel_stack + PAGESIZE );
-	// http://wiki.osdev.org/Getting_to_Ring_3
 	__asm__ volatile(
 
 		"pushq $0x23\n\t"
@@ -144,7 +144,6 @@ void _switch_to_ring_3(){
 
 void k_thread_kernel(){
 	
-	kstrcpy(shell -> pname, "bin/sbush", 50);
 	if (_active_pcb -> status == READY){
 		prepare_user_memory(_active_pcb);
 	}
@@ -166,6 +165,7 @@ void init(){
 
 	pcb* shell = _get_new_pcb();
 
+	kstrcpy(shell -> pname, "bin/sbush", 50);
 	kstrcpy(shell -> wd, "/", 50);
 	shell->status = READY;
 	shell->kernel_sp --;
