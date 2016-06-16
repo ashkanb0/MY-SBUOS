@@ -61,8 +61,8 @@ uint64_t do_fork(){
 	}
 
 
-	uint64_t rsp = 0;
-	__asm__ volatile("movq %%rsp, %0":"=r"(rsp):);
+	// uint64_t rsp = 0;
+	// __asm__ volatile("movq %%rsp, %0":"=r"(rsp):);
 	
 	child -> kernel_sp = (uint64_t*)(child -> kernel_stack + 0xf68);
 	// child -> kernel_sp = (uint64_t*)(child -> kernel_stack + rsp - proc->kernel_stack);
