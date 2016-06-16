@@ -46,7 +46,7 @@ uint64_t do_read (uint64_t fd, uint64_t buffer, uint64_t size){
 	return (uint64_t)NULL;
 }
 
-uint64_t _return_from_fork_child(){
+uint64_t _return_from_fork_child(long useless_a, long useless_b){
 	return 0;
 }
 
@@ -66,11 +66,10 @@ uint64_t do_fork(){
 	uint64_t rsp = 0;
 	__asm__ volatile("movq %%rsp, %0":"=r"(rsp):);
 	
-	// child -> kernel_sp -= 9;
 	child -> kernel_sp = (uint64_t*)(child -> kernel_stack + rsp - proc->kernel_stack);
 	
-	child->kernel_sp +=2;
-	// child->kernel_sp --;
+	// child->kernel_sp +=2;
+	child->kernel_sp --;
 	*(child->kernel_sp) = (uint64_t)(_return_from_fork_child);
 	child->kernel_sp --;
 	*(child->kernel_sp) = 0;
