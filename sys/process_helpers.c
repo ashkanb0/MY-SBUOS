@@ -83,6 +83,7 @@ pcb* _get_new_pcb(){
 	res -> waiting_on_stdin = 0;
 	res -> waiting_on_pid = 0;
 
+	process -> pml4 = get_new_page_table();
 	return res;
 }
 
@@ -104,7 +105,6 @@ pcb* get_forked_pcb(pcb* parent){
 
 
 void prepare_user_memory(pcb* process){
-	process -> pml4 = get_new_page_table();
 	_set_cr3(process -> pml4);
 
 	process -> ip = map_file(process->pname, process->pid);
@@ -144,6 +144,7 @@ void _switch_to_ring_3(){
 
 void k_thread_kernel(){
 	
+	kstrcpy(shell -> pname, "bin/sbush", 50);
 	if (_active_pcb -> status == READY){
 		prepare_user_memory(_active_pcb);
 	}
@@ -165,7 +166,6 @@ void init(){
 
 	pcb* shell = _get_new_pcb();
 
-	kstrcpy(shell -> pname, "bin/sbush", 50);
 	kstrcpy(shell -> wd, "/", 50);
 	shell->status = READY;
 	shell->kernel_sp --;
