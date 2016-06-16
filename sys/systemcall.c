@@ -91,7 +91,7 @@ uint64_t do_waitpid (uint64_t pid, uint64_t status_return, uint64_t options){
 
 uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uint64_t arg3){
 	
-	printf("SYSCALL LOG: %d, 0x%x\n (0x%x, 0x%x, 0x%x)\n",
+	printf("SYSCALL LOG: %d, 0x%x (0x%x, 0x%x, 0x%x)\n",
 						 syscall_code, syscall_code, arg1, arg2, arg3);
 
 	uint64_t res = 0;
@@ -116,7 +116,7 @@ uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uin
 						break;
 	}
 
-	printf("SYSCALL LOG: %d, 0x%x\n -> %d, 0x%x\n",
+	printf("SYSCALL LOG: %d, 0x%x -> %d, 0x%x\n",
 					 syscall_code, syscall_code, res, res);
 
 	return res;
