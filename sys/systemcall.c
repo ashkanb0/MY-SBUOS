@@ -69,7 +69,7 @@ uint64_t do_fork(){
 	// child -> kernel_sp -= 9;
 	child -> kernel_sp = (uint64_t*)(child -> kernel_stack + rsp - proc->kernel_stack);
 	
-	child->kernel_sp --;
+	child->kernel_sp +=2;
 	*(child->kernel_sp) = (uint64_t)(_return_from_fork_child);
 	child->kernel_sp --;
 	*(child->kernel_sp) = 0;
