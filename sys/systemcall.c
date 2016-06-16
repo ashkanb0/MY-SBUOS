@@ -46,7 +46,7 @@ uint64_t do_read (uint64_t fd, uint64_t buffer, uint64_t size){
 	return (uint64_t)NULL;
 }
 
-uint64_t _return_from_fork_child(long useless_a, long useless_b){
+uint64_t _return_from_fork_child(){
 	return 0;
 }
 
@@ -71,8 +71,8 @@ uint64_t do_fork(){
 	// child->kernel_sp +=2;
 	child->kernel_sp --;
 	*(child->kernel_sp) = (uint64_t)(_return_from_fork_child);
-	child->kernel_sp --;
-	*(child->kernel_sp) = 0;
+	// child->kernel_sp --;
+	// *(child->kernel_sp) = 0;
 
 	process_run(child);
 
