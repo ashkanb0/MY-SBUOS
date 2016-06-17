@@ -76,7 +76,7 @@ uint64_t do_fork(){
 
 	process_run(child);
 
-	(*(((uint64_t*)(child -> user_sp))+1) )++;
+	handle_COW(child -> user_sp);
 	return child->pid;
 }
 
