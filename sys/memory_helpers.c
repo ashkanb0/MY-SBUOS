@@ -327,7 +327,7 @@ void cross_off_COW(pcb* proc, uint64_t virt){
 	_set_cr3(prev_cr3);
 }
 
-uint64_t temp_page [512];
+char temp_page [PAGESIZE];
 
 uint64_t map_page_COW (uint64_t phys, uint64_t virt, uint64_t flags, uint64_t pid){
 	uint64_t* table = (uint64_t*) (0xffffff7fbfdfe000);
@@ -336,16 +336,16 @@ uint64_t map_page_COW (uint64_t phys, uint64_t virt, uint64_t flags, uint64_t pi
 	for (int lvl = 4; lvl>1; lvl--){
 		index = (0x01ff & (virt>> (12 + (lvl-1)*9)));
 	 	if(new_page_flag){
-	 		for(int i = 0; i<512; i++)
-				table[i] = temp_page[i];
+	 		for(int i = 0; i<PAGESIZE; i++)
+				((char*)table)[i] = temp_page[i];
 	 	}
 	 	new_page_flag = 0;
 	 	if((table[index] & READ_WRITE)==0 && (table[index] & COW)!=0){
 			// create it!
 			mem_page* next_lvl_page = get_free_page();
 			vma_register_page(next_lvl_page, pid);
-			uint64_t* copy_from = (uint64_t*)(table[index]&0xffffffffff000);
-			for(int i = 0; i<512; i++)
+			char* copy_from = (uint64_t*)(table[index]&0xffffffffff000);
+			for(int i = 0; i<PAGESIZE; i++)
 				temp_page[i] = copy_from[i];
 			table[index] = ((uint64_t)next_lvl_page->base|PRESENT|READ_WRITE|USER_ACCESSIBLE); 
 			new_page_flag = 1;
