@@ -115,6 +115,8 @@ pcb* get_forked_pcb(pcb* parent){
 	child -> user_brk_point = parent -> user_brk_point;
 	child -> user_sp = parent -> user_sp;
 	
+	*(((uint64_t*)(child -> user_sp))+1) = 0x0; 
+
 	kstrcpy (child-> pname, parent-> pname, 50);
 	kstrcpy (child-> wd, parent-> wd, 50);
 
