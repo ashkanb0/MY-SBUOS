@@ -51,5 +51,8 @@ pcb* get_active_pcb();
 pcb* get_forked_pcb(pcb* parent);
 void process_run(pcb* proc);
 
+pcb* find_pcb_by_ppid(int ppid);
+pcb* find_pcb_by_pid(int pid);
+
 
 #endif

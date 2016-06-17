@@ -312,7 +312,86 @@ void mark_COW(){
 	}
 }
 
+void cross_off_COW(pcb* proc, uint64_t virt){
+	uint64_t prev_cr3 = _read_cr3();
+	_set_cr3(proc->pml4);
+	uint64_t* table = (uint64_t*) (0xffffff7fbfdfe000);
+	uint64_t index;
+	for (int lvl = 4; lvl>1; lvl--){
+		index = (0x01ff & (virt>> (12 + (lvl-1)*9)));
+		if((table[index] & READ_WRITE)==0 && (table[index] & COW)!=0){
+			table[index] = (table[index]|PRESENT|READ_WRITE|USER_ACCESSIBLE)&(~COW); 
+		}
+		table = (uint64_t*)((((uint64_t)(table))|0xffffff8000000000| (index<<3))<<9);
+	}
+	_set_cr3(prev_cr3);
+}
 
+uint64_t temp_page [512];
+
+uint64_t map_page_COW (uint64_t phys, uint64_t virt, uint64_t flags, uint64_t pid){
+	uint64_t* table = (uint64_t*) (0xffffff7fbfdfe000);
+	uint64_t index;
+	int new_page_flag = 0;
+	for (int lvl = 4; lvl>1; lvl--){
+		index = (0x01ff & (virt>> (12 + (lvl-1)*9)));
+	 	if(new_page_flag){
+	 		for(int i = 0; i<512; i++)
+				table[i] = temp_page[i];
+	 	}
+	 	new_page_flag = 0;
+	 	if((table[index] & READ_WRITE)==0 && (table[index] & COW)!=0){
+			// create it!
+			mem_page* next_lvl_page = get_free_page();
+			vma_register_page(next_lvl_page, pid);
+			uint64_t* copy_from = (uint64_t*)(table[index]);
+			for(int i = 0; i<512; i++)
+				temp_page[i] = copy_from[i];
+			table[index] = ((uint64_t)next_lvl_page->base|PRESENT|READ_WRITE|USER_ACCESSIBLE); 
+			new_page_flag = 1;
+		}
+		table = (uint64_t*)((((uint64_t)(table))|0xffffff8000000000| (index<<3))<<9);
+	}
+	index = (0x01ff & (virt >> 12 ));
+	table [index] = (phys & 0xffffffffff000)|flags;
+	return virt+ PAGESIZE;
+}
+
+
+void do_COW(pcb* proc, uint64_t v_addr){
+	uint64_t prev_cr3 = _read_cr3();
+	_set_cr3(proc->pml4);
+	mem_page* pg = get_free_page();
+	map_page_COW (pg->base, v_addr, USER_ACCESSIBLE|READ_WRITE|PRESENT, proc-> pid);
+	_set_cr3(prev_cr3);
+}
+
+void handle_COW(uint64_t address){
+	pcb* parent;
+	pcb* child;
+	pcb* proc = get_active_pcb();
+	if (proc-> ppid == 0){	
+		// TODO : what about multiple forks?
+		child = find_pcb_by_ppid(proc->pid);
+		if (child == NULL){
+			cross_off_COW(proc, address);
+			return;
+		}
+		do_COW(proc, address);
+		cross_off_COW(proc, address);
+		cross_off_COW(child, address);
+	}
+	else{
+		parent = find_pcb_by_pid(proc->ppid);
+		if (parent == NULL){
+			cross_off_COW(parent, address);
+			return;
+		}
+		do_COW(parent, address);
+		cross_off_COW(proc, address);
+		cross_off_COW(parent, address);
+	}
+}
 
 
 

@@ -37,5 +37,6 @@ void _set_cr3(uint64_t table);
 uint64_t get_active_pml4();
 
 void mark_COW();
+void handle_COW(uint64_t address);
 
 #endif

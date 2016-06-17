@@ -34,6 +34,25 @@ void notify_stdin(){
 	}
 }
 
+pcb* find_pcb_by_ppid(int ppid){
+	for(uint32_t ptr = processq.head; ptr!= processq.tail; ptr = (ptr+1)%PROCESS_QUEUE_SIZE){
+		pcb* proc = processq.list[ptr];
+		if (proc->ppid == ppid){
+			return proc;
+		}
+	}
+	return NULL;
+}
+
+pcb* find_pcb_by_pid(int pid){
+	for(uint32_t ptr = processq.head; ptr!= processq.tail; ptr = (ptr+1)%PROCESS_QUEUE_SIZE){
+		pcb* proc = processq.list[ptr];
+		if (proc->pid == pid){
+			return proc;
+		}
+	}
+	return NULL;
+}
 
 
 void process_init(){

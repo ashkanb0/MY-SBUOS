@@ -130,7 +130,10 @@ void int_pgflt_srv(exception_stack stack){
 		// k_process_exit();
 		// return;
 	}
-	// TODO : COW pages
+	if(error==7){
+		handle_COW(address);
+		return;
+	}
 	if((error&5)==0 || (error&5)==4) // PAGE NOT MAPPED
 		add_physical_page_in(address);
 	else{
