@@ -344,7 +344,7 @@ uint64_t map_page_COW (uint64_t phys, uint64_t virt, uint64_t flags, uint64_t pi
 			// create it!
 			mem_page* next_lvl_page = get_free_page();
 			vma_register_page(next_lvl_page, pid);
-			char* copy_from = (uint64_t*)(table[index]&0xffffffffff000);
+			char* copy_from = (char*)(table[index]&0xffffffffff000);
 			for(int i = 0; i<PAGESIZE; i++)
 				temp_page[i] = copy_from[i];
 			table[index] = ((uint64_t)next_lvl_page->base|PRESENT|READ_WRITE|USER_ACCESSIBLE); 
