@@ -39,4 +39,6 @@ uint64_t get_active_pml4();
 void mark_COW();
 void handle_COW(uint64_t address);
 
+void mark_fork_cross_entry(uint64_t parent_pml4, uint64_t child_pml4);
+
 #endif

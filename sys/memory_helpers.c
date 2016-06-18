@@ -302,96 +302,92 @@ void setup_paging(
 
 }
 
-void mark_COW(){
-	uint64_t* pml4 = (uint64_t*)(0xffffff7fbfdfe000);
-	for (int i = 0; i < 254; ++i)
+vod _do_mark_COW(uint64_t* table_p, uint64_t* table_c, int pid, int lvl){
+	if (lvl==1){
+		for (int i = 0; i < 512; ++i)
+		{
+			if(table_p[i]== 0)continue;
+			table_p[i] &= (~READ_WRITE);
+			table_p[i] |= COW;
+			table_c[i] = table_p[i];
+		}
+		return;
+	}
+
+	int count = (lvl==4)?509:512;
+
+	for (int i = 0; i < count; ++i)
 	{
-		if(pml4[i]== 0)continue;
-		pml4[i] &= (~READ_WRITE);
-		pml4[i] |= COW;
+		if(table_p[i]== 0)continue;
+		mem_page* next_lvl_page = get_free_page();
+		vma_register_page(next_lvl_page, pid);
+		table_c[i] = ((uint64_t)next_lvl_page->base|PRESENT|READ_WRITE|USER_ACCESSIBLE);
+		_do_mark_COW((uint64_t*)((((uint64_t)(table))|0xffffff8000000000| (i<<3))<<9), lvl - 1);
 	}
 }
 
-void cross_off_COW(pcb* proc, uint64_t virt){
-	uint64_t prev_cr3 = _read_cr3();
-	_set_cr3(proc->pml4);
-	uint64_t* table = (uint64_t*) (0xffffff7fbfdfe000);
-	uint64_t index;
-	for (int lvl = 4; lvl>1; lvl--){
-		index = (0x01ff & (virt>> (12 + (lvl-1)*9)));
-		if((table[index] & READ_WRITE)==0 && (table[index] & COW)!=0){
-			table[index] = (table[index]|PRESENT|READ_WRITE|USER_ACCESSIBLE)&(~COW); 
-		}
-		table = (uint64_t*)((((uint64_t)(table))|0xffffff8000000000| (index<<3))<<9);
-	}
-	_set_cr3(prev_cr3);
+void mark_COW(int pid){
+	_do_mark_COW((uint64_t*)(0xffffff7fbfdfe000), (uint64_t*)(0xffffff7fbfdfd000), pid, 4);
+	return;
+}
+
+void cross_off_COW(uint64_t virt){
+	index = (0x01ff & (virt>> 12));
+	vitr &= 0xffffffffffe00000;
+	uint64_t* table = (uint64_t*)(((virt | 0xffffff8000000000) & 0xffffff7fffffffff)>>9);
+	table[index] &= (~COW);
+	table[index] |= READ_WRITE;
+
+	table = (uint64_t*)(0xffffff7fbfdfe000);
+	if (table[509]==0)return;
+
+	uint64_t* table = (uint64_t*)(((virt | 0xffffff8000000000) & 0xfffffe7fffffffff)>>9);
+	table[index] &= (~COW);
+	table[index] |= READ_WRITE;
 }
 
 char temp_page [PAGESIZE];
 
-uint64_t map_page_COW (uint64_t phys, uint64_t virt, uint64_t flags, uint64_t pid){
-	uint64_t* table = (uint64_t*) (0xffffff7fbfdfe000);
-	uint64_t index;
-	int new_page_flag = 0;
-	for (int lvl = 4; lvl>1; lvl--){
-		index = (0x01ff & (virt>> (12 + (lvl-1)*9)));
-	 	if(new_page_flag){
-	 		for(int i = 0; i<PAGESIZE; i++)
-				((char*)table)[i] = temp_page[i];
-	 	}
-	 	new_page_flag = 0;
-	 	if((table[index] & READ_WRITE)==0 && (table[index] & COW)!=0){
-			// create it!
-			mem_page* next_lvl_page = get_free_page();
-			vma_register_page(next_lvl_page, pid);
-			char* copy_from = (char*)((((uint64_t)(table))|0xffffff8000000000| (index<<3))<<9);
-			for(int i = 0; i<PAGESIZE; i++)
-				temp_page[i] = copy_from[i];
-			table[index] = ((uint64_t)next_lvl_page->base|PRESENT|READ_WRITE|USER_ACCESSIBLE); 
-			new_page_flag = 1;
-		}
-		table = (uint64_t*)((((uint64_t)(table))|0xffffff8000000000| (index<<3))<<9);
-	}
-	index = (0x01ff & (virt >> 12 ));
-	table [index] = (phys & 0xffffffffff000)|flags;
-	return virt+ PAGESIZE;
+uint64_t map_page_COW (uint64_t phys, uint64_t virt, uint64_t flags){
+	index = (0x01ff & (virt>> 12));
+	vitr &= 0xffffffffffe00000;
+	uint64_t* table = (uint64_t*)(((virt | 0xffffff8000000000) & 0xffffff7fffffffff)>>9);
+	table[index] = phys| flags;	
 }
 
-
 void do_COW(pcb* proc, uint64_t v_addr){
-	uint64_t prev_cr3 = _read_cr3();
-	_set_cr3(proc->pml4);
 	mem_page* pg = get_free_page();
-	map_page_COW (pg->base, v_addr, USER_ACCESSIBLE|READ_WRITE|PRESENT, proc-> pid);
-	_set_cr3(prev_cr3);
+	vma_register_page(pg, proc->pid);
+	map_page_COW (pg->base, v_addr, USER_ACCESSIBLE|READ_WRITE|PRESENT);
 }
 
 void handle_COW(uint64_t address){
-	pcb* parent;
-	pcb* child;
 	pcb* proc = get_active_pcb();
 	if (proc-> ppid == 0){	
 		// TODO : what about multiple forks?
+		pcb* child;
 		child = find_pcb_by_ppid(proc->pid);
 		if (child == NULL){
 			cross_off_COW(proc, address);
 			return;
 		}
-		do_COW(proc, address);
-		cross_off_COW(proc, address);
-		cross_off_COW(child, address);
 	}
 	else{
+		pcb* parent;
 		parent = find_pcb_by_pid(proc->ppid);
 		if (parent == NULL){
 			cross_off_COW(parent, address);
 			return;
 		}
-		do_COW(parent, address);
-		cross_off_COW(proc, address);
-		cross_off_COW(parent, address);
 	}
+	do_COW(proc, address);
+	cross_off_COW(address);
 }
 
 
-
+void mark_fork_cross_entry(uint64_t parent_pml4, uint64_t child_pml4){
+	uint64_t* table = (uint64_t*)(0xffffff7fbfdfe000);
+	table[509] = child_pml4;
+	table = (uint64_t*)(0xffffff7fbfdfd000);
+	table[509] = parent_pml4;
+}

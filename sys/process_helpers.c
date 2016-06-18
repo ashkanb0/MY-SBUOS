@@ -108,9 +108,10 @@ pcb* _get_new_pcb(){
 
 pcb* get_forked_pcb(pcb* parent){
 	pcb* child = _get_new_pcb();
-	mark_COW();
-	child -> ppid = parent -> pid;
 	child -> pml4 = get_new_page_table();
+	mark_fork_cross_entry( parent-> pml4 , child->pml4);
+	mark_COW(child->pid);
+	child -> ppid = parent -> pid;
 	child -> status = RUNNING;
 	child -> user_brk_point = parent -> user_brk_point;
 	child -> user_sp = parent -> user_sp;
