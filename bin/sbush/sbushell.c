@@ -81,12 +81,12 @@ int do_command(char* command){
 	// printf("HEREEEEE 3\n");
 	char ** envp = get_envp();
 	int pid = fork();
-	printf("PID: '%d''%x'\n", pid, pid);
+	// printf("PID: '%d''%x'\n", pid, pid);
 	if(pid){
 			if(bg==0){
 				// printf("WAITING!\n" );
 				waitpid(pid, &last_command_status, 0);
-				printf("here after wait: %x\n", last_command_status );
+				// printf("here after wait: %x\n", last_command_status );
 				return last_command_status;
 			}
 			return 0;
