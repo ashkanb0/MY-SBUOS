@@ -391,7 +391,7 @@ void handle_COW(uint64_t address){
 
 void mark_fork_cross_entry(uint64_t parent_pml4, uint64_t child_pml4){
 	uint64_t* table = (uint64_t*)(0xffffff7fbfdfe000);
-	table[509] = child_pml4;
+	table[509] =  child_pml4 | READ_WRITE| PRESENT| USER_ACCESSIBLE;
 	table = (uint64_t*)(0xffffff7fbfdfd000);
-	table[509] = parent_pml4;
+	table[509] = parent_pml4 | READ_WRITE| PRESENT| USER_ACCESSIBLE;
 }
