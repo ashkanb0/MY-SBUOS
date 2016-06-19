@@ -49,7 +49,7 @@ void free(void *ptr){
 pid_t fork(void){
 	uint64_t res = syscall_0(SYS_fork);
 	printf("return from fork: %d\n", res);
-	return res
+	return res;
 }
 pid_t getpid(void){
 	return syscall_0(SYS_getpid);
