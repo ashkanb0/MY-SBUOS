@@ -47,7 +47,10 @@ uint64_t do_read (uint64_t fd, uint64_t buffer, uint64_t size){
 }
 
 uint64_t _return_from_fork_child(){
-	return 0;
+	__asm__ volatile(
+		"movq $0, %%eax\n\t"
+		"iretq\n\t"
+		);
 }
 
 uint64_t do_fork(){
