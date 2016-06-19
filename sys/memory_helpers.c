@@ -355,7 +355,7 @@ void map_page_COW (uint64_t phys, uint64_t virt, uint64_t flags){
 	uint64_t index = (0x01ff & (virt>> 12));
 	virt &= 0xffffffffffe00000;
 	virt |= 0xffff000000000000;
-	virt &= 0xfffe000000000000;
+	virt &= 0xfffeffffffffffff;
 	uint64_t* table = (uint64_t*)( (virt>>9)| 0xffffff8000000000);
 	table[index] = phys| flags;
 	index = table[index];
