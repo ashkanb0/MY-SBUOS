@@ -368,7 +368,7 @@ void handle_COW(uint64_t address){
 		pcb* child;
 		child = find_pcb_by_ppid(proc->pid);
 		if (child == NULL){
-			cross_off_COW(proc, address);
+			cross_off_COW(address);
 			return;
 		}
 	}
@@ -376,7 +376,7 @@ void handle_COW(uint64_t address){
 		pcb* parent;
 		parent = find_pcb_by_pid(proc->ppid);
 		if (parent == NULL){
-			cross_off_COW(parent, address);
+			cross_off_COW(address);
 			return;
 		}
 	}
