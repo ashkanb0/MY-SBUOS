@@ -322,7 +322,10 @@ vod _do_mark_COW(uint64_t* table_p, uint64_t* table_c, int pid, int lvl){
 		mem_page* next_lvl_page = get_free_page();
 		vma_register_page(next_lvl_page, pid);
 		table_c[i] = ((uint64_t)next_lvl_page->base|PRESENT|READ_WRITE|USER_ACCESSIBLE);
-		_do_mark_COW((uint64_t*)((((uint64_t)(table))|0xffffff8000000000| (i<<3))<<9), lvl - 1);
+		_do_mark_COW(
+			(uint64_t*)((((uint64_t)(table_p))|0xffffff8000000000| (i<<3))<<9),
+			(uint64_t*)((((uint64_t)(table_c))|0xffffff8000000000| (i<<3))<<9),
+			lvl - 1);
 	}
 }
 
