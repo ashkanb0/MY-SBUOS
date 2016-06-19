@@ -332,7 +332,7 @@ void mark_COW(int pid){
 }
 
 void cross_off_COW(uint64_t virt){
-	index = (0x01ff & (virt>> 12));
+	uint64_t index = (0x01ff & (virt>> 12));
 	virt &= 0xffffffffffe00000;
 	uint64_t* table = (uint64_t*)(((virt | 0xffffff8000000000) & 0xffffff7fffffffff)>>9);
 	table[index] &= (~COW);
@@ -349,7 +349,7 @@ void cross_off_COW(uint64_t virt){
 char temp_page [PAGESIZE];
 
 void map_page_COW (uint64_t phys, uint64_t virt, uint64_t flags){
-	index = (0x01ff & (virt>> 12));
+	uint64_t index = (0x01ff & (virt>> 12));
 	virt &= 0xffffffffffe00000;
 	uint64_t* table = (uint64_t*)(((virt | 0xffffff8000000000) & 0xffffff7fffffffff)>>9);
 	table[index] = phys| flags;
