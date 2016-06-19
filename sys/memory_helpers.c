@@ -302,7 +302,7 @@ void setup_paging(
 
 }
 
-vod _do_mark_COW(uint64_t* table_p, uint64_t* table_c, int pid, int lvl){
+void _do_mark_COW(uint64_t* table_p, uint64_t* table_c, int pid, int lvl){
 	if (lvl==1){
 		for (int i = 0; i < 512; ++i)
 		{
