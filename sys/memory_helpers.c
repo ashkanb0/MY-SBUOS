@@ -335,30 +335,46 @@ void mark_COW(int pid){
 }
 
 void cross_off_COW(uint64_t virt){
-	uint64_t index = (0x01ff & (virt>> 12));
-	virt &= 0xffffffffffe00000;
-	uint64_t* table = (uint64_t*)(((virt | 0xffffff8000000000) & 0xffffff7fffffffff)>>9);
-	table[index] &= (~COW);
-	table[index] |= READ_WRITE;
-
-	table = (uint64_t*)(0xffffff7fbfdfe000);
-	if (table[509]==0)return;
-
-	table = (uint64_t*)(((virt | 0xffffff8000000000) & 0xfffffe7fffffffff)>>9);
-	table[index] &= (~COW);
-	table[index] |= READ_WRITE;
-}
-
-char temp_page [PAGESIZE];
-
-void map_page_COW (uint64_t phys, uint64_t virt, uint64_t flags){
-	// uint64_t index = (0x01ff & (virt>> 12));
+	uint64_t temp;
 	virt &= 0xfffffffffffff000;
 	virt |= 0xffff000000000000;
 	virt &= 0xfffeffffffffffff;
 	uint64_t* ptr = (uint64_t*)( (virt>>9)| 0xffff000000000000);
+	
+
+	ptr = (uint64_t*)(0xffffff7fbfdfe000);
+	if (ptr[509]==0)return;
+
+	virt &= 0xfffdffffffffffff;
+	ptr = (uint64_t*)( (virt>>9)| 0xffff000000000000);
+
+	temp = *ptr;
+	temp &= (~COW);
+	temp |= READ_WRITE;
+	*ptr = temp;
+}
+
+char temp_page [PAGESIZE];
+
+void map_page_COW (uint64_t phys, uint64_t v_addr, uint64_t flags){
+	uint64_t virt = v_addr;
+
+	virt &= 0xfffffffffffff000;
+
+	char* temp_ptr = (char*)(virt);
+	for (int i = 0; i < PAGESIZE; ++i)
+		temp_page[i] = temp_ptr[i];
+
+	virt |= 0xffff000000000000;
+	virt &= 0xfffeffffffffffff;
+	uint64_t* ptr = (uint64_t*)( (virt>>9)| 0xffff000000000000);
 	*ptr = phys| flags;
-	// index = ptr[index];
+
+	virt = v_addr & 0xfffffffffffff000;
+	temp_ptr = (char*)(virt);
+	for (int i = 0; i < PAGESIZE; ++i)
+		temp_ptr[i] = temp_page[i];
+
 }
 
 void do_COW(pcb* proc, uint64_t v_addr){
