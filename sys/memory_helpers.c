@@ -325,7 +325,7 @@ void _do_mark_COW(uint64_t* table_p, uint64_t* table_c, int pid, int lvl){
 		_do_mark_COW(
 			(uint64_t*)((((uint64_t)(table_p))|0xffffff8000000000| (i<<3))<<9),
 			(uint64_t*)((((uint64_t)(table_c))|0xffffff8000000000| (i<<3))<<9),
-			lvl - 1);
+			pid, lvl - 1);
 	}
 }
 
@@ -344,7 +344,7 @@ void cross_off_COW(uint64_t virt){
 	table = (uint64_t*)(0xffffff7fbfdfe000);
 	if (table[509]==0)return;
 
-	uint64_t* table = (uint64_t*)(((virt | 0xffffff8000000000) & 0xfffffe7fffffffff)>>9);
+	table = (uint64_t*)(((virt | 0xffffff8000000000) & 0xfffffe7fffffffff)>>9);
 	table[index] &= (~COW);
 	table[index] |= READ_WRITE;
 }
