@@ -131,6 +131,7 @@ void int_pgflt_srv(exception_stack stack){
 		// return;
 	}
 	if(error==7){
+		printf("(page fault - COW):%x, %x\n", address, error);
 		handle_COW(address);
 		return;
 	}
