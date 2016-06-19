@@ -51,6 +51,7 @@ uint64_t _return_from_fork_child(){
 		"movq $0, %%eax\n\t"
 		"iretq\n\t"
 		);
+	return 0;
 }
 
 uint64_t do_fork(){
