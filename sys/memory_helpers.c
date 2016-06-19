@@ -353,8 +353,8 @@ char temp_page [PAGESIZE];
 
 void map_page_COW (uint64_t phys, uint64_t virt, uint64_t flags){
 	uint64_t index = (0x01ff & (virt>> 12));
-	virt &= 0xffffffffffe00000;
-	uint64_t* table = (uint64_t*)(((virt | 0xffffff8000000000) & 0xffffff7fffffffff)>>9);
+	virt &= 0x0000ff7fffe00000;
+	uint64_t* table = (uint64_t*)( (virt>>9)| 0xffffff8000000000);
 	table[index] = phys| flags;
 	index = table[index];
 }
