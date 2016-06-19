@@ -46,13 +46,13 @@ uint64_t do_read (uint64_t fd, uint64_t buffer, uint64_t size){
 	return (uint64_t)NULL;
 }
 
-uint64_t _return_from_fork_child(){
-	__asm__ volatile(
-		"movq $0, %%rax\n\t"
-		"iretq\n\t"
-		);
-	return 0;
-}
+// uint64_t _return_from_fork_child(){
+// 	__asm__ volatile(
+// 		"movq $0, %%rax\n\t"
+// 		"iretq\n\t"
+// 		);
+// 	return 0;
+// }
 
 uint64_t do_fork(){
 	pcb* proc = get_active_pcb();
@@ -74,7 +74,7 @@ uint64_t do_fork(){
 	
 	child->kernel_sp +=4;
 	child->kernel_sp --;
-	*(child->kernel_sp) = (uint64_t)(_return_from_fork_child);
+	*(child->kernel_sp) = (uint64_t)(fork_return_from_child);
 	child->kernel_sp --;
 	*(child->kernel_sp) = 0;
 
