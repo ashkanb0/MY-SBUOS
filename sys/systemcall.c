@@ -72,7 +72,7 @@ uint64_t do_fork(){
 	
 	child -> kernel_sp = (uint64_t*)(child -> kernel_stack + rsp - proc->kernel_stack);
 	
-	child->kernel_sp +=12;
+	child->kernel_sp += 12;
 	child->kernel_sp --;
 	*(child->kernel_sp) = (uint64_t)(fork_return_from_child);
 	child->kernel_sp --;
@@ -80,7 +80,9 @@ uint64_t do_fork(){
 
 	process_run(child);
 
+	// 0xffffff37fffff000
 	// handle_COW(child -> user_sp);
+	_set_cr3(proc -> pml4);
 	return child->pid;
 }
 
