@@ -33,7 +33,7 @@ uint64_t map_file(char* path, int pid){
 		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
 		uint64_t size = tar_size(p->size);
 		// printf("%s==%s?\n",p->name, path );
-		if(kstrcmp(p->name, path)==0){
+		if(kstrcmp(p->name, path+1)==0){
 
 			if(check_elf((elf_header*)(p+1))){
 				return map_elf((elf_header*)(p+1));
@@ -45,3 +45,25 @@ uint64_t map_file(char* path, int pid){
 	}
 	return 0;
 }
+
+int search_file_for_exec(char* path){
+	uint64_t offset = 0;
+
+	for (; _tar_start + offset<_tar_end ;)
+	{
+		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
+		uint64_t size = tar_size(p->size);
+		// printf("%s==%s?\n",p->name, path );
+		if(kstrcmp(p->name, path+1)==0){
+
+			if(check_elf((elf_header*)(p+1))){
+				return 1;
+			}else{
+				return 0;
+			}
+		}
+		offset += size + sizeof(tarfs_header) + tar_size_roundup(size);
+	}
+	return 0;
+}
+

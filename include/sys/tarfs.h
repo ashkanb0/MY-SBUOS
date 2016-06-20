@@ -37,5 +37,7 @@ uint64_t tar_size( char* s);
 uint64_t tar_size_roundup( uint64_t);
 uint64_t map_file(char* path, int pid);
 
+int search_file_for_exec(char* path);
+
 
 #endif

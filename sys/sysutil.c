@@ -26,5 +26,39 @@ int kstrcmp(char* s1, char* s2){
 	return 0; 
 }
 
+int kstrstartswith(char* target, char* prefix){
+	for (int i = 0; prefix[i] ; ++i)
+	{
+		if(target[i] != prefix[i])return 0;
+	}
+	return 1;
+}
 
+int kstrcat(char* st1, char* st2, char* buffer, int size){
+	int i;
+	for (i = 0; st1[i]; ++i)
+		buffer[i] = st1[i];
+	for (int j = 0; st2[j]; ++i,++j)
+		buffer[i] = st2[j];
+	buffer[i] = '\0';
+	return 0;
+}
+
+int cleanup_path(char* buffer, int size){
+	// TODO:
+	return 0;
+}
+
+int path_merge(char* base, char* relative, char* buffer, int size){
+	if(kstrstartswith(relative, "/")){
+		kstrcpy(buffer, relative+1, size);
+		return cleanup_path(buffer, size);
+	}
+	if(kstrstartswith(relative, "./")){
+		kstrcat(base, relative+2, buffer, size);
+		return cleanup_path(buffer, size);
+	}
+	kstrcat(base, relative, buffer, size);
+	return cleanup_path(buffer, size);
+}
 

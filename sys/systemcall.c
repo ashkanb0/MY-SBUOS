@@ -1,6 +1,7 @@
 #include <sys/systemcall.h>
 #include <sys/syscall.h>
 #include <sys/sysutil.h>
+#include <sys/tarfs.h>
 #include <sys/process_helpers.h>
 #include <sys/memory_helpers.h>
 
@@ -95,6 +96,17 @@ uint64_t do_waitpid (uint64_t pid, uint64_t status_return, uint64_t options){
 	return 0;
 }
 
+char abspath[100];
+uint64_t do_execve (uint64_t filename, uint64_t argv, uint64_t envp){
+	pcb* proc = get_active_pcb();
+	path_merge(proc->wd, (char*)filename, abspath, 100);
+
+	if (search_file_for_exec(abspath)){
+		return process_exec(proc, abspath);
+	}
+	return 1;
+}
+
 
 uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uint64_t arg3){
 	
@@ -114,6 +126,8 @@ uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uin
 		case SYS_fork : res = do_fork();
 						break;
 		case SYS_wait4 : res = do_waitpid(arg1, arg2, arg3);
+						break;
+		case SYS_execve : res = do_execve(arg1, arg2, arg3);
 						break;
 		default : printf("SYSCALL NOT IMPLEMENTED: %d, 0x%x\n (0x%x, 0x%x, 0x%x)",
 						 syscall_code, syscall_code, arg1, arg2, arg3);

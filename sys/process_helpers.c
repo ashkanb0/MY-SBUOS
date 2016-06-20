@@ -103,6 +103,10 @@ pcb* _get_new_pcb(){
 	res -> waiting_on_pid = 0;
 
 	res -> pml4 = get_new_page_table();
+	
+	res -> user_brk_point = 0x0000700000000000;
+	res -> user_sp = 0x00006FFFFFFFFFF0;
+	
 	return res;
 }
 
@@ -128,8 +132,6 @@ void prepare_user_memory(pcb* process){
 
 	process -> ip = map_file(process->pname, process->pid);
 
-	process -> user_brk_point = 0x0000700000000000;
-	process -> user_sp = 0x00006FFFFFFFFFF0;
 	*((uint64_t*)(process-> user_sp)-1) = 0;
 
 	process -> status = RUNNING;
@@ -184,7 +186,7 @@ void init(){
 
 	pcb* shell = _get_new_pcb();
 
-	kstrcpy(shell -> pname, "bin/sbush", 50);
+	kstrcpy(shell -> pname, "/bin/sbush", 50);
 	kstrcpy(shell -> wd, "/", 50);
 	shell->status = READY;
 	shell->kernel_sp --;
@@ -211,4 +213,16 @@ void schedule(){
 
 void process_run(pcb* proc){
 	enqueue_process(&processq, proc);
+}
+
+
+int process_exec(pcb* proc, char* path){
+	kstrcpy(proc -> pname, path	, 50);
+	proc->status = READY;
+	proc->kernel_sp --;
+	*(proc->kernel_sp) = (uint64_t)(k_thread_kernel);
+	proc->kernel_sp --;
+	*(proc->kernel_sp) = 0;
+	schedule();
+	return -1;
 }

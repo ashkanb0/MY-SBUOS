@@ -54,5 +54,7 @@ void process_run(pcb* proc);
 pcb* find_pcb_by_ppid(int ppid);
 pcb* find_pcb_by_pid(int pid);
 
+int process_exec(pcb* proc, char* abspath);
+
 
 #endif
