@@ -80,7 +80,7 @@ uint64_t do_fork(){
 
 	process_run(child);
 
-	handle_COW(child -> user_sp);
+	// handle_COW(child -> user_sp);
 	return child->pid;
 }
 
