@@ -81,7 +81,7 @@ int do_command(char* command){
 	// printf("HEREEEEE 3\n");
 	char ** envp = get_envp();
 	int pid = fork();
-	// printf("PID: '%d''%x'\n", pid, pid);
+	printf("PID: '%d''%x'\n", pid, pid);
 	if(pid){
 			if(bg==0){
 				// printf("WAITING!\n" );
@@ -91,6 +91,7 @@ int do_command(char* command){
 			}
 			return 0;
 	}else{
+		printf("ELSE?\n");
 		if (command[0] == '.' || command[0] == '/' ){
 			execve(argv[0], argv, envp);
 			str_free_splitted_list(argv);
@@ -98,6 +99,7 @@ int do_command(char* command){
 			exit(1);
 		}
 
+		printf("ELSE2\n");
 		// do we have to do this?
 		// strcat(".:",get_path(), active_path, PATH_LEN);
 		char** path_list = strsplit(get_path(), ':');
@@ -112,7 +114,7 @@ int do_command(char* command){
 			char* temp = argv[0];
 
 			argv[0] = joined_filename;
-			// printf("going to execute: >%s<\n", argv[0]);
+			printf("going to execute: >%s<\n", argv[0]);
 			execve(argv[0], argv, envp);
 			argv[0] = temp;
 			// TODO: uncomment after fixed get_envp;
