@@ -144,16 +144,16 @@ int do_command(char* command_input){
 
 
 void make_prompt(){
-	printf("folan\n");
+	// printf("folan\n");
 	getcwd(cwd, DIR_NAME_LEN);
 	itoa(status_str, last_command_status);
 	
-	printf("folan\n");
+	// printf("folan\n");
 	getusrnm(user_name_str, 30);
-	printf("folan\n");
+	// printf("folan\n");
 
 	get_formatted_prompt(prompt, cwd, status_str, user_name_str);
-	printf("folan\n");
+	// printf("folan\n");
 	
 
 }
@@ -166,7 +166,7 @@ int main(int argc, char* argv[], char* envp[]) {
 	// printf("PARSED IT\n");
 
 	while(!exit_yet){
-		printf("filan\n");
+		// printf("filan\n");
 		make_prompt();
 		readline(buffer, prompt);
 		if(process_command(buffer)){
