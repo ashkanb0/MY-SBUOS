@@ -133,10 +133,14 @@ void int_pgflt_srv(exception_stack stack){
 	if(error==7){
 		// printf("(page fault - COW):%x, %x\n", address, error);
 		handle_COW(address);
+		_set_cr3(get_active_pcb()->pml4);
 		return;
 	}
-	if((error&5)==0 || (error&5)==4) // PAGE NOT MAPPED
+	if((error&5)==0 || (error&5)==4){
+		// PAGE NOT MAPPED
 		add_physical_page_in(address);
+		_set_cr3(get_active_pcb()->pml4);
+	}
 	else{
 		printf("(page fault - not handled):%x, %x\n", address, error);
 		while(1);
