@@ -82,6 +82,7 @@ int do_command(char* command){
 	char ** envp = get_envp();
 	int pid = fork();
 	printf("PID: '%d''%x'\n", pid, pid);
+	log_argv(argv);
 	if(pid){
 			if(bg==0){
 				// printf("WAITING!\n" );
