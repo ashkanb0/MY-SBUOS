@@ -64,9 +64,9 @@ int do_command(char* command){
 	// printf("HEREEEEE 2\n");
 	char ** argv = strsplit(command, ' ');
 
-	log_argv(argv);
+	// log_argv(argv);
 	process_argv(argv);
-	log_argv(argv);
+	// log_argv(argv);
 
 	int pos = strsearch(argv[0], '=');
 	if (pos!=-1){
@@ -82,9 +82,15 @@ int do_command(char* command){
 	char ** envp = get_envp();
 	int pid = fork();
 	printf("PID: '%d''%x'\n", pid, pid);
-	printf("command = >%s<\n", command);
-	printf("command = >0x%x<\n", (uint64_t)command);
-	log_argv(argv);
+	// printf("command = >%s<\n", command);
+	printf("stack  >0x%x<\n", (uint64_t)command-48);
+	printf("stack  >0x%x<\n", (uint64_t)command-32);
+	printf("stack  >0x%x<\n", (uint64_t)command-16);
+	printf("stack ->0x%x<\n", (uint64_t)command);
+	printf("stack  >0x%x<\n", (uint64_t)command+16);
+	printf("stack  >0x%x<\n", (uint64_t)command+32);
+	printf("stack  >0x%x<\n", (uint64_t)command+48);
+	// log_argv(argv);
 	if(pid){
 			if(bg==0){
 				// printf("WAITING!\n" );
