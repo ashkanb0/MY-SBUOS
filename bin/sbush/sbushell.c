@@ -28,6 +28,12 @@ int last_command_status = 0;
 char status_str [15];
 char user_name_str [30];
 
+char* command = NULL;
+char** argv;
+char** envp;
+char bg;
+int l;
+
 int process_command(char* command){
 	int newlind = strsearch(command, '\n');
 	// printf("command is: >%s<\n", command);
@@ -38,9 +44,6 @@ int process_command(char* command){
 	return 0;
 }
 
-char* command = NULL;
-char** argv;
-char** envp;
 
 int do_command(char* command_input){
 
@@ -61,8 +64,8 @@ int do_command(char* command_input){
 		return 0;
 	}
 
-	char bg = 0;
-	int l = strlen(command);
+	bg = 0;
+	l = strlen(command);
 	if(command[l-1]=='&'){
 		bg = 1;
 		command[l-1]=0;
