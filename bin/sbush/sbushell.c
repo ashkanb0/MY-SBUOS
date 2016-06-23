@@ -83,13 +83,13 @@ int do_command(char* command){
 	int pid = fork();
 	printf("PID: '%d''%x'\n", pid, pid);
 	// printf("command = >%s<\n", command);
-	printf("stack  >0x%x<\n", (uint64_t)command-48);
-	printf("stack  >0x%x<\n", (uint64_t)command-32);
-	printf("stack  >0x%x<\n", (uint64_t)command-16);
-	printf("stack ->0x%x<\n", (uint64_t)command);
-	printf("stack  >0x%x<\n", (uint64_t)command+16);
-	printf("stack  >0x%x<\n", (uint64_t)command+32);
-	printf("stack  >0x%x<\n", (uint64_t)command+48);
+	printf("stack  >0x%x<\n", *((uint64_t*)command-48));
+	printf("stack  >0x%x<\n", *((uint64_t*)command-32));
+	printf("stack  >0x%x<\n", *((uint64_t*)command-16));
+	printf("stack ->0x%x<\n", *((uint64_t*)command));
+	printf("stack  >0x%x<\n", *((uint64_t*)command+16));
+	printf("stack  >0x%x<\n", *((uint64_t*)command+32));
+	printf("stack  >0x%x<\n", *((uint64_t*)command+48));
 	// log_argv(argv);
 	if(pid){
 			if(bg==0){
