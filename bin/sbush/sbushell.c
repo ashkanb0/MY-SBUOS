@@ -97,7 +97,7 @@ int do_command(char* command){
 	// log_argv(argv);
 	uint64_t rsp = 0;
 	__asm__ volatile("movq %%rsp, %0":"=r"(rsp):);
-	printf("shell: rsp : >%x<\n", );
+	printf("shell: rsp : >%x<\n", rsp);
 	if(pid){
 			if(bg==0){
 				// printf("WAITING!\n" );
