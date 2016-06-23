@@ -2,6 +2,7 @@
 #include <sys/syscall.h>
 #include <sys/sysutil.h>
 #include <sys/tarfs.h>
+#include <sys/vma.h>
 #include <sys/process_helpers.h>
 #include <sys/memory_helpers.h>
 
@@ -107,6 +108,15 @@ uint64_t do_execve (uint64_t filename, uint64_t argv, uint64_t envp){
 	return 1;
 }
 
+uint64_t do_exit(uint64_t status){
+	pcb* proc = get_active_pcb();
+	proc -> status = FINISHED;
+	notify_exit_pid (proc-> pid, status);
+	vma_free_pages (proc -> pid);
+	schedule();
+	return -1;
+}
+
 
 uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uint64_t arg3){
 	
@@ -128,6 +138,8 @@ uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uin
 		case SYS_wait4 : res = do_waitpid(arg1, arg2, arg3);
 						break;
 		case SYS_execve : res = do_execve(arg1, arg2, arg3);
+						break;
+		case SYS_exit : res = do_exit(arg1);
 						break;
 		default : printf("SYSCALL NOT IMPLEMENTED: %d, 0x%x\n (0x%x, 0x%x, 0x%x)",
 						 syscall_code, syscall_code, arg1, arg2, arg3);

@@ -27,7 +27,7 @@ uint64_t map_elf(elf_header* header){
 	{
 		elf_pheader* phdr= (elf_pheader*) p_base;
 
-		printf("p_memsz: %x, p_filesz: %x, p_vaddr: %x\n", phdr->p_memsz, phdr ->p_filesz, phdr->p_vaddr);
+		// printf("p_memsz: %x, p_filesz: %x, p_vaddr: %x\n", phdr->p_memsz, phdr ->p_filesz, phdr->p_vaddr);
 		mem_map_file(elf_base + (phdr->p_offset), phdr->p_vaddr, phdr->p_memsz, phdr ->p_filesz);
 
 		p_base += header->e_phentsize;

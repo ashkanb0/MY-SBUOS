@@ -1,7 +1,11 @@
 #include <sys/vma.h>
 
 
-void vma_register_page(mem_page* page, uint64_t pid){
+void vma_register_page(mem_page* page, int pid){
+	// TODO :
+}
+
+void vma_free_pages(int pid){
 	// TODO :
 }
 

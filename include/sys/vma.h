@@ -6,8 +6,9 @@
 
 
 
-void vma_register_page(mem_page* page, uint64_t pid);
+void vma_register_page(mem_page* page, int pid);
 void mem_map_file(uint64_t paddr, uint64_t vaddr, uint64_t memsz, uint64_t filesz);
 
+void vma_free_pages(int pid);
 
 #endif

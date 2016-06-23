@@ -28,11 +28,21 @@ void notify_stdin(){
 		pcb* proc = processq.list[ptr];
 		if (proc->status==WAITING && proc-> waiting_on_stdin){
 			proc -> waiting_on_stdin = 0;
-			// TODO : if not waiting on pid;
 			proc -> status = RUNNING;
 		}
 	}
 }
+void notify_exit_pid(int pid, uint64_t status){
+	for(uint32_t ptr = processq.head; ptr!= processq.tail; ptr = (ptr+1)%PROCESS_QUEUE_SIZE){
+		pcb* proc = processq.list[ptr];
+		if (proc->status==WAITING && proc-> waiting_on_pid == pid){
+			proc -> waiting_on_pid = 0;
+			proc -> exit_notify_status = status;
+			proc -> status = RUNNING;
+		}
+	}	
+}
+
 
 pcb* find_pcb_by_ppid(int ppid){
 	for(uint32_t ptr = processq.head; ptr!= processq.tail; ptr = (ptr+1)%PROCESS_QUEUE_SIZE){
