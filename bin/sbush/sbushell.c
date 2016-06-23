@@ -73,15 +73,6 @@ int do_command(char* command_input){
 	process_argv(argv);
 	log_argv(argv);
 
-	int pos = strsearch(argv[0], '=');
-	if (pos!=-1){
-		char* var_and_val [2];
-		str_split_line(argv[0], pos, var_and_val);
-		var_set(var_and_val[0], var_and_val[1]);
-		free(var_and_val[0]);
-		free( var_and_val[1]);
-		return 0;
-	}
 
 	// printf("HEREEEEE 3\n");
 	char ** envp = get_envp();
@@ -92,6 +83,15 @@ int do_command(char* command_input){
 	log_argv(argv);
 
 	if(pid){
+			int pos = strsearch(argv[0], '=');
+			if (pos!=-1){
+				char* var_and_val [2];
+				str_split_line(argv[0], pos, var_and_val);
+				var_set(var_and_val[0], var_and_val[1]);
+				free(var_and_val[0]);
+				free( var_and_val[1]);
+				return 0;
+			}
 			if(bg==0){
 				// printf("WAITING!\n" );
 				waitpid(pid, &last_command_status, 0);
