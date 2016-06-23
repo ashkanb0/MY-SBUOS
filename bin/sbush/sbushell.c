@@ -64,9 +64,9 @@ int do_command(char* command){
 	// printf("HEREEEEE 2\n");
 	char ** argv = strsplit(command, ' ');
 
-	// log_argv(argv);
+	log_argv(argv);
 	process_argv(argv);
-	// log_argv(argv);
+	log_argv(argv);
 
 	int pos = strsearch(argv[0], '=');
 	if (pos!=-1){
