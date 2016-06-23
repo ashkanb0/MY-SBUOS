@@ -213,6 +213,7 @@ int get_formatted_prompt(char* buffer, char* cwd, char* status_str, char* userna
 	int format_index = 0;
 
 	char* ps1 = var_find("PS1")->varval;
+	printf("ps1: >%s<\n", ps1);
 
 	for(;format_index< strlen(ps1); format_index++){
 		if (ps1[format_index]=='\\'){
