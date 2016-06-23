@@ -75,7 +75,7 @@ int do_command(char* command_input){
 	argv = strsplit(command, ' ');
 
 	// log_argv(argv);
-	log_argv(argv);
+	// log_argv(argv);
 
 	int pos = strsearch(argv[0], '=');
 	if (pos!=-1){
@@ -90,11 +90,11 @@ int do_command(char* command_input){
 	// printf("HEREEEEE 3\n");
 	envp = get_envp();
 	int pid = fork();
-	printf("PID: '%d''%x'\n", pid, pid);
-	printf("cmmnd x>0x%x<\n", (uint64_t)command);
-	printf("cmmnd s>%s<\n", command);
+	// printf("PID: '%d''%x'\n", pid, pid);
+	// printf("cmmnd x>0x%x<\n", (uint64_t)command);
+	// printf("cmmnd s>%s<\n", command);
 
-	log_argv(argv);
+	// log_argv(argv);
 	if(pid){
 			if(bg==0){
 				// printf("WAITING!\n" );
@@ -119,7 +119,7 @@ int do_command(char* command_input){
 		
 		// _log_list(path_list);
 
-		printf("preparing to execute: >%s<\n", argv[0]);
+		// printf("preparing to execute: >%s<\n", argv[0]);
 		for (int i=0; path_list[i]; i++)
 		{
 			char* path_elem = path_list[i];
@@ -128,7 +128,7 @@ int do_command(char* command_input){
 			char* temp = argv[0];
 
 			argv[0] = joined_filename;
-			printf("going to execute: >%s<\n", argv[0]);
+			// printf("going to execute: >%s<\n", argv[0]);
 			execve(argv[0], argv, envp);
 			argv[0] = temp;
 			// TODO: uncomment after fixed get_envp;
