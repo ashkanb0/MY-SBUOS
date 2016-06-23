@@ -71,7 +71,7 @@ int do_command(char* command_input){
 
 	// log_argv(argv);
 	process_argv(argv);
-	// log_argv(argv);
+	log_argv(argv);
 
 	int pos = strsearch(argv[0], '=');
 	if (pos!=-1){
@@ -89,6 +89,7 @@ int do_command(char* command_input){
 	printf("PID: '%d''%x'\n", pid, pid);
 	printf("cmmnd x>0x%x<\n", (uint64_t)command);
 	printf("cmmnd s>%s<\n", command);
+	log_argv(argv);
 
 	if(pid){
 			if(bg==0){
