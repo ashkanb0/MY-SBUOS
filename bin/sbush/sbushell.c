@@ -24,7 +24,7 @@ char prompt [BUFFERSIZE];
 char buffer [BUFFERSIZE];
 char cwd [DIR_NAME_LEN];
 char joined_filename [DIR_NAME_LEN];
-int last_command_status = 0;
+uint64_t last_command_status = 0;
 char status_str [15];
 char user_name_str [30];
 
