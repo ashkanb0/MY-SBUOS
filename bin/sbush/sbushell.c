@@ -83,6 +83,7 @@ int do_command(char* command){
 	int pid = fork();
 	printf("PID: '%d''%x'\n", pid, pid);
 	printf("command = >%s<\n", command);
+	printf("command = >0x%x<\n", (uint64_t)command);
 	log_argv(argv);
 	if(pid){
 			if(bg==0){
