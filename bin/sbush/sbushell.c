@@ -83,21 +83,18 @@ int do_command(char* command){
 	int pid = fork();
 	printf("PID: '%d''%x'\n", pid, pid);
 	printf("cmmnd =>0x%x<\n", (uint64_t)command);
-	// printf("command = >%s<\n", command);
-	// printf("stack  >0x%x<\n", *((uint64_t*)command-48));
-	// printf("stack  >0x%x<\n", *((uint64_t*)command-32));
-	// printf("stack  >0x%x<\n", *((uint64_t*)command-16));
-	// printf("stack ->0x%x<\n", *((uint64_t*)command));
-	// printf("stack  >0x%x<\n", *((uint64_t*)command+16));
-	// printf("stack  >0x%x<\n", *((uint64_t*)command+32));
-	// printf("stack  >0x%x<\n", *((uint64_t*)command+48));
-	// printf("stack  >0x%x<\n", *((uint64_t*)command+48+16));
-	// printf("stack  >0x%x<\n", *((uint64_t*)command+48+32));
-	// printf("stack  >0x%x<\n", *((uint64_t*)command+48+48));
-	// log_argv(argv);
 	uint64_t rsp = 0;
 	__asm__ volatile("movq %%rsp, %0":"=r"(rsp):);
 	printf("shell: rsp : >%x<\n", rsp);
+	printf("stack [0] >0x%x<\n", ((uint64_t*)rsp)[0]);
+	printf("stack [1] >0x%x<\n", ((uint64_t*)rsp)[1]);
+	printf("stack [2] >0x%x<\n", ((uint64_t*)rsp)[2]);
+	printf("stack [3] >0x%x<\n", ((uint64_t*)rsp)[3]);
+	printf("stack [4] >0x%x<\n", ((uint64_t*)rsp)[4]);
+	printf("stack [5] >0x%x<\n", ((uint64_t*)rsp)[5]);
+	printf("stack [6] >0x%x<\n", ((uint64_t*)rsp)[6]);
+	printf("stack [7] >0x%x<\n", ((uint64_t*)rsp)[7]);
+	printf("stack [8] >0x%x<\n", ((uint64_t*)rsp)[8]);
 	if(pid){
 			if(bg==0){
 				// printf("WAITING!\n" );
