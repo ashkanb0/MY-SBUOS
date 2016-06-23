@@ -87,14 +87,17 @@ int do_command(char* command){
 	// printf("stack  >0x%x<\n", *((uint64_t*)command-48));
 	// printf("stack  >0x%x<\n", *((uint64_t*)command-32));
 	// printf("stack  >0x%x<\n", *((uint64_t*)command-16));
-	printf("stack ->0x%x<\n", *((uint64_t*)command));
-	printf("stack  >0x%x<\n", *((uint64_t*)command+16));
-	printf("stack  >0x%x<\n", *((uint64_t*)command+32));
-	printf("stack  >0x%x<\n", *((uint64_t*)command+48));
-	printf("stack  >0x%x<\n", *((uint64_t*)command+48+16));
-	printf("stack  >0x%x<\n", *((uint64_t*)command+48+32));
-	printf("stack  >0x%x<\n", *((uint64_t*)command+48+48));
+	// printf("stack ->0x%x<\n", *((uint64_t*)command));
+	// printf("stack  >0x%x<\n", *((uint64_t*)command+16));
+	// printf("stack  >0x%x<\n", *((uint64_t*)command+32));
+	// printf("stack  >0x%x<\n", *((uint64_t*)command+48));
+	// printf("stack  >0x%x<\n", *((uint64_t*)command+48+16));
+	// printf("stack  >0x%x<\n", *((uint64_t*)command+48+32));
+	// printf("stack  >0x%x<\n", *((uint64_t*)command+48+48));
 	// log_argv(argv);
+	uint64_t rsp = 0;
+	__asm__ volatile("movq %%rsp, %0":"=r"(rsp):);
+	printf("shell: rsp : >%x<\n", );
 	if(pid){
 			if(bg==0){
 				// printf("WAITING!\n" );
