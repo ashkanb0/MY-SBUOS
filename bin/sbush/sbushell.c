@@ -99,7 +99,7 @@ int do_command(char* command_input){
 			if(bg==0){
 				// printf("WAITING!\n" );
 				waitpid(pid, &last_command_status, 0);
-				printf("here after wait: %x\n", last_command_status );
+				// printf("here after wait: %x\n", last_command_status );
 				return last_command_status;
 			}
 			return 0;
@@ -144,12 +144,15 @@ int do_command(char* command_input){
 
 
 void make_prompt(){
+	printf("folan\n");
 	getcwd(cwd, DIR_NAME_LEN);
 	itoa(status_str, last_command_status);
 	
+	printf("folan\n");
 	getusrnm(user_name_str, 30);
 
 	get_formatted_prompt(prompt, cwd, status_str, user_name_str);
+	printf("folan\n");
 	
 
 }
