@@ -38,7 +38,12 @@ int process_command(char* command){
 	return 0;
 }
 
-int do_command(char* command){
+char* command = NULL;
+
+int do_command(char* command_input){
+
+	command = command_input;
+
 	if (strprefix("cd ", command)){
 		char* dir = command+ 3;
 		if(chdir(dir)){
