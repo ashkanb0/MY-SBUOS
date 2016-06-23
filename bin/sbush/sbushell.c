@@ -104,7 +104,7 @@ int do_command(char* command){
 			}
 			return 0;
 	}else{
-		printf("ELSE?\n");
+		// printf("ELSE?\n");
 		if (command[0] == '.' || command[0] == '/' ){
 			execve(argv[0], argv, envp);
 			str_free_splitted_list(argv);
@@ -112,14 +112,14 @@ int do_command(char* command){
 			exit(1);
 		}
 
-		printf("ELSE2\n");
+		// printf("ELSE2\n");
 		// do we have to do this?
 		// strcat(".:",get_path(), active_path, PATH_LEN);
 		char** path_list = strsplit(get_path(), ':');
 		
 		// _log_list(path_list);
 
-		printf("preparing to execute: >%s<\n", argv[0]);
+		// printf("preparing to execute: >%s<\n", argv[0]);
 		for (int i=0; path_list[i]; i++)
 		{
 			char* path_elem = path_list[i];
