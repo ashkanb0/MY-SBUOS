@@ -51,7 +51,7 @@ int cleanup_path(char* buffer, int size){
 
 int path_merge(char* base, char* relative, char* buffer, int size){
 	if(kstrstartswith(relative, "/")){
-		kstrcpy(buffer, relative+1, size);
+		kstrcpy(buffer, relative, size);
 		return cleanup_path(buffer, size);
 	}
 	if(kstrstartswith(relative, "./")){
