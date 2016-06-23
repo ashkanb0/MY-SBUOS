@@ -26,37 +26,86 @@ struct pt_regs {
 
 static __inline int64_t syscall_0(uint64_t n) {
 	int64_t res;
-	__asm volatile ("int $0x80"
-		 : "=a" (res)
-		 : "a" (n)
+	__asm volatile (
+		"pushq %%rax\n\t"
+		"pushq %%rdi\n\t"
+		"pushq %%rsi\n\t"
+		"pushq %%rdx\n\t"
+		"movq %1, %%rax\n\t"
+		"int $0x80\n\t"
+		"movq %%rax, %0\n\t"
+		"popq %%rdx\n\t"
+		"popq %%rsi\n\t"
+		"popq %%rdi\n\t"
+		"popq %%rax\n\t"
+		 : "=r" (res)
+		 : "r" (n)
 		 );
 	return res;
 }
 
 static __inline int64_t syscall_1(uint64_t n, uint64_t a1) {
 	int64_t res;
-	__asm volatile ("int $0x80"
-		 : "=a" (res)
-		 : "a" (n), "D" (a1)
+	__asm volatile (
+		"pushq %%rax\n\t"
+		"pushq %%rdi\n\t"
+		"pushq %%rsi\n\t"
+		"pushq %%rdx\n\t"
+		"movq %1, %%rax\n\t"
+		"movq %2, %%rdi\n\t"
+		"int $0x80\n\t"
+		"movq %%rax, %0\n\t"
+		"popq %%rdx\n\t"
+		"popq %%rsi\n\t"
+		"popq %%rdi\n\t"
+		"popq %%rax\n\t"
+		 : "=r" (res)
+		 : "r" (n), "r" (a1)
 		 );
 	return res;
 }
 
 static __inline int64_t syscall_2(uint64_t n, uint64_t a1, uint64_t a2) {
 	int64_t res;
-	__asm volatile ("int $0x80"
-		 : "=a" (res)
-		 : "a" (n), "D" (a1), "S" (a2)
+	__asm volatile (
+		"pushq %%rax\n\t"
+		"pushq %%rdi\n\t"
+		"pushq %%rsi\n\t"
+		"pushq %%rdx\n\t"
+		"movq %1, %%rax\n\t"
+		"movq %2, %%rdi\n\t"
+		"movq %3, %%rsi\n\t"
+		"int $0x80\n\t"
+		"movq %%rax, %0\n\t"
+		"popq %%rdx\n\t"
+		"popq %%rsi\n\t"
+		"popq %%rdi\n\t"
+		"popq %%rax\n\t"
+		 : "=r" (res)
+		 : "r" (n), "r" (a1), "r" (a2)
 		 );
 	return res;
 }
 
 static __inline int64_t syscall_3(uint64_t n, uint64_t a1, uint64_t a2, uint64_t a3) {
-	// return 0;
 	int64_t res;
-	__asm volatile ("int $0x80"
-		 : "=a" (res)
-		 : "a" (n), "D" (a1), "S" (a2), "d" (a3)
+	__asm volatile (
+		"pushq %%rax\n\t"
+		"pushq %%rdi\n\t"
+		"pushq %%rsi\n\t"
+		"pushq %%rdx\n\t"
+		"movq %1, %%rax\n\t"
+		"movq %2, %%rdi\n\t"
+		"movq %3, %%rsi\n\t"
+		"movq %4, %%rdx\n\t"
+		"int $0x80\n\t"
+		"movq %%rax, %0\n\t"
+		"popq %%rdx\n\t"
+		"popq %%rsi\n\t"
+		"popq %%rdi\n\t"
+		"popq %%rax\n\t"
+		 : "=r" (res)
+		 : "r" (n), "r" (a1), "r" (a2), "r" (a3)
 		 );
 	return res;
 }
