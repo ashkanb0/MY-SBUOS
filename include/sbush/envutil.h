@@ -14,4 +14,6 @@ char* process_val(char* val);
 
 int var_set(char* varname, char* varval);
 
+int log_argv(char** argv);
+
 #endif
