@@ -94,7 +94,7 @@ uint64_t do_waitpid (uint64_t pid, uint64_t status_return, uint64_t options){
 	proc -> status = WAITING;
 	proc -> status_return = status_return;
 	schedule();
-	*((uint64_t*)(proc -> status_return)) = proc -> exit_notify_status;
+	*((int*)(proc -> status_return)) = proc -> exit_notify_status;
 	return 0;
 }
 
