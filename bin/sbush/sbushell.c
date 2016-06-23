@@ -150,6 +150,7 @@ void make_prompt(){
 	
 	printf("folan\n");
 	getusrnm(user_name_str, 30);
+	printf("folan\n");
 
 	get_formatted_prompt(prompt, cwd, status_str, user_name_str);
 	printf("folan\n");
