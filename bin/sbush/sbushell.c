@@ -82,6 +82,7 @@ int do_command(char* command){
 	char ** envp = get_envp();
 	int pid = fork();
 	printf("PID: '%d''%x'\n", pid, pid);
+	printf("cmmnd =>0x%x<\n", (uint64_t)command);
 	// printf("command = >%s<\n", command);
 	printf("stack  >0x%x<\n", *((uint64_t*)command-48));
 	printf("stack  >0x%x<\n", *((uint64_t*)command-32));
