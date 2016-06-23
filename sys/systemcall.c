@@ -92,8 +92,9 @@ uint64_t do_waitpid (uint64_t pid, uint64_t status_return, uint64_t options){
 	pcb* proc = get_active_pcb();
 	proc -> waiting_on_pid = pid;
 	proc -> status = WAITING;
+	proc -> status_return = status_return;
 	schedule();
-	*((uint64_t*)status_return) = proc -> exit_notify_status;
+	*((uint64_t*)(proc -> status_return)) = proc -> exit_notify_status;
 	return 0;
 }
 
