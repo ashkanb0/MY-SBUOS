@@ -114,7 +114,7 @@ int do_command(char* command_input){
 		
 		// _log_list(path_list);
 
-		// printf("preparing to execute: >%s<\n", argv[0]);
+		printf("preparing to execute: >%s<\n", argv[0]);
 		for (int i=0; path_list[i]; i++)
 		{
 			char* path_elem = path_list[i];
