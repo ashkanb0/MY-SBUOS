@@ -99,7 +99,7 @@ int do_command(char* command_input){
 			if(bg==0){
 				// printf("WAITING!\n" );
 				waitpid(pid, &last_command_status, 0);
-				// printf("here after wait: %x\n", last_command_status );
+				printf("here after wait: %x\n", last_command_status );
 				return last_command_status;
 			}
 			return 0;
