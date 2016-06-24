@@ -62,6 +62,7 @@ int get_formatted_prompt(){
 
 	for(;format_index< strlen(ps1); format_index++){
 		if (ps1[format_index]=='\\'){
+			printf("-%c", ps1[format_index]);
 			int formatting = 0;
 			char* format_with = NULL;
 			if(ps1[format_index+1]=='u'){
