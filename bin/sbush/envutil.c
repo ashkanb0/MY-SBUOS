@@ -8,14 +8,6 @@ char path [PATH_LEN];
 char usrnm [USERNAME_LEN];
 char ps1 [MAX_STR_LEN];
 
-typedef struct var_store_linked_list_structure
-{
-	char* varname;
-	char* varval;
-
-	struct var_store_linked_list_structure* next;
-}var_list;
-
 var_list* head;
 var_list* tail;
 
@@ -197,56 +189,6 @@ char** get_envp(){
 	// It should return the new envp to be run in new
 	// process, ex: updated username, updated path, etc ...
 	return env_vars;
-}
-
-int get_formatted_prompt(char* buffer, char* cwd, char* status_str, char* username){
-	/////////////////////////////////////////////////////
-	//
-	//	supports:
-	//	\u - username
-	//	\d - current working dir
-	//	\S - status
-	//
-	/////////////////////////////////////////////////////
-	// printf("bahmedan\n");
-
-	int buffer_index = 0;
-	int format_index = 0;
-
-	char* ps1 = var_find("PS1")->varval;
-	printf("ps1: >%s<\n", ps1);
-
-	for(;format_index< strlen(ps1); format_index++){
-		if (ps1[format_index]=='\\'){
-			int formatting = 0;
-			char* format_with = NULL;
-			if(ps1[format_index+1]=='u'){
-				formatting = 1;
-				format_with = username;
-			}
-			if(ps1[format_index+1]=='d'){
-				formatting = 1;
-				format_with = cwd;
-			}
-			if(ps1[format_index+1]=='S'){
-				formatting = 1;
-				format_with = status_str;
-			}
-			if (formatting){
-				format_index += 1;
-				for(int i=0; i<strlen(format_with); i++){
-					buffer[buffer_index] = format_with[i];
-					buffer_index++;
-				}
-				continue;
-			}
-
-		}
-		buffer[buffer_index] = ps1[format_index];
-		buffer_index++;
-	}
-	buffer[buffer_index] = 0;
-	return 0;
 }
 
 char* var_get_val(char* varname){

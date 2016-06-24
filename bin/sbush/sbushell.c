@@ -34,6 +34,56 @@ char** envp;
 char bg;
 int l;
 
+int get_formatted_prompt(char* buffer, char* cwd, char* status_str, char* username){
+	/////////////////////////////////////////////////////
+	//
+	//	supports:
+	//	\u - username
+	//	\d - current working dir
+	//	\S - status
+	//
+	/////////////////////////////////////////////////////
+	// printf("bahmedan\n");
+
+	int buffer_index = 0;
+	int format_index = 0;
+
+	char* ps1 = var_find("PS1")->varval;
+	printf("ps1: >%s<\n", ps1);
+
+	for(;format_index< strlen(ps1); format_index++){
+		if (ps1[format_index]=='\\'){
+			int formatting = 0;
+			char* format_with = NULL;
+			if(ps1[format_index+1]=='u'){
+				formatting = 1;
+				format_with = username;
+			}
+			if(ps1[format_index+1]=='d'){
+				formatting = 1;
+				format_with = cwd;
+			}
+			if(ps1[format_index+1]=='S'){
+				formatting = 1;
+				format_with = status_str;
+			}
+			if (formatting){
+				format_index += 1;
+				for(int i=0; i<strlen(format_with); i++){
+					buffer[buffer_index] = format_with[i];
+					buffer_index++;
+				}
+				continue;
+			}
+
+		}
+		buffer[buffer_index] = ps1[format_index];
+		buffer_index++;
+	}
+	buffer[buffer_index] = 0;
+	return 0;
+}
+
 int process_command(char* command){
 	int newlind = strsearch(command, '\n');
 	// printf("command is: >%s<\n", command);
