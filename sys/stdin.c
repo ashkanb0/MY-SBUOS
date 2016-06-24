@@ -16,6 +16,13 @@ int _stdin_input = 0;
 void _add_char(char c){
 	if((end_point+1)%STDIN_BUFFER_SIZE == start_point) return;
 
+	if (c=='\b' && end_point==start_point) return;
+
+	if (c=='\b'){
+		end_point -- ;
+		return;
+	} 
+
 	_stdin_buffer[end_point]= c;
 	end_point = (end_point+1)%STDIN_BUFFER_SIZE;
 	if (c=='\n'){
