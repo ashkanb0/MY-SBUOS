@@ -79,19 +79,17 @@ int get_formatted_prompt(){
 			if (formatting){
 				format_index += 1;
 				for(int i=0; i<strlen(format_with); i++){
-					buffer[buffer_index] = format_with[i];
-					printf("-%c", buffer[buffer_index]);
+					prompt[buffer_index] = format_with[i];
 					buffer_index++;
 				}
 				continue;
 			}
 
 		}
-		buffer[buffer_index] = ps1[format_index];
-		printf("-%c", buffer[buffer_index]);
+		prompt[buffer_index] = ps1[format_index];
 		buffer_index++;
 	}
-	buffer[buffer_index] = 0;
+	prompt[buffer_index] = 0;
 	return 0;
 }
 
