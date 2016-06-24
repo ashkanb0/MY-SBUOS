@@ -50,7 +50,7 @@ int get_formatted_prompt(){
 	//
 	/////////////////////////////////////////////////////
 	// printf("bahmedan\n");
-	printf(">ssssss<\n");
+	// printf(">ssssss<\n");
 
 	buffer_index = 0;
 	format_index = 0;
@@ -58,7 +58,7 @@ int get_formatted_prompt(){
 	
 	
 	ps1 = var_find("PS1")->varval;
-	printf("ps1: >%s<\n", ps1);
+	// printf("ps1: >%s<\n", ps1);
 
 	for(;format_index< strlen(ps1); format_index++){
 		if (ps1[format_index]=='\\'){
@@ -151,7 +151,7 @@ int do_command(char* command_input){
 	// printf("HEREEEEE 3\n");
 	envp = get_envp();
 	int pid = fork();
-	// printf("PID: '%d''%x'\n", pid, pid);
+	printf("PID: '%d''%x'\n", pid, pid);
 	// printf("cmmnd x>0x%x<\n", (uint64_t)command);
 	// printf("cmmnd s>%s<\n", command);
 
@@ -212,8 +212,8 @@ void make_prompt(){
 	// printf("folan\n");
 	getusrnm(user_name_str, 30);
 
-	printf("shell:1 prompt>%s< \n cwd>%s< status_str:>%s<, user_name_str>%s<\n", prompt, cwd, status_str, user_name_str);
-	printf("shell:2 func>%x<\n", get_formatted_prompt);
+	// printf("shell:1 prompt>%s< \n cwd>%s< status_str:>%s<, user_name_str>%s<\n", prompt, cwd, status_str, user_name_str);
+	// printf("shell:2 func>%x<\n", get_formatted_prompt);
 	
 	get_formatted_prompt();
 	// printf("folan\n");
