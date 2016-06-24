@@ -55,6 +55,8 @@ int get_formatted_prompt(char* buffer, char* cwd, char* status_str, char* userna
 	buffer_index = 0;
 	format_index = 0;
 
+	
+	
 	ps1 = var_find("PS1")->varval;
 	printf("ps1: >%s<\n", ps1);
 
