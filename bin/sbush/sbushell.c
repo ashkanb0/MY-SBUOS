@@ -80,7 +80,7 @@ int get_formatted_prompt(){
 				format_index += 1;
 				for(int i=0; i<strlen(format_with); i++){
 					prompt[buffer_index] = format_with[i];
-					printf("~%c", prompt[buffer_index]);
+					// printf("~%c", prompt[buffer_index]);
 					buffer_index++;
 				}
 				continue;
@@ -88,7 +88,7 @@ int get_formatted_prompt(){
 
 		}
 		prompt[buffer_index] = ps1[format_index];
-		printf("~%c", prompt[buffer_index]);
+		// printf("~%c", prompt[buffer_index]);
 		buffer_index++;
 	}
 	prompt[buffer_index] = 0;
@@ -229,7 +229,6 @@ int main(int argc, char* argv[], char* envp[]) {
 	// printf("PARSED IT\n");
 
 	while(!exit_yet){
-		// printf("filan\n");
 		make_prompt();
 		readline(buffer, prompt);
 		if(process_command(buffer)){
@@ -237,6 +236,7 @@ int main(int argc, char* argv[], char* envp[]) {
 			return 0;
 		}
 		last_command_status = do_command(buffer);
+		printf("huh? >%x<\n", exit_yet);
 	}
 	return exit_status;
 }
