@@ -40,7 +40,7 @@ int format_index = 0;
 
 char* ps1 = NULL;
 
-int get_formatted_prompt(char* buffer, char* cwd, char* status_str, char* username){
+int get_formatted_prompt(){
 	/////////////////////////////////////////////////////
 	//
 	//	supports:
@@ -66,7 +66,7 @@ int get_formatted_prompt(char* buffer, char* cwd, char* status_str, char* userna
 			char* format_with = NULL;
 			if(ps1[format_index+1]=='u'){
 				formatting = 1;
-				format_with = username;
+				format_with = user_name_str;
 			}
 			if(ps1[format_index+1]=='d'){
 				formatting = 1;
@@ -211,7 +211,7 @@ void make_prompt(){
 	getusrnm(user_name_str, 30);
 
 	printf("shell:1 prompt>%s< \n cwd>%s< status_str:>%s<, user_name_str>%s<\n", prompt, cwd, status_str, user_name_str);
-	printf("shell:2 func>%x< \n", get_formatted_prompt);
+	printf("shell:2 func>%x<\n", get_formatted_prompt);
 	
 	get_formatted_prompt(prompt, cwd, status_str, user_name_str);
 	// printf("folan\n");
