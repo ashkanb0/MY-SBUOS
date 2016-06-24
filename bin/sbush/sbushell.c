@@ -80,7 +80,7 @@ int get_formatted_prompt(){
 				format_index += 1;
 				for(int i=0; i<strlen(format_with); i++){
 					prompt[buffer_index] = format_with[i];
-					printf("~%c\n", prompt[buffer_index]);
+					printf("~%c", prompt[buffer_index]);
 					buffer_index++;
 				}
 				continue;
@@ -88,7 +88,7 @@ int get_formatted_prompt(){
 
 		}
 		prompt[buffer_index] = ps1[format_index];
-		printf("~%c\n", prompt[buffer_index]);
+		printf("~%c", prompt[buffer_index]);
 		buffer_index++;
 	}
 	prompt[buffer_index] = 0;
