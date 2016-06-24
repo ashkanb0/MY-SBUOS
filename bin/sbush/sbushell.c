@@ -151,7 +151,7 @@ int do_command(char* command_input){
 	// printf("HEREEEEE 3\n");
 	envp = get_envp();
 	int pid = fork();
-	printf("PID: '%d''%x'\n", pid, pid);
+	// printf("PID: '%d''%x'\n", pid, pid);
 	// printf("cmmnd x>0x%x<\n", (uint64_t)command);
 	// printf("cmmnd s>%s<\n", command);
 
