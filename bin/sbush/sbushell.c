@@ -215,7 +215,7 @@ void make_prompt(){
 	printf("shell:1 prompt>%s< \n cwd>%s< status_str:>%s<, user_name_str>%s<\n", prompt, cwd, status_str, user_name_str);
 	printf("shell:2 func>%x<\n", get_formatted_prompt);
 	
-	get_formatted_prompt(prompt, cwd, status_str, user_name_str);
+	get_formatted_prompt();
 	// printf("folan\n");
 	
 
@@ -236,7 +236,6 @@ int main(int argc, char* argv[], char* envp[]) {
 			return 0;
 		}
 		last_command_status = do_command(buffer);
-		printf("huh? >%x<\n", exit_yet);
 	}
 	return exit_status;
 }
