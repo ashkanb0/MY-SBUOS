@@ -151,9 +151,9 @@ void make_prompt(){
 	// printf("folan\n");
 	getusrnm(user_name_str, 30);
 
-	printf("shell:1 prompt>%s< \n status_str:>%s<, user_name_str>%s<\n", prompt, status_str, user_name_str);
+	printf("shell:1 prompt>%s< \n cwd>%s< status_str:>%s<, user_name_str>%s<\n", prompt, cwd, status_str, user_name_str);
 	get_formatted_prompt(prompt, cwd, status_str, user_name_str);
-	printf("shell:2 prompt>%s< \n status_str:>%s<, user_name_str>%s<\n", prompt, status_str, user_name_str);
+	printf("shell:2 prompt>%s< \n cwd>%s< status_str:>%s<, user_name_str>%s<\n", prompt, cwd, status_str, user_name_str);
 	// printf("folan\n");
 	
 
