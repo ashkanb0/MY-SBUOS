@@ -76,6 +76,7 @@ void process_init(){
 }
 
 void enqueue_process(pcb_list* list, pcb* process){
+	if (process -> status == FINISHED) return;
 	list->list[list->tail] = process;
 	list->tail++;
 	list->tail %= PROCESS_QUEUE_SIZE;
