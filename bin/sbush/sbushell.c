@@ -34,6 +34,12 @@ char** envp;
 char bg;
 int l;
 
+
+int buffer_index = 0;
+int format_index = 0;
+
+char* ps1 = NULL;
+
 int get_formatted_prompt(char* buffer, char* cwd, char* status_str, char* username){
 	/////////////////////////////////////////////////////
 	//
@@ -46,10 +52,10 @@ int get_formatted_prompt(char* buffer, char* cwd, char* status_str, char* userna
 	// printf("bahmedan\n");
 	printf(">ssssss<\n");
 
-	int buffer_index = 0;
-	int format_index = 0;
+	buffer_index = 0;
+	format_index = 0;
 
-	char* ps1 = var_find("PS1")->varval;
+	ps1 = var_find("PS1")->varval;
 	printf("ps1: >%s<\n", ps1);
 
 	for(;format_index< strlen(ps1); format_index++){
