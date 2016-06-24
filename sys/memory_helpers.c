@@ -356,7 +356,7 @@ void cross_off_COW(uint64_t virt){
 
 char temp_page [PAGESIZE];
 
-void map_page_COW (uint64_t phys, uint64_t v_addr, uint64_t flags){
+void map_page_COW (uint64_t phys, uint64_t v_addr, uint64_t flags, uint64_t current_table){
 	uint64_t virt = v_addr;
 
 	virt &= 0xfffffffffffff000;
@@ -370,6 +370,8 @@ void map_page_COW (uint64_t phys, uint64_t v_addr, uint64_t flags){
 	uint64_t* ptr = (uint64_t*)( (virt>>9)| 0xffff000000000000);
 	*ptr = phys| flags;
 
+	_set_cr3(current_table);
+
 	virt = v_addr & 0xfffffffffffff000;
 	temp_ptr = (char*)(virt);
 	for (int i = 0; i < PAGESIZE; ++i)
@@ -380,7 +382,7 @@ void map_page_COW (uint64_t phys, uint64_t v_addr, uint64_t flags){
 void do_COW(pcb* proc, uint64_t v_addr){
 	mem_page* pg = get_free_page();
 	vma_register_page(pg, proc->pid);
-	map_page_COW (pg->base, v_addr, USER_ACCESSIBLE|READ_WRITE|PRESENT);
+	map_page_COW (pg->base, v_addr, USER_ACCESSIBLE|READ_WRITE|PRESENT, proc->pml4);
 }
 
 void handle_COW(uint64_t address){
