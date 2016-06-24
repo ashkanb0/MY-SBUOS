@@ -20,7 +20,7 @@ int _add_char(char c){
 
 	if (c=='\b'){
 		end_point = (end_point-1)%STDIN_BUFFER_SIZE ;
-		return 0;
+		return 1;
 	} 
 
 	_stdin_buffer[end_point]= c;
@@ -29,7 +29,7 @@ int _add_char(char c){
 		input_count++;
 		notify_stdin();
 	}
-
+	return 1;
 }
 
 int buffer_is_ready(){
@@ -109,8 +109,8 @@ void buffer_add_char(unsigned char c){
 		if(_std_ctrl ){
 			to_print -= 64;
 		}
-		_add_char(to_print);
-		write_k(to_print);
+		if(_add_char(to_print))
+			write_k(to_print);
 	}
 }
 
