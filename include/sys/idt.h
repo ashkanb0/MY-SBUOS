@@ -131,7 +131,7 @@ void int_pgflt_srv(exception_stack stack){
 		// return;
 	}
 	if(error==7){
-		printf("(page fault - COW):%x, %x\n", address, error);
+		// printf("(page fault - COW):%x, %x\n", address, error);
 		handle_COW(address);
 		_set_cr3(get_active_pcb()->pml4);
 		return;
