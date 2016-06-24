@@ -80,6 +80,7 @@ int get_formatted_prompt(){
 				format_index += 1;
 				for(int i=0; i<strlen(format_with); i++){
 					buffer[buffer_index] = format_with[i];
+					printf("-%c", buffer[buffer_index]);
 					buffer_index++;
 				}
 				continue;
