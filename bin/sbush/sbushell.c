@@ -44,6 +44,7 @@ int get_formatted_prompt(char* buffer, char* cwd, char* status_str, char* userna
 	//
 	/////////////////////////////////////////////////////
 	// printf("bahmedan\n");
+	printf(">ssssss<\n");
 
 	int buffer_index = 0;
 	int format_index = 0;
