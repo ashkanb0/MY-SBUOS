@@ -27,71 +27,48 @@ struct pt_regs {
 static __inline int64_t syscall_0(uint64_t n) {
 	int64_t res;
 	__asm volatile (
-		"pushq %rax\n\t"
-		"pushq %rdi\n\t"
-		"pushq %rsi\n\t"
-		"pushq %rdx\n\t"
-		);
-	
-	__asm volatile ("int $0x80"
-		 : "=a" (res)
-		 : "a" (n)
+		"movq %1, %%rax\n\t"
+		// "movq %2, %%rdi\n\t"
+		// "movq %3, %%rsi\n\t"
+		// "movq %4, %%rdx\n\t"
+		"int $0x80\n\t"
+		"movq %%rax, %0\n\t"
+		 : "=r" (res)
+		 : "r" (n)
+		 : "rax", "rdi", "rsi", "rdx", "memory"
 		 );
-
-	__asm volatile (
-		"popq %rdx\n\t"
-		"popq %rsi\n\t"
-		"popq %rdi\n\t"
-		"popq %rax\n\t"
-		);
-
-
 	return res;
 }
 
 static __inline int64_t syscall_1(uint64_t n, uint64_t a1) {
 	int64_t res;
 	__asm volatile (
-		"pushq %rax\n\t"
-		"pushq %rdi\n\t"
-		"pushq %rsi\n\t"
-		"pushq %rdx\n\t"
-		);
-
-	__asm volatile ("int $0x80"
-		 : "=a" (res)
-		 : "a" (n), "D" (a1)
+		"movq %1, %%rax\n\t"
+		"movq %2, %%rdi\n\t"
+		// "movq %3, %%rsi\n\t"
+		// "movq %4, %%rdx\n\t"
+		"int $0x80\n\t"
+		"movq %%rax, %0\n\t"
+		 : "=r" (res)
+		 : "r" (n), "r" (a1)
+		 : "rax", "rdi", "rsi", "rdx", "memory"
 		 );
-	__asm volatile (
-		"popq %rdx\n\t"
-		"popq %rsi\n\t"
-		"popq %rdi\n\t"
-		"popq %rax\n\t"
-		);
-
 	return res;
 }
 
 static __inline int64_t syscall_2(uint64_t n, uint64_t a1, uint64_t a2) {
 	int64_t res;
 	__asm volatile (
-		"pushq %rax\n\t"
-		"pushq %rdi\n\t"
-		"pushq %rsi\n\t"
-		"pushq %rdx\n\t"
-		);
-
-	__asm volatile ("int $0x80"
-		 : "=a" (res)
-		 : "a" (n), "D" (a1), "S" (a2)
+		"movq %1, %%rax\n\t"
+		"movq %2, %%rdi\n\t"
+		"movq %3, %%rsi\n\t"
+		// "movq %4, %%rdx\n\t"
+		"int $0x80\n\t"
+		"movq %%rax, %0\n\t"
+		 : "=r" (res)
+		 : "r" (n), "r" (a1), "r" (a2)
+		 : "rax", "rdi", "rsi", "rdx", "memory"
 		 );
-	__asm volatile (
-		"popq %rdx\n\t"
-		"popq %rsi\n\t"
-		"popq %rdi\n\t"
-		"popq %rax\n\t"
-		);
-
 	return res;
 }
 
@@ -99,23 +76,16 @@ static __inline int64_t syscall_3(uint64_t n, uint64_t a1, uint64_t a2, uint64_t
 	// return 0;
 	int64_t res;
 	__asm volatile (
-		"pushq %rax\n\t"
-		"pushq %rdi\n\t"
-		"pushq %rsi\n\t"
-		"pushq %rdx\n\t"
-		);
-
-	__asm volatile ("int $0x80"
-		 : "=a" (res)
-		 : "a" (n), "D" (a1), "S" (a2), "d" (a3)
+		"movq %1, %%rax\n\t"
+		"movq %2, %%rdi\n\t"
+		"movq %3, %%rsi\n\t"
+		"movq %4, %%rdx\n\t"
+		"int $0x80\n\t"
+		"movq %%rax, %0\n\t"
+		 : "=r" (res)
+		 : "r" (n), "r" (a1), "r" (a2), "r" (a3)
+		 : "rax", "rdi", "rsi", "rdx", "memory"
 		 );
-	__asm volatile (
-		"popq %rdx\n\t"
-		"popq %rsi\n\t"
-		"popq %rdi\n\t"
-		"popq %rax\n\t"
-		);
-
 	return res;
 }
 
