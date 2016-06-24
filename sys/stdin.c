@@ -14,13 +14,13 @@ int input_count = 0;
 int _stdin_input = 0;
 
 int _add_char(char c){
-	if((end_point+1)%STDIN_BUFFER_SIZE == start_point) 1;
+	if((end_point+1)%STDIN_BUFFER_SIZE == start_point) return 1;
 
-	if (c=='\b' && end_point==start_point) 0;
+	if (c=='\b' && end_point==start_point) return 0;
 
 	if (c=='\b'){
 		end_point = (end_point-1)%STDIN_BUFFER_SIZE ;
-		0;
+		return 0;
 	} 
 
 	_stdin_buffer[end_point]= c;
