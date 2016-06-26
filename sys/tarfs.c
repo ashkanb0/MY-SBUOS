@@ -53,6 +53,7 @@ int search_file_for_exec(char* path){
 	{
 		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
 		uint64_t size = tar_size(p->size);
+		printf("size : >%x<, p->size >%s< p->name >%s<\n", size, p->size, p->name);
 		// printf("%s==%s?\n",p->name, path );
 		if(kstrcmp(p->name, path+1)==0){
 
