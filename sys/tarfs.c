@@ -31,6 +31,7 @@ uint64_t map_file(char* path, int pid){
 	for (; _tar_start + offset<_tar_end ;)
 	{
 		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
+		if (kstrlen(p->name)==0)return 0;
 		uint64_t size = tar_size(p->size);
 		// printf("%s==%s?\n",p->name, path );
 		if(kstrcmp(p->name, path+1)==0){
@@ -54,7 +55,7 @@ int search_file_for_exec(char* path){
 		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
 		if (kstrlen(p->name)==0)return 0;
 		uint64_t size = tar_size(p->size);
-		printf("size : >%x<, p->size >%s< p->name >%s<\n", size, p->size, p->name);
+		// printf("size : >%x<, p->size >%s< p->name >%s<\n", size, p->size, p->name);
 		// printf("%s==%s?\n",p->name, path );
 		if(kstrcmp(p->name, path+1)==0){
 
@@ -65,7 +66,7 @@ int search_file_for_exec(char* path){
 			}
 		}
 		offset += size + sizeof(tarfs_header) + tar_size_roundup(size);
-		printf("size : >%x<, offset >%x<\n", size, offset);
+		// printf("size : >%x<, offset >%x<\n", size, offset);
 	}
 	return 0;
 }
