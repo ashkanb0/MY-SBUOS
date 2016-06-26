@@ -103,10 +103,10 @@ uint64_t do_execve (uint64_t filename, uint64_t argv, uint64_t envp){
 	pcb* proc = get_active_pcb();
 	path_merge(proc->wd, (char*)filename, abspath, 100);
 
-	uint64_t* ptr = (uint64_t*)(0xffffff7fbfdfe000);
-	ptr[0] = 0;
 
 	if (search_file_for_exec(abspath)){
+		uint64_t* ptr = (uint64_t*)(0xffffff7fbfdfe000);
+		ptr[0] = 0;
 		return process_exec(proc, abspath);
 	}
 	return 1;
