@@ -47,6 +47,8 @@ int copy_input(char* buffer, int size){
 		}
 
 	}
+	
+	start_point = (start_point+1)%STDIN_BUFFER_SIZE;
 	buffer[i] = '\n';
 	buffer[i+1] = '\0';
 	input_count --;
