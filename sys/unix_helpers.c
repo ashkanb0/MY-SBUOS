@@ -19,7 +19,7 @@ void do_newline(){
 	}
 	col = 0;
 	row ++;	
-	if (row>23) row =0;
+	if (row>22) row =0;
 }
 void write_k(char v){
 	if (v=='\0') return;
@@ -65,7 +65,7 @@ char _glyph_buffer [4] = {' ', ' ', ' ', ' '};
 
 void put_pressed_key(unsigned char key){
 	if(keyboard_feed(key, _glyph_buffer)){
-		char* position = (char*)(display_mem + 160*22+ 2*48);
+		char* position = (char*)(display_mem + 160*23+ 2*48);
 		*position = _glyph_buffer[0];
 		position++;
 		*position = 0x00;
@@ -90,7 +90,7 @@ char _time_buffer [] = "0:00:00";
 
 void put_time_since_boot(void){
 	if (tick_count(_time_buffer)){
-		char* position = (char*)(display_mem + 160*22+ 2*56);
+		char* position = (char*)(display_mem + 160*23+ 2*56);
 		for(int i=0; _time_buffer[i]; ++i){
 			*position = _time_buffer[i];
 			position++;
