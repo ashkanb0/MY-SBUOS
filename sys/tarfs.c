@@ -63,6 +63,7 @@ int search_file_for_exec(char* path){
 			}
 		}
 		offset += size + sizeof(tarfs_header) + tar_size_roundup(size);
+		printf("size : >%x<, offset >%x<\n", size, offset);
 	}
 	return 0;
 }
