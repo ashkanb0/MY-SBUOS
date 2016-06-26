@@ -189,7 +189,7 @@ int do_command(char* command_input){
 			char* temp = argv[0];
 
 			argv[0] = joined_filename;
-			// printf("going to execute: >%s<\n", argv[0]);
+			printf("going to execute: >%s<\n", argv[0]);
 			execve(argv[0], argv, envp);
 			argv[0] = temp;
 			// TODO: uncomment after fixed get_envp;
