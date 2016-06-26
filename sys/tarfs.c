@@ -52,6 +52,7 @@ int search_file_for_exec(char* path){
 	for (; _tar_start + offset<_tar_end ;)
 	{
 		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
+		if (len(p->name)==0)return 0;
 		uint64_t size = tar_size(p->size);
 		printf("size : >%x<, p->size >%s< p->name >%s<\n", size, p->size, p->name);
 		// printf("%s==%s?\n",p->name, path );
