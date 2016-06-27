@@ -73,10 +73,15 @@ int cleanup_path(char* buffer, int size){
 			i--;
 		}
 		else if(kstrcmp(parts[i], "..")==0){
-			if(i==0)continue;
-			for (int j = i; j < 13; j+=2)
+			if(i==0){
+				for (int j = i; j < 14; ++j)
+				parts[j] = parts[j+1];
+				i--;
+				continue;
+			}
+			for (int j = i; j < 13; ++j)
 				parts[j] = parts[j+2];
-			i-=2;	
+			i-=2;
 		}
 	}
 	i = 1;
