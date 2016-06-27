@@ -66,7 +66,7 @@ int cleanup_path(char* buffer, int size){
 		}
 	}
 
-	for(i = 0; i<15; i++){
+	for(i = 0; i<15 && parts[i]; i++){
 		if(parts[i][0] == '\0' || kstrcmp(parts[i], ".")==0){
 			for (int j = i; j < 14; ++j)
 				parts[j] = parts[j+1];
