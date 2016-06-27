@@ -119,7 +119,7 @@ uint64_t do_chdir (uint64_t dirname){
 	abspath[l] = '/';
 	abspath[l+1] = '\0';
 
-	if (search_for_dir(abspath)){		
+	if (kstrcmp(abspath, "/")==0 || search_for_dir(abspath)){		
 		kstrcpy(proc->wd, abspath, 100);
 		return 0;
 	}
