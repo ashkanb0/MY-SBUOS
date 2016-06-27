@@ -79,7 +79,7 @@ int cleanup_path(char* buffer, int size){
 				i--;
 				continue;
 			}
-			for (int j = i; j < 13; ++j)
+			for (int j = i-1; j < 13; ++j)
 				parts[j] = parts[j+2];
 			i-=2;
 		}
