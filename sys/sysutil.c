@@ -55,14 +55,14 @@ int cleanup_path(char* buffer, int size){
 	parts[0] = temp_path;
 	int part_pointer = 1;
 
+	for (i = 0; i < size; ++i)
+		temp_path[i] = buffer[i];
+
 	for (i = 0; i<size && buffer[i]; ++i){
 		if (buffer[i]=='/'){
 			temp_path[i] = '\0';
 			parts[part_pointer] = temp_path+i+1;
 			part_pointer ++;
-		}else{
-			temp_path[i] = buffer[i];
-		}
 	}
 
 	for(i = 0; i<15; i++){
