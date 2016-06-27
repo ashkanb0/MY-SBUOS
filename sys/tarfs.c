@@ -71,3 +71,24 @@ int search_file_for_exec(char* path){
 	return 0;
 }
 
+int search_for_dir(char* path){
+	uint64_t offset = 0;
+
+	for (; _tar_start + offset<_tar_end ;)
+	{
+		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
+		uint64_t size = tar_size(p->size);
+		if (kstrlen(p->name)==0)return 0;
+		if(kstrcmp(p->name, path+1)==0){
+
+			if(size==0){
+				return 1;
+			}else{
+				return 0;
+			}
+		}
+		offset += size + sizeof(tarfs_header) + tar_size_roundup(size);
+	}
+	return 0;
+}
+

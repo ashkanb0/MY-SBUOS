@@ -32,10 +32,11 @@ typedef struct posix_header_ustar {
 
 void init_tarfs(void* tar_start, void* tar_end);
 
-
+int search_for_dir(char* path);
 uint64_t tar_size( char* s);
 uint64_t tar_size_roundup( uint64_t);
 uint64_t map_file(char* path, int pid);
+
 
 int search_file_for_exec(char* path);
 
