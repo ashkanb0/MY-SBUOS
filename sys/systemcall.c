@@ -115,7 +115,9 @@ uint64_t do_execve (uint64_t filename, uint64_t argv, uint64_t envp){
 uint64_t do_chdir (uint64_t dirname){
 	pcb* proc = get_active_pcb();
 	path_merge(proc->wd, (char*)dirname, abspath, 100);
-
+	int l = kstrlen(abspath);
+	abspath[l] = '/';
+	abspath[l+1] = '\0';
 
 	if (search_for_dir(abspath)){		
 		kstrcpy(proc->wd, abspath, 100);

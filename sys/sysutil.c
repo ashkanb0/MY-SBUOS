@@ -88,8 +88,8 @@ int cleanup_path(char* buffer, int size){
 		buffer[i+l] = '/';
 		i += l+1;
 	}
+	buffer[i-1] = '\0';
 	return 0;
-
 }
 
 int path_merge(char* base, char* relative, char* buffer, int size){
