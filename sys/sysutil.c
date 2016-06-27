@@ -44,9 +44,51 @@ int kstrcat(char* st1, char* st2, char* buffer, int size){
 	return 0;
 }
 
+char temp_path [100];
 int cleanup_path(char* buffer, int size){
-	// TODO:
+	int i=0;
+	char* parts [15];
+
+	for (i = 0; i<15; ++i)
+		parts[i] = NULL;
+
+	parts[0] = temp_path;
+	int part_pointer = 1;
+
+	for (i = 0; i<size && buffer[i]; ++i){
+		if (buffer[i]=='/'){
+			temp_path[i] = '\0';
+			parts[part_pointer] = temp_path+i+1;
+			part_pointer ++;
+		}else{
+			temp_path[i] = buffer[i];
+		}
+	}
+
+	for(i = 0; i<15; i++){
+		if(parts[i][0] == '\0' || kstrcmp(parts[i], ".")==0){
+			for (int j = i; j < 14; ++j)
+				parts[j] = parts[j+1];
+			i--;
+		}
+		else if(kstrcmp(parts[i], "..")==0){
+			if(i==0)continue;
+			for (int j = i; j < 13; j+=2)
+				parts[j] = parts[j+2];
+			i-=2;	
+		}
+	}
+	i = 1;
+	buffer[0] = '/'; // should already be '/'!
+
+	for (part_pointer = 0; parts[part_pointer]; ++part_pointer){
+		int l = kstrlen(parts[part_pointer]);
+		kstrcpy(buffer+i, parts[part_pointer], l);
+		buffer[i+l] = '/';
+		i += l+1;
+	}
 	return 0;
+
 }
 
 int path_merge(char* base, char* relative, char* buffer, int size){
