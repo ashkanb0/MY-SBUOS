@@ -112,6 +112,18 @@ uint64_t do_execve (uint64_t filename, uint64_t argv, uint64_t envp){
 	return 1;
 }
 
+uint64_t do_chdir (uint64_t dirname){
+	pcb* proc = get_active_pcb();
+	path_merge(proc->wd, (char*)dirname, abspath, 100);
+
+
+	if (search_for_dir(abspath)){		
+		kstrcpy(proc->wd, abspath, 100);
+		return 0;
+	}
+	return 1;
+}
+
 uint64_t do_exit(uint64_t status){
 	pcb* proc = get_active_pcb();
 	proc -> status = FINISHED;
@@ -144,6 +156,8 @@ uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uin
 		case SYS_execve : res = do_execve(arg1, arg2, arg3);
 						break;
 		case SYS_exit : res = do_exit(arg1);
+						break;
+		case SYS_chdir : res = do_chdir(arg1);
 						break;
 		default : printf("SYSCALL NOT IMPLEMENTED: %d, 0x%x\n (0x%x, 0x%x, 0x%x)",
 						 syscall_code, syscall_code, arg1, arg2, arg3);
