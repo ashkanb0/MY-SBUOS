@@ -107,7 +107,7 @@ uint64_t do_execve (uint64_t filename, uint64_t argv, uint64_t envp){
 	if (search_file_for_exec(abspath)){
 		uint64_t* ptr = (uint64_t*)(0xffffff7fbfdfe000);
 		ptr[0] = 0;
-		return process_exec(proc, abspath);
+		return process_exec(proc, abspath, (char**)argv, (char**)envp );
 	}
 	return 1;
 }

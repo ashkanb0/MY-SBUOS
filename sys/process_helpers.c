@@ -226,14 +226,35 @@ void process_run(pcb* proc){
 	enqueue_process(&processq, proc);
 }
 
-
-int process_exec(pcb* proc, char* path){
-	kstrcpy(proc -> pname, path	, 50);
+int process_exec(pcb* proc, char* abspath, char *argv[], char* envp[]){
+	kstrcpy(proc -> pname, abspath	, 50);
 	proc->status = READY;
 	proc->kernel_sp --;
 	*(proc->kernel_sp) = (uint64_t)(k_thread_kernel);
 	proc->kernel_sp --;
 	*(proc->kernel_sp) = 0;
+
+	uint64_t* sp = ((uint64_t*)proc -> user_sp);
+	uint64_t count = 0;
+	for (; envp[count]; ++count);
+	uint64_t i = count -1;
+	for(; i>=0; --i){
+		sp --;
+		*sp = ((uint64_t)envp[i]);
+	}
+
+	count = 0;
+	for (; argv[count]; ++count);
+	i = count;
+	for(; i>=0; --i){
+		sp --;
+		*sp = ((uint64_t)argv[i]);
+	}
+	sp --;
+	*sp = count;
+
+	proc -> user_sp = ((uint64_t)sp);
+
 	schedule();
 	return -1;
 }
