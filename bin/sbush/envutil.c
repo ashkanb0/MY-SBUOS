@@ -207,12 +207,12 @@ char** get_envp(){
 		// printf("what? %s %s %p, %p\n",varname, current->varname , current, current->next);
 		// if(strcomp(current-> varname, varname)==0) return current;
 		// printf("what? %p, %p\n", current, current->next);
-		printf("FONAL\n");
-		print_envp_arged(envp_copy);
+		// printf("FONAL\n");
+		// print_envp_arged(envp_copy);
 
 		strcpy(current-> varname, envp_copy2[i]);
 		int l = strlen(current -> varname);
-		envp_copy2[i][l] = ':';
+		envp_copy2[i][l] = '=';
 		strcpy(current-> varval, envp_copy2[i]+l+1);
 		envp_copy[i] = envp_copy2[i];
 		i++;
