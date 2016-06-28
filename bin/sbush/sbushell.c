@@ -170,7 +170,7 @@ int do_command(char* command_input){
 	}else{
 		// printf("ELSE?\n");
 		if (command[0] == '.' || command[0] == '/' ){
-			log_argv(argv);
+			// log_argv(argv);
 			// do_nothing_shell((uint64_t)argv);
 			execve(argv[0], argv, envp);
 			str_free_splitted_list(argv);
@@ -195,7 +195,7 @@ int do_command(char* command_input){
 
 			// argv[0] = joined_filename;
 			// printf("going to execute: >%s<\n", argv[0]);
-			log_argv(argv);
+			// log_argv(argv);
 			execve(joined_filename, argv, envp);
 			// argv[0] = temp;
 			// TODO: uncomment after fixed get_envp;
