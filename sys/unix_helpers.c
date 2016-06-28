@@ -9,7 +9,7 @@ void set_display_address(uint64_t add){
 }
 
 void rollup(){
-	for(int temprow = 0; temprow < 22; ++temprow)
+	for(int temprow = 0; temprow < 21; ++temprow)
 		for(int tempcol = 0; tempcol < 80; ++tempcol){
 			char* position1 = (char*)(display_mem + 160*temprow+ 2*tempcol);
 			char* position2 = (char*)(display_mem + 160*(temprow+1)+ 2*tempcol);
