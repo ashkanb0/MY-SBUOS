@@ -194,17 +194,17 @@ char** get_envp(){
 	for (i = 0; i < 15; ++i)
 		envp_copy[i] = NULL;
 
-	for(var_list* current = head->next; current; current = current-> next){
-		// printf("what? %s %s %p, %p\n",varname, current->varname , current, current->next);
-		// if(strcomp(current-> varname, varname)==0) return current;
-		// printf("what? %p, %p\n", current, current->next);
-		strcpy(current-> varname, envp_copy2[i]);
-		int l = strlen(current -> varname);
-		envp_copy2[i][l] = ':';
-		strcpy(current-> varval, envp_copy2[i]+l+1);
-		envp_copy[i] = envp_copy2[i];
-		i++;
-	}
+	// for(var_list* current = head->next; current; current = current-> next){
+	// 	// printf("what? %s %s %p, %p\n",varname, current->varname , current, current->next);
+	// 	// if(strcomp(current-> varname, varname)==0) return current;
+	// 	// printf("what? %p, %p\n", current, current->next);
+	// 	strcpy(current-> varname, envp_copy2[i]);
+	// 	int l = strlen(current -> varname);
+	// 	envp_copy2[i][l] = ':';
+	// 	strcpy(current-> varval, envp_copy2[i]+l+1);
+	// 	envp_copy[i] = envp_copy2[i];
+	// 	i++;
+	// }
 	return envp_copy;
 
 }
