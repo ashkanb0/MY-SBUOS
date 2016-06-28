@@ -40,6 +40,10 @@ int format_index = 0;
 
 char* ps1 = NULL;
 
+uint64_t do_nothing(uint64_t arg){
+	return 0+0;
+}
+
 int get_formatted_prompt(){
 	/////////////////////////////////////////////////////
 	//
@@ -166,7 +170,8 @@ int do_command(char* command_input){
 	}else{
 		// printf("ELSE?\n");
 		if (command[0] == '.' || command[0] == '/' ){
-			log_argv(argv);
+			// log_argv(argv);
+			do_nothing((uint64_t)argv);
 			execve(argv[0], argv, envp);
 			str_free_splitted_list(argv);
 			printf("No command or binary found: '%s'\n", argv[0]);
@@ -190,7 +195,7 @@ int do_command(char* command_input){
 
 			// argv[0] = joined_filename;
 			// printf("going to execute: >%s<\n", argv[0]);
-			log_argv(argv);
+			// log_argv(argv);
 			execve(joined_filename, argv, envp);
 			// argv[0] = temp;
 			// TODO: uncomment after fixed get_envp;
