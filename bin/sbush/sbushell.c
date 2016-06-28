@@ -40,7 +40,7 @@ int format_index = 0;
 
 char* ps1 = NULL;
 
-uint64_t do_nothing(uint64_t arg){
+uint64_t do_nothing_shell(uint64_t arg){
 	return 0+0;
 }
 
@@ -171,7 +171,7 @@ int do_command(char* command_input){
 		// printf("ELSE?\n");
 		if (command[0] == '.' || command[0] == '/' ){
 			// log_argv(argv);
-			do_nothing((uint64_t)argv);
+			do_nothing_shell((uint64_t)argv);
 			execve(argv[0], argv, envp);
 			str_free_splitted_list(argv);
 			printf("No command or binary found: '%s'\n", argv[0]);
