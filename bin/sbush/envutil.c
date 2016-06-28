@@ -192,29 +192,22 @@ char* get_path(){
 
 
 char* envp_copy [15];
-char envp_copy2 [15][100];
 char** get_envp(){
-	//TODO : do this!
-	// It should return the new envp to be run in new
-	// process, ex: updated username, updated path, etc ...
 	int i = 0;
-	for (i = 0; i < 15; ++i)
+	for (i = 0; i < 15; ++i){
+		if (envp_copy[i])
+			free(envp_copy[i]);
 		envp_copy[i] = NULL;
+	}
 
 	i = 0;
 
 	for(var_list* current = head->next; current; current = current-> next){
-		// printf("what? %s %s %p, %p\n",varname, current->varname , current, current->next);
-		// if(strcomp(current-> varname, varname)==0) return current;
-		// printf("what? %p, %p\n", current, current->next);
-		// printf("FONAL\n");
-		// print_envp_arged(envp_copy);
-
-		strcpy(current-> varname, envp_copy2[i]);
+		envp_copy[i] = (char*)malloc(100*sizeof(char));// !!!!
+		strcpy(current-> varname, envp_copy[i]);
 		int l = strlen(current -> varname);
-		envp_copy2[i][l] = '=';
-		strcpy(current-> varval, envp_copy2[i]+l+1);
-		envp_copy[i] = envp_copy2[i];
+		envp_copy[i][l] = '=';
+		strcpy(current-> varval, envp_copy[i]+l+1);
 		i++;
 	}
 	return envp_copy;
