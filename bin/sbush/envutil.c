@@ -201,6 +201,8 @@ char** get_envp(){
 	for (i = 0; i < 15; ++i)
 		envp_copy[i] = NULL;
 
+	i = 0;
+
 	for(var_list* current = head->next; current; current = current-> next){
 		// printf("what? %s %s %p, %p\n",varname, current->varname , current, current->next);
 		// if(strcomp(current-> varname, varname)==0) return current;
