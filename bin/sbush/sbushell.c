@@ -155,7 +155,6 @@ int do_command(char* command_input){
 	// printf("cmmnd x>0x%x<\n", (uint64_t)command);
 	// printf("cmmnd s>%s<\n", command);
 
-	// log_argv(argv);
 	if(pid){
 			if(bg==0){
 				// printf("WAITING!\n" );
@@ -167,9 +166,10 @@ int do_command(char* command_input){
 	}else{
 		// printf("ELSE?\n");
 		if (command[0] == '.' || command[0] == '/' ){
-			// execve(argv[0], argv, envp);
-			// str_free_splitted_list(argv);
-			// printf("No command or binary found: '%s'\n", argv[0]);
+			log_argv(argv);
+			execve(argv[0], argv, envp);
+			str_free_splitted_list(argv);
+			printf("No command or binary found: '%s'\n", argv[0]);
 			exit(1);
 		}
 
@@ -190,6 +190,7 @@ int do_command(char* command_input){
 
 			// argv[0] = joined_filename;
 			// printf("going to execute: >%s<\n", argv[0]);
+			log_argv(argv);
 			execve(joined_filename, argv, envp);
 			// argv[0] = temp;
 			// TODO: uncomment after fixed get_envp;
