@@ -8,6 +8,15 @@ void set_display_address(uint64_t add){
 	display_mem = add;
 }
 
+void rollup(){
+	for(int temprow = 0; temprow < 22; ++temprow)
+		for(int tempcol = 0; tempcol < 80; ++tempcol){
+			char* position1 = (char*)(display_mem + 160*temprow+ 2*tempcol);
+			char* position2 = (char*)(display_mem + 160*(temprow+1)+ 2*tempcol);
+			*position1 = *position2;
+		}
+			
+}
 
 void do_newline(){
 	while(col<80){
@@ -19,7 +28,11 @@ void do_newline(){
 	}
 	col = 0;
 	row ++;	
-	if (row>22) row =0;
+	if (row>22) {
+		rollup();
+		row=21;
+		do_newline();
+	}
 }
 void write_k(char v){
 	if (v=='\0') return;
