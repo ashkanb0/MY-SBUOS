@@ -234,7 +234,7 @@ int process_exec(pcb* proc, char* abspath, char *argv[], char* envp[]){
 	proc->kernel_sp --;
 	*(proc->kernel_sp) = 0;
 
-	uint64_t* sp = ((uint64_t*)proc -> user_sp);
+	uint64_t* sp = ((uint64_t*)0x00006FFFFFFFFFF0);
 	uint64_t count = 0;
 	for (; envp[count]; ++count);
 	uint64_t i = count -1;
