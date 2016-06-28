@@ -30,8 +30,7 @@ void do_newline(){
 	row ++;	
 	if (row>22) {
 		rollup();
-		row=21;
-		do_newline();
+		row=22;
 	}
 }
 void write_k(char v){
