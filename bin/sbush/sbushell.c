@@ -186,12 +186,12 @@ int do_command(char* command_input){
 			char* path_elem = path_list[i];
 			strcat(path_elem, "/", joined_filename, DIR_NAME_LEN);
 			strcat(joined_filename, argv[0], joined_filename, DIR_NAME_LEN);
-			char* temp = argv[0];
+			// char* temp = argv[0];
 
-			argv[0] = joined_filename;
+			// argv[0] = joined_filename;
 			// printf("going to execute: >%s<\n", argv[0]);
-			execve(argv[0], argv, envp);
-			argv[0] = temp;
+			execve(joined_filename, argv, envp);
+			// argv[0] = temp;
 			// TODO: uncomment after fixed get_envp;
 			// str_free_splitted_list(envp);
 		}
