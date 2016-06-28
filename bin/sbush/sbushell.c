@@ -168,7 +168,7 @@ int do_command(char* command_input){
 		// printf("ELSE?\n");
 		if (command[0] == '.' || command[0] == '/' ){
 			execve(argv[0], argv, envp);
-			str_free_splitted_list(argv);
+			// str_free_splitted_list(argv);
 			printf("No command or binary found: '%s'\n", argv[0]);
 			exit(1);
 		}
