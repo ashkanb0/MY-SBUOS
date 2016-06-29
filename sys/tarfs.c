@@ -138,7 +138,7 @@ int do_open_dir  (pcb* proc, char* abspath){
 	if (kstrcmp(abspath, "/")==0){
 		int fd = proc-> next_fd;
 		proc -> next_fd ++;
-		(proc -> fd_table[fd]).file_start_address = _tar_start;
+		(proc -> fd_table[fd]).file_start_address = _tar_end;
 		(proc -> fd_table[fd]).file_size = 0;
 		(proc -> fd_table[fd]).file_offset = 0;
 		return fd;
@@ -201,7 +201,7 @@ uint64_t _fill_dents_by_path(char* path, struct dirent * buffer, uint64_t dir_si
 }
 
 uint64_t fill_dents(uint64_t file_start, struct dirent * buffer, uint64_t size){
-	if(file_start== _tar_start)
+	if(file_start== _tar_end)
 		return _fill_dents_by_path("", buffer, size);
 	tarfs_header* p = (tarfs_header *) (file_start);
 	return _fill_dents_by_path(p->name, buffer, size);
