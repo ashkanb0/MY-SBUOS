@@ -144,6 +144,10 @@ uint64_t do_open(uint64_t path, uint64_t mode){
 		}
 	}
 	else if( mode == O_DIRECTORY){
+		int l = kstrlen(abspath);
+		abspath[l] = '/';
+		abspath[l+1] = '\0';
+
 		if (kstrcmp(abspath, "/")==0 || search_for_dir(abspath)){		
 			return do_open_dir(proc, abspath);
 		}			
