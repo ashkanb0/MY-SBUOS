@@ -155,10 +155,16 @@ uint64_t do_open(uint64_t path, uint64_t mode){
 	return -1;
 }
 
-
 uint64_t do_getdents(uint64_t fd, uint64_t buffer, uint64_t size){
 	pcb* proc = get_active_pcb();
 	return fill_dents(proc->fd_table[fd].file_start_address, (struct dirent *) buffer, size);
+}
+
+uint64_t do_close(uint64_t fd){
+	pcb* proc = get_active_pcb();
+	proc->fd_table[fd].file_start_address = 0;
+	proc->fd_table[fd].file_size = 0;
+	proc->fd_table[fd].file_offset = 0;
 }
 
 uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uint64_t arg3){
@@ -189,6 +195,8 @@ uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uin
 		case SYS_open : res = do_open(arg1, arg2);
 						break;
 		case SYS_getdents : res = do_getdents(arg1, arg2, arg2);
+						break;
+		case SYS_close : res = do_close(arg1);
 						break;
 		default : printf("SYSCALL NOT IMPLEMENTED: %d, 0x%x\n (0x%x, 0x%x, 0x%x)",
 						 syscall_code, syscall_code, arg1, arg2, arg3);
