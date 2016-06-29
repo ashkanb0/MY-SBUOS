@@ -165,6 +165,7 @@ uint64_t do_close(uint64_t fd){
 	proc->fd_table[fd].file_start_address = 0;
 	proc->fd_table[fd].file_size = 0;
 	proc->fd_table[fd].file_offset = 0;
+	return 0;
 }
 
 uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uint64_t arg3){
