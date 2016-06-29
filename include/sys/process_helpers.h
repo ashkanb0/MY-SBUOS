@@ -2,11 +2,21 @@
 #define _SYS_PROC_H
 
 #include <sys/defs.h>
+#include <sys/tarfs.h>
 
 #define PROCESS_QUEUE_SIZE 100
 #define HEAP_TOP 0x0000770000000000
 
 enum process_status{READY = 0, RUNNING = 1, WAITING = 2, FINISHED = 3};
+
+
+typedef struct file_descriptor
+{
+	uint64_t file_start_address;
+	uint64_t file_size;
+	uint64_t file_offset;
+}fd_t;
+
 
 typedef struct process_control_block
 {
@@ -26,6 +36,9 @@ typedef struct process_control_block
 	uint64_t status_return;
 
 	enum process_status status;
+
+	fd_t fd_table [15];
+	int next_fd;
 }pcb;
 
 typedef struct process_control_block_list
@@ -57,6 +70,9 @@ pcb* find_pcb_by_ppid(int ppid);
 pcb* find_pcb_by_pid(int pid);
 
 int process_exec(pcb* proc, char* abspath, char *argv[], char* envp[]);
+
+int do_open_file (pcb* proc, char* abspath);
+int do_open_dir  (pcb* proc, char* abspath);
 
 
 #endif

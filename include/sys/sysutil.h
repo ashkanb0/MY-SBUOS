@@ -6,7 +6,7 @@
 int kstrlen(char* dest);
 int kstrcpy(char* dest, char* src, int);
 int kstrcmp(char* s1, char* s2);
-
+int kstrstartswith(char* target, char* prefix);
 
 int path_merge(char* base, char* relative, char* buffer, int size);
 

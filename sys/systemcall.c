@@ -135,6 +135,31 @@ uint64_t do_exit(uint64_t status){
 	return -1;
 }
 
+uint64_t do_open(uint64_t path, uint64_t mode){
+	pcb* proc = get_active_pcb();
+	path_merge(proc->wd, (char*)path, abspath, 100);
+	if( mode == O_RDONLY){
+		if (search_file_open(abspath)){
+			return do_open_file(proc, abspath);
+		}
+	}
+	else if( mode == O_DIRECTORY){
+		if (kstrcmp(abspath, "/")==0 || search_for_dir(abspath)){		
+			return do_open_dir(proc, abspath);
+		}			
+	}
+	else{
+		printf("OPEN MODE NOT SUPPORTED: %x\n", mode);
+		while(1);
+	}
+	return -1;
+}
+
+
+uint64_t do_getdents(uint64_t fd, uint64_t buffer, uint64_t size){
+	pcb* proc = get_active_pcb();
+	return fill_dents(proc->fd_table[fd].file_start_address, (struct dirent *) buffer, size);
+}
 
 uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uint64_t arg3){
 	
@@ -160,6 +185,10 @@ uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uin
 		case SYS_exit : res = do_exit(arg1);
 						break;
 		case SYS_chdir : res = do_chdir(arg1);
+						break;
+		case SYS_open : res = do_open(arg1, arg2);
+						break;
+		case SYS_getdents : res = do_getdents(arg1, arg2, arg2);
 						break;
 		default : printf("SYSCALL NOT IMPLEMENTED: %d, 0x%x\n (0x%x, 0x%x, 0x%x)",
 						 syscall_code, syscall_code, arg1, arg2, arg3);

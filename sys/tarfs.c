@@ -2,6 +2,7 @@
 #include <sys/sysutil.h>
 #include <sys/sbunix.h>
 #include <sys/exec.h>
+#include <sys/process_helpers.h>
 
 
 uint64_t _tar_start, _tar_end;
@@ -92,3 +93,116 @@ int search_for_dir(char* path){
 	return 0;
 }
 
+int search_file_open(char* abspath){
+	uint64_t offset = 0;
+
+	for (; _tar_start + offset<_tar_end ;)
+	{
+		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
+		uint64_t size = tar_size(p->size);
+		if (kstrlen(p->name)==0)return 0;
+		if(kstrcmp(p->name, abspath+1)==0){
+			if(size==0){
+				return 0;
+			}else{
+				return 1;
+			}
+		}
+		offset += size + sizeof(tarfs_header) + tar_size_roundup(size);
+	}
+	return 0;
+}
+
+int do_open_file (pcb* proc, char* abspath){
+	uint64_t offset = 0;
+
+	for (; _tar_start + offset<_tar_end ;)
+	{
+		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
+		uint64_t size = tar_size(p->size);
+		if (kstrlen(p->name)==0)return -1;
+		if(kstrcmp(p->name, abspath+1)==0){
+			int fd = proc-> next_fd;
+			proc -> next_fd ++;
+			(proc -> fd_table[fd]).file_start_address = (uint64_t)(p+1);
+			(proc -> fd_table[fd]).file_size = size;
+			(proc -> fd_table[fd]).file_offset = 0;
+			return fd;
+		}
+		offset += size + sizeof(tarfs_header) + tar_size_roundup(size);
+	}
+	return -1;	
+}
+
+int do_open_dir  (pcb* proc, char* abspath){
+	if (kstrcmp(abspath, "/")==0){
+		int fd = proc-> next_fd;
+		proc -> next_fd ++;
+		(proc -> fd_table[fd]).file_start_address = _tar_start;
+		(proc -> fd_table[fd]).file_size = 0;
+		(proc -> fd_table[fd]).file_offset = 0;
+		return fd;
+	}
+	
+	uint64_t offset = 0;
+
+	for (; _tar_start + offset<_tar_end ;)
+	{
+		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
+		uint64_t size = tar_size(p->size);
+		if (kstrlen(p->name)==0)return -1;
+		if(kstrcmp(p->name, abspath+1)==0){
+			int fd = proc-> next_fd;
+			proc -> next_fd ++;
+			(proc -> fd_table[fd]).file_start_address = (uint64_t)(p);
+			(proc -> fd_table[fd]).file_size = 0;
+			(proc -> fd_table[fd]).file_offset = 0;
+			return fd;
+		}
+		offset += size + sizeof(tarfs_header) + tar_size_roundup(size);
+	}
+	return -1;
+}
+
+
+uint64_t _fill_dents_by_path(char* path, struct dirent * buffer, uint64_t dir_size){
+	uint64_t offset = 0;
+
+	int ent_c = 0;
+
+	int l = kstrlen(path);
+
+	for (; _tar_start + offset<_tar_end ;)
+	{
+		tarfs_header* p = (tarfs_header *) (_tar_start+offset);
+		uint64_t size = tar_size(p->size);
+		int ll = kstrlen(p->name);
+		if (ll==0)return 0;
+		if(kstrstartswith(p->name, path)){
+			int c = 0;
+			for (int i = l; i < ll-1; ++i){
+				if (p->name[i]=='/') c++;
+			}
+			if(c==0){
+				buffer[ent_c].d_ino = ent_c+1;
+				buffer[ent_c].d_reclen = sizeof(struct dirent);
+				kstrcpy(buffer[ent_c].d_name, p->name+l, NAME_MAX);
+				ent_c ++;
+			}
+
+		}
+		offset += size + sizeof(tarfs_header) + tar_size_roundup(size);
+	}
+	for (int i = ent_c; i < dir_size; ++i)
+	{
+		buffer[i].d_ino = 0;
+	}
+	return 0;	
+}
+
+uint64_t fill_dents(uint64_t file_start, struct dirent * buffer, uint64_t size){
+	if(file_start== _tar_start)
+		return _fill_dents_by_path("", buffer, size);
+	tarfs_header* p = (tarfs_header *) (file_start);
+	return _fill_dents_by_path(p->name, buffer, size);
+}

@@ -117,6 +117,14 @@ pcb* _get_new_pcb(){
 	
 	res -> user_brk_point = 0x0000700000000000;
 	res -> user_sp = 0x00006FFFFFFFFFF0;
+
+	for (int i = 0; i < 15; ++i){
+		(res -> fd_table[i]).file_start_address = 0;
+		(res -> fd_table[i]).file_size = 0;
+		(res -> fd_table[i]).file_offset = 0;
+	}
+
+	res -> next_fd = 3;
 	
 	return res;
 }
