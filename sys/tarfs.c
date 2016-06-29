@@ -201,7 +201,7 @@ uint64_t _fill_dents_by_path(char* path, struct dirent * buffer, uint64_t dir_si
 }
 
 uint64_t fill_dents(uint64_t file_start, struct dirent * buffer, uint64_t size){
-	if(file_start== _tar_end)
+	if(file_start == _tar_end)
 		return _fill_dents_by_path("", buffer, size);
 	tarfs_header* p = (tarfs_header *) (file_start);
 	return _fill_dents_by_path(p->name, buffer, size);
