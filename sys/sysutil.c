@@ -46,6 +46,9 @@ int kstrcat(char* st1, char* st2, char* buffer, int size){
 
 char temp_path [100];
 int cleanup_path(char* buffer, int size){
+	if (kstrcmp(buffer, "/")==0)
+		return 0;
+
 	int i=0;
 	char* parts [15];
 
