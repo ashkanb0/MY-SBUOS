@@ -35,5 +35,6 @@ int main(int argc, char const *argv[], char const *envp[])
 		}
 		printf("%s", buffer);
 	}
+	close(fd);
 	return 0;
 }
