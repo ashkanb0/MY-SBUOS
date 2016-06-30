@@ -25,7 +25,7 @@ int _add_char(char c){
 
 	_stdin_buffer[end_point]= c;
 	end_point = (end_point+1)%STDIN_BUFFER_SIZE;
-	if (c=='\n'){
+	if (c=='\n'|| c=='D'-64){
 		input_count++;
 		notify_stdin();
 	}
