@@ -55,7 +55,31 @@ int copy_input(char* buffer, int size){
 	return i+1;
 }
 
-int _stdin_keyboard_feed(unsigned char key){
+void fill_single_elem_buffer(char* single_elem_buffer){
+	if(_stdin_input == 0x01){//ESC
+		single_elem_buffer[0] = 0;
+	}
+	else if(_stdin_input == 0x0e){//backspace
+		single_elem_buffer[0] = '\b';
+	}
+	else if(_stdin_input == 0x0f){//tab
+		single_elem_buffer[0] = '\t';
+	}
+	else if(_stdin_input == 0x1c){//return
+		single_elem_buffer[0] = '\n';
+	}
+	// OTHER KEYS
+	else if(_stdin_shift ||_std_ctrl ){
+		single_elem_buffer[0] = __capitals[_stdin_input];
+	}else{
+		single_elem_buffer[0] = __smalls[_stdin_input];
+	}
+	if(_std_ctrl ){
+		single_elem_buffer[0] -= 64;
+	}
+}
+
+int _stdin_keyboard_feed(unsigned char key, char* single_elem_buffer){
 	if(_stdin_state == S_NEED_1){
 		_stdin_state = S_FINISHED;
 	}
@@ -79,7 +103,7 @@ int _stdin_keyboard_feed(unsigned char key){
 	}
 	if (_stdin_state == S_FINISHED){
 		_stdin_state = S_INPUT;
-		_stdin_input = _stdin_key;
+		fill_single_elem_buffer(single_elem_buffer);
 		_stdin_shift = 0;
 		_std_ctrl = 0;
 		_stdin_key = 0;
@@ -87,30 +111,12 @@ int _stdin_keyboard_feed(unsigned char key){
 	}
 	return 0;
 }
+
+char key_buffer [2];
+
 void buffer_add_char(unsigned char c){
-	if (_stdin_keyboard_feed(c)){
-		char to_print = 0;
-		if(_stdin_input == 0x01){//ESC
-			to_print = 0;
-		}
-		else if(_stdin_input == 0x0e){//backspace
-			to_print = '\b';
-		}
-		else if(_stdin_input == 0x0f){//tab
-			to_print = '\t';
-		}
-		else if(_stdin_input == 0x1c){//return
-			to_print = '\n';
-		}
-		// OTHER KEYS
-		else if(_stdin_shift ||_std_ctrl ){
-			to_print = __capitals[_stdin_input];
-		}else{
-			to_print = __smalls[_stdin_input];
-		}
-		if(_std_ctrl ){
-			to_print -= 64;
-		}
+	if (_stdin_keyboard_feed(c, key_buffer)){
+		char to_print = key_buffer[0];
 		if(_add_char(to_print))
 			write_k(to_print);
 	}
