@@ -39,6 +39,7 @@ int buffer_is_ready(){
 int copy_input(char* buffer, int size){
 	if(_stdin_buffer[start_point]=='D'-64){
 		start_point++;
+		input_count--;
 		return 0;
 	}
 	int i;
