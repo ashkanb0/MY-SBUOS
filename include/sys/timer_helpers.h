@@ -3,7 +3,7 @@
 
 #include <sys/defs.h>
 
-#define TICK_DIVIDE 	20
+#define TICK_DIVIDE 	18
 
 /***
 *
@@ -12,5 +12,8 @@
 ***/
 
 int tick_count(char* buff);
+
+uint64_t timer_get_clock();
+
 #endif
 

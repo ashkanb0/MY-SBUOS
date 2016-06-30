@@ -28,3 +28,8 @@ int tick_count(char* buff){
 	return 0;
 }
 
+uint64_t timer_get_clock(){
+	return clk;
+}
+
+

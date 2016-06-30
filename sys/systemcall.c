@@ -88,6 +88,8 @@ uint64_t do_fork(){
 	return child->pid;
 }
 
+
+
 uint64_t do_waitpid (uint64_t pid, uint64_t status_return, uint64_t options){
 	pcb* proc = get_active_pcb();
 	proc -> waiting_on_pid = pid;
@@ -95,6 +97,15 @@ uint64_t do_waitpid (uint64_t pid, uint64_t status_return, uint64_t options){
 	proc -> status_return = status_return;
 	schedule();
 	*((int*)(proc -> status_return)) = proc -> exit_notify_status;
+	return 0;
+}
+
+uint64_t do_alarm (uint64_t seconds){
+	pcb* proc = get_active_pcb();
+	uint64_t clock = timer_get_clock();
+	proc -> waiting_on_clock = timer_get_clock+(TICK_DIVIDE*seconds);
+	proc -> status = WAITING;
+	schedule();
 	return 0;
 }
 
@@ -204,6 +215,8 @@ uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uin
 		case SYS_getdents : res = do_getdents(arg1, arg2, arg2);
 						break;
 		case SYS_close : res = do_close(arg1);
+						break;
+		case SYS_alarm : res = do_alarm(arg1);
 						break;
 		default : printf("SYSCALL NOT IMPLEMENTED: %d, 0x%x\n (0x%x, 0x%x, 0x%x)",
 						 syscall_code, syscall_code, arg1, arg2, arg3);
