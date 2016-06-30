@@ -10,7 +10,7 @@ void exit(int status){
 	syscall_1(SYS_exit, status);
 }
 
-void yield(){
+void yield(void){
 	syscall_0(SYS_yield);
 }
 
