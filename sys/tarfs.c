@@ -218,7 +218,9 @@ uint64_t read_to_buffer(fd_t* file_d, char* buffer ,uint64_t size){
 			return size_read +1;
 		}
 		buffer[size_read] = file[file_d->file_offset];
-		file_d -> file_offset ++;		
+		file_d -> file_offset ++;
+		if (buffer[size_read]=='\n')
+			return size_read;		
 	}
 	buffer[size_read] = '\0';
 	return size_read +1;
