@@ -311,6 +311,8 @@ int process_exec(pcb* proc, char* abspath, char *argv[], char* envp[]){
 
 void preempt(void){
 	time_slice ++;
-	if (time_slice > TIME_SLICE_LIMIT)
+	if (time_slice > TIME_SLICE_LIMIT){	
+		time_slice = 0;
 		schedule();
+	}
 }
