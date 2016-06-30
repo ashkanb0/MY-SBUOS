@@ -13,10 +13,11 @@ int atoi(const char* s){
 
 int main(int argc, char const *argv[], char const *envp[])
 {
-	if(argc < 2)
+	if(argc < 2){
 		printf("sleep: need an argumet\n");
+		return 1;
+	}
 	int s = atoi(argv[1]);
-	// printf("sleeping for %d seconds\n", s);
 	sleep(s);
 	return 0;
 }
