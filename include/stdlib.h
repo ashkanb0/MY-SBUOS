@@ -12,7 +12,7 @@ extern __thread int errno;
 
 void exit(int status);
 
-// void yield();
+void yield();
 
 // memory
 void *malloc(size_t size);
