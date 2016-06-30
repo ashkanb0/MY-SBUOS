@@ -4,6 +4,7 @@
 #include <sys/tarfs.h>
 #include <sys/vma.h>
 #include <sys/process_helpers.h>
+#include <sys/timer_helpers.h>
 #include <sys/memory_helpers.h>
 
 uint64_t do_break (uint64_t arg1){
@@ -103,7 +104,7 @@ uint64_t do_waitpid (uint64_t pid, uint64_t status_return, uint64_t options){
 uint64_t do_alarm (uint64_t seconds){
 	pcb* proc = get_active_pcb();
 	uint64_t clock = timer_get_clock();
-	proc -> waiting_on_clock = clock+(TICK_DIVIDE*seconds);
+	proc -> waiting_on_clock = clock+(PRINT_TICK_DIVIDE*seconds);
 	proc -> status = WAITING;
 	schedule();
 	return 0;

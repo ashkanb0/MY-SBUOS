@@ -53,6 +53,7 @@ typedef struct process_control_block_list
 
 void notify_stdin();
 void notify_exit_pid(int pid, uint64_t status);
+void notify_alarm(uint64_t clock);
 
 void process_init();
 

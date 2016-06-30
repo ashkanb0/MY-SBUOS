@@ -3,7 +3,8 @@
 
 #include <sys/defs.h>
 
-#define TICK_DIVIDE 	10
+#define PRINT_TICK_DIVIDE 	10
+#define ALARM_TICK_DIVIDE 	3
 
 /***
 *
