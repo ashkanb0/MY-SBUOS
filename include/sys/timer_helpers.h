@@ -3,7 +3,7 @@
 
 #include <sys/defs.h>
 
-#define TICK_DIVIDE 	24
+#define TICK_DIVIDE 	20
 
 /***
 *

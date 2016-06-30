@@ -17,6 +17,10 @@ int do_nothing(void* p){
 	return 0;
 }
 
+unsigned int sleep(unsigned int seconds){
+	return syscall_1(SYS_alarm, seconds);
+}
+
 
 void *sbrk(int inc){ 
 	uint64_t break_point = syscall_1(SYS_brk, 0);
