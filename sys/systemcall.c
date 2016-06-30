@@ -37,16 +37,16 @@ uint64_t do_write (uint64_t fd, uint64_t buffer, uint64_t size){
 }
 
 uint64_t do_read (uint64_t fd, uint64_t buffer, uint64_t size){
-	if (fd== 0){
+	pcb* proc = get_active_pcb();
+	if (fd== 0 && proc->fd_table[0].file_start_address==0){
 		while( !buffer_is_ready()){
-			pcb* proc = get_active_pcb();
 			proc -> status = WAITING;
 			proc -> waiting_on_stdin = -1;
 			schedule();
 		}
 		return copy_input((char*)buffer, size);
 	}
-	return (uint64_t)NULL;
+	return read_to_buffer(&(proc->fd_table[fd]), (char*)buffer , size);
 }
 
 // uint64_t _return_from_fork_child(){

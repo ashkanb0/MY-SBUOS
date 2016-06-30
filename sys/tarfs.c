@@ -206,3 +206,17 @@ uint64_t fill_dents(uint64_t file_start, struct dirent * buffer, uint64_t size){
 	tarfs_header* p = (tarfs_header *) (file_start);
 	return _fill_dents_by_path(p->name, buffer, size);
 }
+
+uint64_t read_to_buffer(fd_t* file_d, char* buffer ,uint64_t size){
+	uint64_t size_read = 0;
+	char* file = (char*) (file_d->file_start_address);
+	for (;size_read < size -1 ; ++size_read){
+		if (file_d->file_offset >= file_d->file_size){
+			buffer[size_read] = '\0';
+			return size_read +1;
+		}
+		buffer[size_read] = file[file_d->file_offset];
+	}
+	buffer[size_read] = '\0';
+	return size_read +1;
+}
