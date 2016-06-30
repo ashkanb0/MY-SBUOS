@@ -10,9 +10,9 @@ void exit(int status){
 	syscall_1(SYS_exit, status);
 }
 
-void yield(){
-	syscall_0(SYS_yield);
-}
+// void yield(){
+// 	syscall_0(SYS_yield);
+// }
 
 
 //SO UGLY!!! :))) HOW DOES IT WORK?????!!!!
