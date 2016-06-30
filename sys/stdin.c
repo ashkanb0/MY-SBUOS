@@ -37,6 +37,10 @@ int buffer_is_ready(){
 }
 
 int copy_input(char* buffer, int size){
+	if(_stdin_buffer[start_point]=='D'-64){
+		start_point++;
+		return 0;
+	}
 	int i;
 	for (i = 0; _stdin_buffer[start_point]!='\n'; i++){
 		buffer[i] = _stdin_buffer[start_point];
