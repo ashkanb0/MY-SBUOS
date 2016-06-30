@@ -112,6 +112,7 @@ pcb* _get_new_pcb(){
 	res -> ppid = 0;
 	res -> waiting_on_stdin = 0;
 	res -> waiting_on_pid = 0;
+	res -> waiting_on_clock = 0;
 
 	res -> pml4 = get_new_page_table();
 	

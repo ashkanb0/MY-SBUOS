@@ -103,7 +103,7 @@ uint64_t do_waitpid (uint64_t pid, uint64_t status_return, uint64_t options){
 uint64_t do_alarm (uint64_t seconds){
 	pcb* proc = get_active_pcb();
 	uint64_t clock = timer_get_clock();
-	proc -> waiting_on_clock = timer_get_clock+(TICK_DIVIDE*seconds);
+	proc -> waiting_on_clock = clock+(TICK_DIVIDE*seconds);
 	proc -> status = WAITING;
 	schedule();
 	return 0;

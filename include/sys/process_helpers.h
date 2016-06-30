@@ -30,8 +30,11 @@ typedef struct process_control_block
 	uint64_t ip;
 	char pname [50];
 	char wd [50];
+
 	char waiting_on_stdin;
 	int waiting_on_pid;
+	uint64_t waiting_on_clock;
+
 	uint64_t exit_notify_status;
 	uint64_t status_return;
 
