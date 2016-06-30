@@ -3,7 +3,7 @@
 
 #include <sys/defs.h>
 
-#define TICK_DIVIDE 	18
+#define TICK_DIVIDE 	10
 
 /***
 *
