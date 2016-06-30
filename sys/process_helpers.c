@@ -118,6 +118,8 @@ void enqueue_process(pcb_list* list, pcb* process){
 	list->tail %= PROCESS_QUEUE_SIZE;
 }
 
+int time_slice = 0;
+
 pcb* get_next_context(){
 	enqueue_process(&processq, _active_pcb);
 
@@ -131,6 +133,9 @@ pcb* get_next_context(){
 
 	_set_cr3(_active_pcb -> pml4);
 	tss.rsp0 = (_active_pcb -> kernel_stack + PAGESIZE );
+	
+	time_slice = 0;
+
 	return res;
 
 }
@@ -304,3 +309,8 @@ int process_exec(pcb* proc, char* abspath, char *argv[], char* envp[]){
 	return -1;
 }
 
+void preempt(){
+	time_slice ++;
+	if (time_slice > TIME_SLICE_LIMIT)
+		schedule();
+}

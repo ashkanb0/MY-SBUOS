@@ -8,6 +8,8 @@
 #define PROCESS_QUEUE_SIZE 100
 #define HEAP_TOP 0x0000770000000000
 
+#define TIME_SLICE_LIMIT 16
+
 enum process_status{READY = 0, RUNNING = 1, WAITING = 2, FINISHED = 3};
 
 

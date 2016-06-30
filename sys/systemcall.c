@@ -198,6 +198,10 @@ uint64_t do_kill(uint64_t pid, uint64_t sig){
 	return 0;
 }
 
+uint64_t do_yield(){
+	schedule();
+	return 0;
+}
 
 uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uint64_t arg3){
 	
@@ -235,6 +239,8 @@ uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uin
 		case SYS_getps : res = do_getps(arg1, arg2);
 						break;
 		case SYS_kill : res = do_kill(arg1, arg2);
+						break;
+		case SYS_yield : res = do_yield();
 						break;
 		default : printf("SYSCALL NOT IMPLEMENTED: %d, 0x%x\n (0x%x, 0x%x, 0x%x)",
 						 syscall_code, syscall_code, arg1, arg2, arg3);
