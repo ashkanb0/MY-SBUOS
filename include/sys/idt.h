@@ -59,7 +59,7 @@ void timer_interrupt_handler(void);
 void int_tmr_srv(){
 // unsigned char l = inb(0x60);
 	put_time_since_boot();
-	preempt();
+	// preempt();
 	// printf("INR\n");
 	outb(0x20,0x20);
 }
