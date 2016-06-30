@@ -3,6 +3,7 @@
 
 #include <sys/defs.h>
 #include <sys/dirent.h>
+#include <sys/ps_helpers.h>
 
 extern __thread int errno;
 
@@ -59,5 +60,7 @@ int dup2(int oldfd, int newfd);
 void *opendir(const char *name);
 struct dirent *readdir(void *dir);
 int closedir(void *dir);
+
+int get_ps(pspcb* buffer, int size);
 
 #endif

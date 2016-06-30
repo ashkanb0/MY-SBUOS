@@ -175,4 +175,8 @@ int closedir(void *dir){
 	return 0;
 }
 
+int get_ps(pspcb* buffer, int size){
+	return syscall_2(SYS_getps, (uint64_t)buffer, (uint64_t)size);
+}
+
 

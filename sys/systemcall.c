@@ -186,6 +186,10 @@ uint64_t do_close(uint64_t fd){
 	return 0;
 }
 
+uint64_t do_getps(uint64_t buffer, uint64_t size){
+	return _get_process_info((pspcb*)buffer, size);
+}
+
 uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uint64_t arg3){
 	
 
@@ -218,6 +222,8 @@ uint64_t do_system_call(uint64_t syscall_code, uint64_t arg1, uint64_t arg2, uin
 		case SYS_close : res = do_close(arg1);
 						break;
 		case SYS_alarm : res = do_alarm(arg1);
+						break;
+		case SYS_getps : res = do_getps(arg1, arg2);
 						break;
 		default : printf("SYSCALL NOT IMPLEMENTED: %d, 0x%x\n (0x%x, 0x%x, 0x%x)",
 						 syscall_code, syscall_code, arg1, arg2, arg3);

@@ -53,6 +53,19 @@ void notify_alarm(uint64_t clock){
 	}	
 }
 
+int _get_process_info(pspcb* buffer,int size){
+	int i = 0;
+	for(uint32_t ptr = processq.head; ptr!= processq.tail; ptr = (ptr+1)%PROCESS_QUEUE_SIZE){
+		pcb* proc = processq.list[ptr];
+		buffer[i].pid = proc->pid;
+		buffer[i].ppid = proc->ppid;
+		kstrcpy(buffer[i].pname, proc->pname, 50);
+		i++;
+		if(i>=size)break;
+	}
+	return i;
+}
+
 
 pcb* find_pcb_by_ppid(int ppid){
 	for(uint32_t ptr = processq.head; ptr!= processq.tail; ptr = (ptr+1)%PROCESS_QUEUE_SIZE){

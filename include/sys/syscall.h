@@ -23,5 +23,6 @@
 #define SYS_getdents	78
 
 #define SYS_kill		62
+#define SYS_getps		100
 
 #endif

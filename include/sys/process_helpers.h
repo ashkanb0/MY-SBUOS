@@ -3,6 +3,7 @@
 
 #include <sys/defs.h>
 #include <sys/tarfs.h>
+#include <sys/ps_helpers.h>
 
 #define PROCESS_QUEUE_SIZE 100
 #define HEAP_TOP 0x0000770000000000
@@ -44,6 +45,7 @@ typedef struct process_control_block
 	int next_fd;
 }pcb;
 
+
 typedef struct process_control_block_list
 {
 	pcb* list [PROCESS_QUEUE_SIZE];
@@ -77,6 +79,6 @@ int process_exec(pcb* proc, char* abspath, char *argv[], char* envp[]);
 
 int do_open_file (pcb* proc, char* abspath);
 int do_open_dir  (pcb* proc, char* abspath);
-
+int _get_process_info(pspcb* buffer,int size);
 
 #endif
