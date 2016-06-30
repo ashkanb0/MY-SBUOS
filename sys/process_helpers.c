@@ -53,9 +53,22 @@ void notify_alarm(uint64_t clock){
 	}	
 }
 
+int kill_pid (pid){
+	for(uint32_t ptr = processq.head; ptr!= processq.tail; ptr = (ptr+1)%PROCESS_QUEUE_SIZE){
+		pcb* proc = processq.list[ptr];
+		if (proc->pid == pid){
+			proc -> status = FINISHED;
+			return 0;
+		}
+	}
+	return 1;	
+}
+
 int _get_process_info(pspcb* buffer,int size){
 	int i = 0;
 	for(uint32_t ptr = processq.head; ptr!= processq.tail; ptr = (ptr+1)%PROCESS_QUEUE_SIZE){
+		if (proc-> status == FINISHED)
+			continue;
 		pcb* proc = processq.list[ptr];
 		buffer[i].pid = proc->pid;
 		buffer[i].ppid = proc->ppid;

@@ -81,4 +81,6 @@ int do_open_file (pcb* proc, char* abspath);
 int do_open_dir  (pcb* proc, char* abspath);
 int _get_process_info(pspcb* buffer,int size);
 
+int kill_pid (pid);
+
 #endif
