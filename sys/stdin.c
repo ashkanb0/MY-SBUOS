@@ -56,23 +56,23 @@ int copy_input(char* buffer, int size){
 }
 
 void fill_single_elem_buffer(char* single_elem_buffer){
-	if(_stdin_input == 0x01){//ESC
+	if(_stdin_key == 0x01){//ESC
 		single_elem_buffer[0] = 0;
 	}
-	else if(_stdin_input == 0x0e){//backspace
+	else if(_stdin_key == 0x0e){//backspace
 		single_elem_buffer[0] = '\b';
 	}
-	else if(_stdin_input == 0x0f){//tab
+	else if(_stdin_key == 0x0f){//tab
 		single_elem_buffer[0] = '\t';
 	}
-	else if(_stdin_input == 0x1c){//return
+	else if(_stdin_key == 0x1c){//return
 		single_elem_buffer[0] = '\n';
 	}
 	// OTHER KEYS
 	else if(_stdin_shift ||_std_ctrl ){
-		single_elem_buffer[0] = __capitals[_stdin_input];
+		single_elem_buffer[0] = __capitals[_stdin_key];
 	}else{
-		single_elem_buffer[0] = __smalls[_stdin_input];
+		single_elem_buffer[0] = __smalls[_stdin_key];
 	}
 	if(_std_ctrl ){
 		single_elem_buffer[0] -= 64;
