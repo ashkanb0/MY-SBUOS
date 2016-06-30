@@ -18,11 +18,11 @@ char buffer [1024];
 
 int main(int argc, char const *argv[], char const *envp[])
 {
-	int i = 0, fd = 1;
+	int i = 0, fd = 0;
 	if (argc>=2){
 		strcpy(argv[1], buffer);
 		fd = open(buffer, O_RDONLY);
-		printf("%x\n", fd);
+		// printf("%x\n", fd);
 		if (fd<0){
 			printf("cat: %s: Failed to open.\n", argv[1]);
 			return -1;
